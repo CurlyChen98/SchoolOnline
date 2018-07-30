@@ -8,6 +8,7 @@
         "talk"=>"",
         "use"=>"",
         "class"=>"",
+        "course"=>"",
     ];
     
     // 首次打开时先根据openid在数据库注册一个用户
@@ -36,11 +37,13 @@
             $content["use"] = $detail[0];
             $content["talk"] = "Have";
             if($detail[0]["cid"] != ""){
-                $one = $detail[0]["cid"];
-                $sql = "SELECT * FROM `s_class` WHERE `s_cid` = '$one'";
+                $cid = $detail[0]["cid"];
+                $sql = "SELECT * FROM `s_class` WHERE `s_cid` = '$cid'";
                 $que = mysqli_query($conn,$sql);
                 $detail = mysqli_fetch_all($que,1);
                 $content["class"] = $detail[0];
+                // 加载班级所有课程
+                LoadCourse($cid);
             }
         }else{
             // 第一次
@@ -77,8 +80,6 @@
             $que = mysqli_query($conn,$sql);
             // 查询并输出学生信息
             $sql = "SELECT `s_uid`,`s_uame`,`s_ulevel` FROM `s_use` WHERE `s_uid` = '$uid'";
-            $content["zzzzzzzzz"] = $sql;
-            
             $que = mysqli_query($conn,$sql);
             $detail = mysqli_fetch_all($que,1);
             $content["use"] = $detail[0];
@@ -87,5 +88,16 @@
             $content["talk"] = "NotRight";
         }
         echo json_encode($content);
+    }
+
+    // 加载班级所有课程
+    function LoadCourse($cid){
+        global $conn;
+        global $content;
+
+        $sql = "SELECT * FROM `s_course` WHERE `s_cid` = '$cid'";
+        $que = mysqli_query($conn,$sql);
+        $detail = mysqli_fetch_all($que,1);
+        $content["course"] = $detail[0];
     }
 ?>

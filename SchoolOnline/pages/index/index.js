@@ -12,110 +12,58 @@ Page({
     classkey: '',
     studentkey: '',
     key: '',
-    arrcourse: [{
-        id: 0,
-        courseName: '第一讲：大灰狼与小绵羊',
-        courseDate: '9/31'
-      },
-      {
-        id: 1,
-        courseName: '第二讲：大灰狼与小绵羊',
-        courseDate: '2/31'
-      },
-      {
-        id: 2,
-        courseName: '第三讲：大灰狼与小绵羊',
-        courseDate: '10/31'
-      },
-      {
-        id: 3,
-        courseName: '第四讲：大灰狼与小绵羊',
-        courseDate: '5/31'
-      },
-      {
-        id: 4,
-        courseName: '第五讲：大灰狼与小绵羊',
-        courseDate: '10/31'
-      },
-      {
-        id: 5,
-        courseName: '第六讲：大灰狼与小绵羊',
-        courseDate: '6/31'
-      },
-      {
-        id: 6,
-        courseName: '第七讲：大灰狼与小绵羊',
-        courseDate: '12/31'
-      },
-      {
-        id: 7,
-        courseName: '第八讲：大灰狼与小绵羊',
-        courseDate: '1/31'
-      },
-      {
-        id: 8,
-        courseName: '第九讲：大灰狼与小绵羊',
-        courseDate: '11/31'
-      },
-    ],
+    arrcourse: '',
   },
 
   onLoad: function(options) {
-    let uid = wx.getStorageSync('uid');
-    let uname = wx.getStorageSync('uname');
-    let ulevel = wx.getStorageSync('ulevel');
-    let uclass = wx.getStorageSync('uclass');
-    if (uid != "" && uclass != "" && uname != "" && ulevel != "") {
-      this.setData({
-        classkey: uclass,
-        studentkey: uname,
-      })
-    } else {
-      wx.hideTabBar();
-      let back = this.data.backAddress + this.data.backurl;
-      let that = this;
-      wx.login({
-        success: function(res) {
-          let code = res.code;
-          wx.request({
-            url: back,
-            data: {
-              do: "CreateUse",
-              code: code
-            },
-            method: 'POST',
-            header: {
-              'content-type': 'application/x-www-form-urlencoded'
-            },
-            success: function(res) {
-              let use = res.data.use;
-              let talk = res.data.talk;
-              if (talk == "NotHave" || use.s_uame == "") {
-                that.setData({
-                  classhidden: false,
-                })
-                if (use.s_uid == undefined) {
-                  wx.setStorageSync('uid', use)
-                } else {
-                  wx.setStorageSync('uid', use.s_uid)
-                }
+    wx.hideTabBar();
+    let back = this.data.backAddress + this.data.backurl;
+    let that = this;
+    wx.login({
+      success: function(res) {
+        let code = res.code;
+        wx.request({
+          url: back,
+          data: {
+            do: "CreateUse",
+            code: code
+          },
+          method: 'POST',
+          header: {
+            'content-type': 'application/x-www-form-urlencoded'
+          },
+          success: function(res) {
+            console.log(res.data)
+            let use = res.data.use;
+            let talk = res.data.talk;
+            if (talk == "NotHave" || use.s_uame == "") {
+              that.setData({
+                classhidden: false,
+              })
+              if (use.s_uid == undefined) {
+                wx.setStorageSync('uid', use)
               } else {
-                wx.showTabBar();
-                let uclass = res.data.class;
-                that.setData({
-                  classkey: uclass.s_cname,
-                  studentkey: use.s_uame,
-                })
                 wx.setStorageSync('uid', use.s_uid)
-                wx.setStorageSync('uclass', uclass.s_cname)
-                wx.setStorageSync('uname', use.s_uame)
-                wx.setStorageSync('ulevel', use.s_ulevel)
               }
+            } else {
+              wx.showTabBar();
+              let uclass = res.data.class;
+              let arrcourse = res.data.course;
+              that.setData({
+                classkey: uclass.s_cname,
+                studentkey: use.s_uame,
+                arrcourse: arrcourse
+              })
+              wx.setStorageSync('uid', use.s_uid)
+              wx.setStorageSync('uclass', uclass.s_cname)
+              wx.setStorageSync('uname', use.s_uame)
+              wx.setStorageSync('ulevel', use.s_ulevel)
+              console.log(that.data.arrcourse)
             }
-          })
-        }
-      });
-    }
+          }
+        })
+      }
+    });
     console.log("打开首页（课堂）")
   },
 
