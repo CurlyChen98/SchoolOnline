@@ -1,0 +1,96 @@
+/* note.wxss */
+
+.box {
+  padding: 10px;
+  margin-bottom: 100px;
+}
+.titlebox {
+  border-bottom: #e0e1db 1px solid;
+  /* height: 150px; */
+  position: relative;
+  font-size: 14px;
+  color: #818e9e;
+}
+
+.titlebox >.detail {
+  font-size: 17px;
+  color: #343434;
+  display: block;
+  margin-top: 15px;
+  margin-bottom: 50px;
+  word-break: break-all;
+}
+
+.titlebox >.title {
+  font-size: 22px;
+  font-weight: bolder;
+  background-color: #fbc44d;
+  color: #ffffff;
+}
+
+.titlebox >.name {
+  position: absolute;
+  left: 0;
+  bottom: 10px;
+}
+
+.titlebox >.date {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+}
+
+.detailbox {  
+  border-bottom: #e0e1db 1px solid;
+  margin-top: 10px;
+  position: relative;
+  font-size: 14px;
+  color: #818e9e;
+}
+
+.detailbox>.detail {
+  margin-bottom: 60px;
+  display: inline-block;
+  font-size: 16px;
+  color: #343434;
+}
+
+.detailbox >.name {
+  position: absolute;
+  left: 0;
+  bottom: 10px;
+}
+
+.detailbox >.date {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+}
+
+.send {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+
+.useinput {
+  box-sizing: border-box;
+  font-size: 15px;
+  background-color: #dcdcdd;
+  width: 100%;
+  height: 50px;
+  padding: 10px;
+  border-radius: 5px;
+  z-index: 99;
+  display: flex;
+  word-break: break-all;
+}
+
+.submit {
+  border-radius: 0 5px 5px 0;
+  height: 30px;
+  width: 100%;
+  text-align: center;
+  z-index: 99;
+  display: flex;
+}

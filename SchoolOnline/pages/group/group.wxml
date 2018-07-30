@@ -1,0 +1,13 @@
+<view class='bigshow'>
+  <view class='show' wx:for="{{arrtalk}}" wx:for-index="ind1" wx:for-item="item" wx:key="ind1">
+    <text class='showname'>{{item[0]}}</text>
+    <text class='showinput'>{{item[1]}}</text>
+  </view>
+</view>
+
+<view class="send">
+  <form bindsubmit="bindFormSubmit">
+    <input class='useinput' name="text" maxlength="50" placeholder="Enter something" />
+    <button form-type="submit"> 提交 </button>
+  </form>
+</view>

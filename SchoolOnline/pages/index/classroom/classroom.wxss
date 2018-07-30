@@ -1,0 +1,65 @@
+/* classroom.wxss */
+
+.room {
+  box-sizing: border-box;
+  padding: 10px;
+}
+
+.roomname {
+  font-size: 20;
+  font-weight: bold;
+  color: #0275d8;
+}
+
+.titlearr {
+  margin-top: 10px;
+  margin-right: 10px;
+  box-sizing: border-box;
+}
+
+.titlearr .titlebox {
+  color: #fff;
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.titlearr .title {
+  background-color: #f8b066;
+  width: 200px;
+  padding: 5px;
+  display: inline-block;
+}
+
+.titlearr .detail {
+  border: #e0e1db 1px solid;
+  border-radius: 0 10px 10px 10px;
+  width: 100%;
+  color: #343434;
+  padding: 5px;
+}
+
+.textbox {
+  width: 100%;
+  word-break: break-all;
+  line-height: 30px;
+}
+
+.downloadbox {
+  display: flex;
+  align-items: center;
+  height: 50px;
+}
+
+.downloadbox>text {
+  vertical-align: middle;
+  margin-bottom: 5px;
+  margin-right: 10px;
+}
+
+.videobox {
+  width: 100%;
+}
+
+.videobox>video {
+  width: 100%;
+}

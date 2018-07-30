@@ -1,0 +1,35 @@
+/* myself.wxss */
+@import "../../utils/template.wxss";
+
+.self {
+  display: flex;
+  flex-direction: column;
+  padding-left: 20px;
+  padding-right: 20px;
+  color: #343434;
+}
+
+.self>view {
+  width: 100%;
+}
+
+open-data[type="userAvatarUrl"] {
+  width: 100px;
+}
+
+.self>.ava {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.self>.selfT {
+  font-size: 16px;
+  line-height: 40px;
+  border-bottom: 1px #e0e0e0 solid;
+  padding-left: 10px;
+  box-sizing: border-box;
+}
+

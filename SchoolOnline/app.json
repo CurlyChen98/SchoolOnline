@@ -1,0 +1,52 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/myself/uploadFiles/uploadFiles",
+    "pages/myself/mygroup/mygroup",
+    "pages/myself/mytopic/mytopic",
+    "pages/myself/setting/setting",
+    "pages/myself/myself",
+    "pages/topic/note/note",
+    "pages/index/classroom/classroom",
+    "pages/group/group",
+    "pages/topic/topic"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#ffffff",
+    "navigationBarTitleText": "WeChat",
+    "navigationBarTextStyle": "black"
+  },
+  "tabBar": {
+    "color": "#5296d5",
+    "selectedColor": "#0275d8",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "black",
+    "list": [
+      {
+        "iconPath": "img/shop_fill33.png",
+        "selectedIconPath": "img/shop_fill3.png",
+        "pagePath": "pages/index/index",
+        "text": "课程"
+      },
+      {
+        "iconPath": "img/interactive_fill33.png",
+        "selectedIconPath": "img/interactive_fill3.png",
+        "pagePath": "pages/topic/topic",
+        "text": "话题"
+      },
+      {
+        "iconPath": "img/group_fill33.png",
+        "selectedIconPath": "img/group_fill3.png",
+        "pagePath": "pages/group/group",
+        "text": "小组"
+      },
+      {
+        "iconPath": "img/people_fill33.png",
+        "selectedIconPath": "img/people_fill3.png",
+        "pagePath": "pages/myself/myself",
+        "text": "我的"
+      }
+    ]
+  }
+}

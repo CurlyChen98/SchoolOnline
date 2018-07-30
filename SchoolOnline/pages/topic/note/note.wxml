@@ -1,0 +1,25 @@
+<!-- note.wxml -->
+
+<view class='box'>
+
+  <view class='titlebox'>
+    <text class='title'>帖子标题</text>
+    <view class='detail'>跟帖内容跟帖内容跟帖内容跟帖内容跟帖内容跟帖内容跟帖内容跟帖内容跟帖内容跟帖内容跟帖内容跟帖内容跟帖内容跟帖内容跟帖内容跟帖内容跟帖内容跟帖内容跟帖内容跟帖内容跟帖内容</view>
+    <text class='name'>王小明</text>
+    <text class='date'>8/21</text>
+  </view>
+
+  <view class='detailbox' wx:for="{{arrdetail}}" wx:for-index="ind" wx:for-item="item" wx:key="ind">
+    <text class='detail'>{{item.detail}}</text>
+    <text class='name'>{{item.name}}</text>
+    <text class='date'>{{item.date}}</text>
+  </view>
+
+</view>
+
+<view class="send">
+  <form bindsubmit="bindFormSubmit">
+    <input class='useinput' name="text" maxlength="50" placeholder="Enter something" />
+    <button form-type="submit"> 提交 </button>
+  </form>
+</view>

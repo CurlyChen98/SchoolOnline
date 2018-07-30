@@ -1,0 +1,7 @@
+<view class='setting'>
+  <view bindtap='enterkey'>输入班级密匙</view>
+</view>
+
+<modal hidden="{{classkeyhidden}}" title="请输入班级密匙" confirm-text="提交" bindconfirm="confirm" no-cancel="true">
+  <input placeholder="Key" bindblur="classinput" value="{{key}}"></input>
+</modal>

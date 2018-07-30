@@ -1,0 +1,76 @@
+/* pages/topic/topic.wxss */
+
+#arrorder {
+  font-size: 13px;
+  height: 25px;
+  line-height: 25px;
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  z-index: 99;
+  box-sizing: border-box;
+  color: #fff;
+}
+
+#arrorder>view {
+  border: 1px #f1f1f1 solid;
+  background-color: #5cb85c;
+  width: 40%;
+  height: 100%;
+  text-align: center;
+  border-radius: 5px;
+}
+
+.arrTopic {
+  margin-top: 10px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: rgb(255, 255, 255);
+  padding: 5px;
+  box-sizing: border-box;
+  border-radius: 5px;
+}
+
+.arrTopic>.courseName {
+  color: rgb(34, 34, 34);
+  align-self: flex-start;
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.arrTopic>.topic {
+  background-color: #fbc44d;
+  width: 90%;
+  height: 70px;
+  border-radius: 5px;
+  padding: 10px;
+  position: relative;
+  font-size: 13px;
+  margin-bottom: 5px;
+}
+
+.arrTopic>.topic>.title {
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  width: 90%;
+  font-size: 17px;
+  font-weight: bolder;
+}
+
+.arrTopic>.topic>.date {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+}
+
+.arrTopic>.topic>.classMate {
+  position: absolute;
+  bottom: 25px;
+  right: 5px;
+}

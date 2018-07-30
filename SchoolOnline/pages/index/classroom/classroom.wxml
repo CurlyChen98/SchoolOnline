@@ -1,0 +1,32 @@
+<!-- classroom.wxml -->
+
+<!-- 最外层 -->
+<view class='room'>
+  <!-- 课程名 -->
+  <view class='roomname'>{{cname}}</view>
+  <!-- 功能选项 -->
+  <view class='titlearr'>
+    <!-- 预习资料查看功能 -->
+    <view class='titlebox'>
+      <text class='title'>资料</text>
+      <!-- 内容 -->
+      <view class='detail'>
+        <!-- 纯文本 -->
+        <view class='textbox'>{{www}}</view>
+        <!-- 视频在线播放 -->
+        <view class='videobox'>
+          <video src="{{videosrc}}" objectFit="contain"></video>
+        </view>
+      </view>
+      <!-- 内容结束 -->
+    </view>
+    <!-- 思考题查看功能 -->
+    <view class='titlebox'>
+      <text class='title'>思考问题</text>
+      <view class='detail'>
+        asdsadsa
+      </view>
+    </view>
+  </view>
+  <!-- 功能选项结束 -->
+</view>

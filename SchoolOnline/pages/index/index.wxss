@@ -1,0 +1,46 @@
+/**index.wxss**/
+
+.classroom {
+  background-color: #5cb85c;
+  font-size: 13px;
+  position: fixed;
+  height: 20px;
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  z-index: 99;
+}
+
+#arrcourse {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#arrcourse>.course:first-child {
+  margin-top: 25px;
+}
+
+#arrcourse>.course {
+  background-color: #7d8f9d;
+  border-radius: 10px;
+  height: 50px;
+  width: 90%;
+  margin: 5px 0 5px 0;
+  padding: 10px;
+  color: white;
+  position: relative;
+}
+
+#arrcourse>.course>.course-date {
+  font-size: 15px;
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+}
+
+#arrcourse>.course>.course-name {
+  font-size: 18px;
+}

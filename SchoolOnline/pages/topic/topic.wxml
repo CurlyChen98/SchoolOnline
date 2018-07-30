@@ -1,0 +1,20 @@
+<!-- topic.wxml -->
+<view id='arrorder'>
+  <!-- 日期选择器 -->
+  <view>
+    <picker mode="date" value="{{selectdate}}" start="2018-01-01" end="{{lastdate}}" bindchange="bindDateChange">{{selectdate}}</picker>
+  </view>
+  <!-- 顺序选择器 -->
+  <view>
+    <picker bindchange="bindPickerChange" value="{{order}}" range="{{arrorder}}">{{arrorder[order]}}</picker>
+  </view>
+</view>
+
+<view class='arrTopic' wx:for="{{arrquer}}" wx:for-index="ind1" wx:for-item="course" wx:key="ind1">
+  <text class='courseName'>{{course[0]}}</text>
+  <view class='topic' wx:for="{{course[1]}}" wx:for-index="ind2" wx:for-item="item" wx:key="ind2"  data-tid='{{item.id}}' bindtap='jumonote'>
+    <text class='title'>{{item.quer}}</text>
+    <text class='classMate'><image src='../../img/shop_fill.png'></image>{{item.classMate}}</text>
+    <text class='date'>{{item.date}}</text>
+  </view> 
+</view>
