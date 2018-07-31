@@ -10,14 +10,14 @@ Page({
     key:'',
     uanme: '',
     rlevel:'',
-    uclass:'',
+    cname:'',
   },
 
   onLoad: function () {
-    let uname = wx.getStorageSync('uname');
+    let uname = wx.getStorageSync('uanme');
     let ulevel = wx.getStorageSync('ulevel');
     let rlevel = '';
-    let uclass = wx.getStorageSync('uclass');
+    let cname = wx.getStorageSync('cname');
     switch (ulevel){
       case "1":
         rlevel = "学生";
@@ -38,7 +38,7 @@ Page({
     this.setData({
       uanme: uname,
       rlevel: rlevel,
-      uclass: uclass,
+      cname: cname,
     })
     console.log("打开我的");
   },

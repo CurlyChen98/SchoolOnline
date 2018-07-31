@@ -16,6 +16,7 @@ Page({
   },
 
   onLoad: function(options) {
+    console.log("打开首页（课堂）")
     wx.hideTabBar();
     let back = this.data.backAddress + this.data.backurl;
     let that = this;
@@ -33,45 +34,24 @@ Page({
             'content-type': 'application/x-www-form-urlencoded'
           },
           success: function(res) {
-            console.log(res.data)
-            let use = res.data.use;
-            let talk = res.data.talk;
-            if (talk == "NotHave" || use.s_uame == "") {
+            if (res.data.talk == "NotHave") {
               that.setData({
                 classhidden: false,
               })
-              if (use.s_uid == undefined) {
-                wx.setStorageSync('uid', use)
-              } else {
-                wx.setStorageSync('uid', use.s_uid)
-              }
-            } else {
-              wx.showTabBar();
-              let uclass = res.data.class;
-              let arrcourse = res.data.course;
-              that.setData({
-                classkey: uclass.s_cname,
-                studentkey: use.s_uame,
-                arrcourse: arrcourse
-              })
-              wx.setStorageSync('uid', use.s_uid)
-              wx.setStorageSync('uclass', uclass.s_cname)
-              wx.setStorageSync('uname', use.s_uame)
-              wx.setStorageSync('ulevel', use.s_ulevel)
-              console.log(that.data.arrcourse)
+              wx.setStorageSync("uid", res.data.uid);
+            } else if (res.data.talk == "Have") {
+              LoadHave(res.data, that);
             }
           }
         })
       }
     });
-    console.log("打开首页（课堂）")
   },
 
   // 班级警告框输入框失去焦点事件
   classinput: function(e) {
     this.setData({
       classkey: e.detail.value,
-      key: '',
     })
   },
 
@@ -79,7 +59,6 @@ Page({
   studentinput: function(e) {
     this.setData({
       studentkey: e.detail.value,
-      key: '',
     })
   },
 
@@ -88,6 +67,7 @@ Page({
     this.setData({
       classhidden: true,
       studenthidden: false,
+      key: '',
     })
   },
 
@@ -95,6 +75,7 @@ Page({
   studentconfirm: function() {
     this.setData({
       studenthidden: true,
+      key: '',
     })
     // 填写班级和姓名后发回服务器根据uid修改对应用户信息
     let back = this.data.backAddress + this.data.backurl;
@@ -113,33 +94,19 @@ Page({
         'content-type': 'application/x-www-form-urlencoded'
       },
       success: function(res) {
-        // 若班级密匙不正确重新输入
         if (res.data.talk == "NotRight") {
           wx.showModal({
             title: '警告',
-            content: '班级密匙不存在',
+            content: '班级密匙错误',
             showCancel: false,
-            confirmText: '重新输入',
             success: function(res) {
               that.setData({
                 classhidden: false,
               })
             }
           })
-        }
-        // 正确则允许使用
-        else {
-          let use = res.data.use;
-          let uclass = res.data.class;
-          that.setData({
-            classkey: uclass.s_cname,
-            studentkey: use.s_uame,
-          })
-          wx.showTabBar();
-          wx.setStorageSync('uid', use.s_uid)
-          wx.setStorageSync('uclass', uclass.s_cname)
-          wx.setStorageSync('uname', use.s_uame)
-          wx.setStorageSync('ulevel', use.s_ulevel)
+        } else if (res.data.talk == "Right") {
+          LoadHave(res.data, that);
         }
       }
     })
@@ -147,12 +114,30 @@ Page({
 
   // 点击触发课程事件
   jumpnext: function(e) {
-    let cid = e.currentTarget.dataset.cid;
-    let cname = e.currentTarget.dataset.cname;
-    wx.setStorageSync('cid', cid);
-    wx.setStorageSync('cname', cname);
+    let couid = e.currentTarget.dataset.couid;
+    wx.setStorageSync('couid', couid);
     wx.navigateTo({
       url: 'classroom/classroom',
     });
   },
+
 })
+
+// 正常用户输出信息方法
+function LoadHave(data, that) {
+  wx.showTabBar();
+  let use = data.use[0];
+  let uclass = data.class[0];
+  let course = data.course;
+  that.setData({
+    classkey: uclass.name,
+    studentkey: use.name,
+    arrcourse: course,
+  })
+  wx.setStorageSync("cid", uclass.cid);
+  wx.setStorageSync("cname", uclass.name);
+  wx.setStorageSync("uid", use.uid);
+  wx.setStorageSync("uanme", use.name);
+  wx.setStorageSync("ulevel", use.level);
+  wx.setStorageSync("gid", use.gid);
+}

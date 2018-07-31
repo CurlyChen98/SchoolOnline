@@ -16,13 +16,10 @@ App({
     wx.onUserCaptureScreen(function(res) {
       wx.showModal({
         title: '截图了？',
-        content: '欢迎反馈至someEmail@email.com',
+        content: '欢迎反馈至z876786569@163.com',
         showCancel: false,
         confirmText: '明白',
         success: function(res) {
-          if (res.confirm) {
-            console.log('欢迎反馈')
-          }
         }
       })
     })

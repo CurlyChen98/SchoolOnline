@@ -3,28 +3,26 @@
 <!-- 最外层 -->
 <view class='room'>
   <!-- 课程名 -->
-  <view class='roomname'>{{cname}}</view>
+  <view class='roomname'>{{title}}</view>
   <!-- 功能选项 -->
   <view class='titlearr'>
-    <!-- 预习资料查看功能 -->
+    <!-- 课程资料 -->
     <view class='titlebox'>
-      <text class='title'>资料</text>
-      <!-- 内容 -->
+      <text class='title'>课程资料</text>
       <view class='detail'>
         <!-- 纯文本 -->
-        <view class='textbox'>{{www}}</view>
+        <view class='textbox'>{{content}}</view>
         <!-- 视频在线播放 -->
         <view class='videobox'>
-          <video src="{{videosrc}}" objectFit="contain"></video>
+          <video src="{{video_src}}" objectFit="contain"></video>
         </view>
       </view>
-      <!-- 内容结束 -->
     </view>
-    <!-- 思考题查看功能 -->
+    <!-- 作业下载 -->
     <view class='titlebox'>
-      <text class='title'>思考问题</text>
+      <text class='title'>作业下载</text>
       <view class='detail'>
-        asdsadsa
+        <button type="primary" open-type="contact" size="mini" bindtap='homeworkDownload'>点击这里</button>
       </view>
     </view>
   </view>

@@ -11,7 +11,7 @@
         "course"=>"",
     ];
     
-    // 首次打开时先根据openid在数据库注册一个用户
+    // 用户注册功能
     function CreateUse(){
         global $conn;
         global $content;
@@ -27,31 +27,26 @@
         $mdOpenId = md5($useOpenId);
 
         // 判断是否第一次登陆
-        $sql = "SELECT `s_uid`,`s_uame`,`s_ulevel`,`cid` FROM `s_use` WHERE `s_uopid` = '$mdOpenId'";
+        $sql = "SELECT * FROM `s_use` WHERE `opid` = '$mdOpenId'";
         $que = mysqli_query($conn,$sql);
         $num = mysqli_num_rows($que);
         if($num>0){
-            // 非第一次
-            $que = mysqli_query($conn,$sql);
-            $detail = mysqli_fetch_all($que,1);
-            $content["use"] = $detail[0];
             $content["talk"] = "Have";
-            if($detail[0]["cid"] != ""){
+            $detail = mysqli_fetch_all($que,1);
+            $content["use"] = $detail;      
+            if($detail[0]["cid"]=="0"||$detail[0]["name"]=="0"){
+                $content["talk"] = "NotHave";
+            }else{
                 $cid = $detail[0]["cid"];
-                $sql = "SELECT * FROM `s_class` WHERE `s_cid` = '$cid'";
-                $que = mysqli_query($conn,$sql);
-                $detail = mysqli_fetch_all($que,1);
-                $content["class"] = $detail[0];
-                // 加载班级所有课程
                 LoadCourse($cid);
-            }
+            }   
+            $content["uid"] = $detail[0]["uid"];    
         }else{
-            // 第一次
-            $sql = "INSERT INTO `s_use` VALUES (NULL, '', '$mdOpenId', '1', '', '', now())";
+            $content["talk"]="NotHave";
+            $sql = "INSERT INTO `s_use` VALUES (NULL,'0','0','$mdOpenId','0','1',now())";
             $que = mysqli_query($conn,$sql);
-            $id = mysqli_insert_id($conn);
-            $content["use"] = $id;
-            $content["talk"] = "NotHave";
+            $uid = mysqli_insert_id($conn);
+            $content["uid"] = $uid;    
         }
         echo json_encode($content);
     }
@@ -66,38 +61,55 @@
         $studentkey = $_REQUEST["studentkey"];
 
         // 判断班级密匙是否正确
-        $sql = "SELECT * FROM `s_class` WHERE `classkey` = '$classkey'";
+        $sql = "SELECT * FROM `class` WHERE `classkey` = '$classkey'";
         $que = mysqli_query($conn,$sql);
         $num = mysqli_num_rows($que);
         if($num>0){
-            // 若班级密匙正确
             $content["talk"] = "Right";
             $detail = mysqli_fetch_all($que,1);
-            $content["class"] = $detail[0];
-            $cid = $content["class"]["s_cid"];
-            // 先修改学生信息
-            $sql = "UPDATE `s_use` SET `cid` = '$cid' , `s_uame` = '$studentkey' WHERE `s_uid` = '$uid';";
+            $cid = $detail[0]["cid"];
+            $sql = "UPDATE `s_use` SET `cid` = '$cid',`name` = '$studentkey' WHERE `uid` = '$uid'";
             $que = mysqli_query($conn,$sql);
-            // 查询并输出学生信息
-            $sql = "SELECT `s_uid`,`s_uame`,`s_ulevel` FROM `s_use` WHERE `s_uid` = '$uid'";
+            $sql = "SELECT * FROM `s_use` WHERE `uid` = '$uid'";
             $que = mysqli_query($conn,$sql);
             $detail = mysqli_fetch_all($que,1);
-            $content["use"] = $detail[0];
+            $content["use"] = $detail;      
+            LoadCourse($cid);
         }else{        
-            // 若班级密匙不正确
             $content["talk"] = "NotRight";
         }
         echo json_encode($content);
     }
 
-    // 加载班级所有课程
+    // 加载班级课程以及班级信息
     function LoadCourse($cid){
         global $conn;
         global $content;
 
-        $sql = "SELECT * FROM `s_course` WHERE `s_cid` = '$cid'";
+        $sql = "SELECT couid,title,date FROM `course` WHERE `cid` = '1' ORDER BY `date` DESC";
+        $que = mysqli_query($conn,$sql);
+        $num = mysqli_num_rows($que);
+        $detail = mysqli_fetch_all($que,1);
+        $content["course"] = $detail;
+
+        $sql = "SELECT * FROM `class` WHERE `cid` = '$cid'";
         $que = mysqli_query($conn,$sql);
         $detail = mysqli_fetch_all($que,1);
-        $content["course"] = $detail[0];
+        $content["class"] = $detail;
+    }
+
+    // 课程详细展示
+    function ClassRoom(){
+        global $conn;
+        global $content;
+
+        $couid = $_REQUEST["couid"];
+
+        $sql = "SELECT * FROM `course` WHERE `couid` = '$couid'";
+        $que = mysqli_query($conn,$sql);
+        $detail = mysqli_fetch_all($que,1);
+        $content["course"] = $detail;
+
+        echo json_encode($content);
     }
 ?>

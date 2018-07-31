@@ -10,7 +10,7 @@
     <text>{{uanme}}</text>
   </view>
   <view class='selfT'>
-    <text>{{uclass}}</text>
+    <text>{{cname}}</text>
   </view>
   <view class='selfT'>
     <text bindlongpress='superCheck'>{{rlevel}}</text>

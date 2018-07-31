@@ -1,14 +1,16 @@
 <!--index.wxml-->
 
+<wxs module="dateFr" src="../../utils/date.wxs"></wxs>
+
 <view class='classroom'>
   <text>班级：{{classkey}}</text>
   <text>同学：{{studentkey}}</text>
 </view>
 
 <view id="arrcourse">
-  <view wx:for="{{arrcourse}}" wx:key="item.courseDate" class="course" data-cid='{{item.s_cid}}' data-cname='{{item.s_cname}}' bindtap='jumpnext'>
-    <view class='course-name'>{{item.s_cname}}</view>
-    <view class='course-date'>{{item.s_cdate}}</view>
+  <view wx:for="{{arrcourse}}" wx:key="item.courseDate" class="course" data-couid='{{item.couid}}' bindtap='jumpnext'>
+    <view class='course-name'>{{item.title}}</view>
+    <view class='course-date'>{{dateFr.getDate(item.date,'/')}}</view>
   </view>
 </view>
 

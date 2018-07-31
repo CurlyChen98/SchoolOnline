@@ -1,30 +1,61 @@
 // classroom.js
 
+const app = getApp();
+
 Page({
 
   data: {
-    cid: '',
-    cname: '',
-    www: "大萨达撒的撒多撒多萨达打打打萨达打大萨达撒的撒大萨达萨达撒的撒大萨达的撒大萨达大萨达撒发的说法的撒范大萨达撒的撒多撒多萨达打打打萨达打大萨达撒的撒大萨达萨达撒的撒大萨达的撒大萨达大萨达撒发的说法的撒范",
-    videosrc: 'https://gslb.miaopai.com/stream/6yIb~rdCXWBtcNrLaPIZrZnCCgsq6s3azN~cSw__.mp4?ssig=25a0113ac6a3552988b44da98d5ddf71&time_stamp=1532598439132&cookie_id=&vend=1&os=3&partner=1&platform=2&cookie_id=&refer=miaopai&scid=6yIb%7ErdCXWBtcNrLaPIZrZnCCgsq6s3azN%7EcSw__',
-    // videosrc: 'https://wantu-103o-tbm-hz.oss-cn-hangzhou.aliyuncs.com/nSvE8IgAiXYRL9wfOUU/9RvzTwQtWgrkdTdMPO4@@sd.mp4',
+    backAddress: app.globalData.backAddress,
+    backurl: 'Php/use.php',
+    couid: '',
+    title: '',
+    content: '',
+    video_src: '',
+    task_src: '',
+    date: '',
   },
 
   onLoad: function(options) {
-    let cid = wx.getStorageSync('cid');
-    let cname = wx.getStorageSync('cname');
-    this.setData({
-      cid: cid,
-      cname: cname,
-      // cname: '勾股定理的形成',
+    console.log("打开课程")
+    let couid = wx.getStorageSync('couid');
+    let back = this.data.backAddress + this.data.backurl;
+    let that = this;
+    wx.request({
+      url: back,
+      data: {
+        do: "ClassRoom",
+        couid: couid
+      },
+      method: 'POST',
+      header: {
+        'content-type': 'application/x-www-form-urlencoded'
+      },
+      success: function(res) {
+        let data = res.data.course[0];
+        that.setData({
+          couid: data.couid,
+          title: data.title,
+          content: data.content,
+          video_src: data.video_src,
+          task_src: data.task_src,
+          date: data.date,
+        })
+      }
     })
   },
 
-  onShow: function() {
-    console.log("打开课程")
-  },
-
-  downloaddet: function() {
-
-  },
+  homeworkDownload: function() {
+    let task_src = this.data.task_src
+    wx.downloadFile({
+      url: task_src, 
+      success: function(res) {
+        let temp = res.tempFilePath;
+        wx.saveFile({
+          tempFilePath: temp,
+          success: function (res) {
+          }
+        })
+      }
+    })
+  }
 })
