@@ -13,6 +13,8 @@ Page({
     video_src: '',
     task_src: '',
     date: '',
+    key:'',
+    downloadhidden: true,
   },
 
   onLoad: function(options) {
@@ -45,17 +47,43 @@ Page({
   },
 
   homeworkDownload: function() {
-    let task_src = this.data.task_src
+    let task_src = this.data.task_src;
+    let src = this.data.backAddress + "HomeworkDownload/" + task_src;
+    let that = this;
+    console.log(src)
     wx.downloadFile({
-      url: task_src, 
+      url: src,
       success: function(res) {
         let temp = res.tempFilePath;
+        // wx.openDocument({
+        //   filePath: temp,
+        //   success: function(res) {
+        //   }
+        // })
         wx.saveFile({
           tempFilePath: temp,
           success: function (res) {
+            var savedFilePath = res.savedFilePath
+            console.log(savedFilePath)
+            wx.saveVideoToPhotosAlbum({
+              filePath: savedFilePath,
+              success(res) {
+                console.log(res)
+              }
+            })
+            // that.setData({
+            //   key: savedFilePath,
+            //   downloadhidden: false,
+            // })
           }
         })
       }
+    })
+  },
+
+  downloadconfirm:function(){
+    this.setData({
+      downloadhidden: true,
     })
   }
 })

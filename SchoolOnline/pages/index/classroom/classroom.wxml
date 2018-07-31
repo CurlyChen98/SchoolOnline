@@ -22,9 +22,14 @@
     <view class='titlebox'>
       <text class='title'>作业下载</text>
       <view class='detail'>
-        <button type="primary" open-type="contact" size="mini" bindtap='homeworkDownload'>点击这里</button>
+        <button type="primary" size="mini" bindtap='homeworkDownload'>点击这里</button>
       </view>
     </view>
   </view>
   <!-- 功能选项结束 -->
 </view>
+
+
+<modal hidden="{{downloadhidden}}" title="链接" confirm-text="确认" bindconfirm="downloadconfirm" no-cancel="true">
+  <input value='{{key}}'></input>
+</modal>
