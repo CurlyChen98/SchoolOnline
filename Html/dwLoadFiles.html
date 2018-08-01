@@ -5,83 +5,69 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>作业下载</title>
     <style>
         * {
             padding: 0;
             margin: 0;
-            /* background-color: chocolate; */
         }
 
-        #box {
-            /* background-color: forestgreen; */
+        html,
+        body {
+            height: 100%;
         }
 
-        .title {
-            /* background-color: fuchsia; */
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #btn {
+            margin-bottom: 200px;
+            color: #ffffff;
+            padding: 10px;
+            background-color: #0275d8;
+            border-radius: 10px;
+        }
+
+        #btn:active {
+            background-color: #04559c;
         }
     </style>
 </head>
 
 <body>
-    <div id="box">
-        <p>作业提交</p>
-        <!-- 伪input:file控件 -->
-        <span class="span">
-            <button id="select" type="button" class="btn btn-success">File</button>选择上传的文件
-        </span>
-        <!-- 真input:file控件被隐藏 -->
-        <input type="file" style="display: none;" id="file" onchange="fileChange()">
-        <input type="text" placeholder="TextShow" id="textShow" p>
-        <div id="show">显示等待提交的文件</div>
-        <button type="submit" onclick="upFile">Submit</button>
-    </div>
+    <div id="btn" onclick="dw()">点击下载</div>
 
-
+    <!-- <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script> -->
+    <script src="./jquery-3.3.1.min.js"></script>
     <script>
-        let file_form = new FormData();
-        let phpurl = "";
+        let src = "https://www.bigcurly.club/SchoolOnline/HomeworkDownload/"
 
-        window.onload = function () {
-            document.getElementById("select").onclick = function () {
-                document.getElementById("file").click();
+        function dw() {
+            let test = window.location.search;
+            test = test.slice(1);
+            let arrtest = test.split("&")
+            let arr = {};
+            for (const key in arrtest) {
+                let one = arrtest[key].split("=")[0];
+                let two = arrtest[key].split("=")[1];
+                arr[one] = two;
             }
-        }
-
-        function fileChange() {
-            var file = document.getElementById("file").files[0];
-            if (file) {
-                file_form.append("file", file);
-            }
-            document.getElementById("show").innerHTML = file.name;
-            document.getElementById("textShow").value = file.name;
-        }
-
-        function createXhr() {
-            if (window.XMLHttpRequest) {
-                //code buy 市面上的浏览器
-                var Xhr = new window.XMLHttpRequest;
-            } else {
-                //code buy IE8以下
-                var Xhr = new ActiveXObject("Microsoft.XMLHttp");
-            }
-            return Xhr;
-        }
-
-        function upFile() {
-            let text = document.getElementById("textShow").value;
-            if (text == "") {
-                text = "doNotChange";
-            }
-            file_form.append("text", JSON.stringify(text));
-
-            var xhr = createXhr();
-            xhr.open("post", phpurl, true);
-            xhr.onload = function () {
-                var get = JSON.parse(xhr.responseText)
-            }
-            // xhr.send(file_form);
-            console.log(file_form)
+            arr["do"] = "Dw";
+            $.ajax({
+                type: "POST",
+                url: "../Php/homework.php",
+                data: arr,
+                dataType: "JSON",
+                success: function (res) {
+                    let course = res.course;
+                    let task_src = course[0].task_src;
+                    task_src = src + task_src
+                    window.location.href = task_src;
+                }
+            });
         }
     </script>
 </body>

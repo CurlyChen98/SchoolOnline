@@ -7,14 +7,13 @@ Page({
   data: {
     backAddress: app.globalData.backAddress,
     backurl: 'Php/use.php',
+    cid: '',
     couid: '',
     title: '',
     content: '',
     video_src: '',
     task_src: '',
     date: '',
-    key:'',
-    downloadhidden: true,
   },
 
   onLoad: function(options) {
@@ -35,6 +34,7 @@ Page({
       success: function(res) {
         let data = res.data.course[0];
         that.setData({
+          cid: data.cid,
           couid: data.couid,
           title: data.title,
           content: data.content,
@@ -48,42 +48,19 @@ Page({
 
   homeworkDownload: function() {
     let task_src = this.data.task_src;
-    let src = this.data.backAddress + "HomeworkDownload/" + task_src;
-    let that = this;
-    console.log(src)
-    wx.downloadFile({
-      url: src,
+    let cid = this.data.cid;
+    let couid = this.data.couid;
+    let src = this.data.backAddress + "Html/dwLoadFiles.html?cid=" + cid + "&couid=" + couid;
+    wx.showModal({
+      title: '提示',
+      content: '微信不支持该链接，确认复制链接到浏览器打开下载',
+      showCancel: false,
       success: function(res) {
-        let temp = res.tempFilePath;
-        // wx.openDocument({
-        //   filePath: temp,
-        //   success: function(res) {
-        //   }
-        // })
-        wx.saveFile({
-          tempFilePath: temp,
-          success: function (res) {
-            var savedFilePath = res.savedFilePath
-            console.log(savedFilePath)
-            wx.saveVideoToPhotosAlbum({
-              filePath: savedFilePath,
-              success(res) {
-                console.log(res)
-              }
-            })
-            // that.setData({
-            //   key: savedFilePath,
-            //   downloadhidden: false,
-            // })
-          }
+        wx.setClipboardData({
+          data: src,
+          success: function (res) { }
         })
       }
     })
   },
-
-  downloadconfirm:function(){
-    this.setData({
-      downloadhidden: true,
-    })
-  }
 })

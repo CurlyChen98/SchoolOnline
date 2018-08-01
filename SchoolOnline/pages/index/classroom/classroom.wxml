@@ -30,6 +30,6 @@
 </view>
 
 
-<modal hidden="{{downloadhidden}}" title="链接" confirm-text="确认" bindconfirm="downloadconfirm" no-cancel="true">
+<!-- <modal hidden="{{downloadhidden}}" title="链接" confirm-text="确认" bindconfirm="downloadconfirm" no-cancel="true">
   <input value='{{key}}'></input>
-</modal>
+</modal> -->
