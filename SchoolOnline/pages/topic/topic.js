@@ -1,94 +1,99 @@
+// topic.js
+
+const app = getApp();
+
 Page({
 
   data: {
+    backAddress: app.globalData.backAddress,
+    backurl: 'Php/use.php',
     selectdate: '',
     lastdate: '',
+    befday: '',
+    today: '',
     order: 0,
     arrorder: ["倒叙", "顺序"],
-    arrquer: [
-      ["第一讲", [{
-          id: 0,
-          quer: '为什么第三条边大于第一条边加第二条边之和',
-          like: 22,
-          classMate: '王小明',
-          date: '9/21',
-        },
-        {
-          id: 1,
-          quer: '勾股定理疑问',
-          like: 98,
-          classMate: '莉文东',
-          date: '5/21',
-        },
-        {
-          id: 2,
-          quer: '勾股定理疑问',
-          like: 98,
-          classMate: '莉文东',
-          date: '5/21',
-        },
-      ]],
-      ["第er讲", [{
-          id: 3,
-          quer: 'css的弹性盒子不理解',
-          like: 5,
-          classMate: '老王',
-          date: '12/31',
-        },
-        {
-          id: 4,
-          quer: 'css的弹性盒子不理解',
-          like: 5,
-          classMate: '老王',
-          date: '12/31',
-        },
-      ]],
-    ],
+    arrquer: '',
   },
 
   onLoad: function(options) {
+    console.log("打开话题")
     let nowdate = new Date()
     let year = nowdate.getFullYear();
     let mon = nowdate.getMonth() + 1;
     let day = nowdate.getDate();
-    // console.log(nowdate);
-    // console.log(year + "-" + mon + "-" + day)
-    if (mon < 10)
-      mon = "0" + mon
-    if (day < 10)
-      day = "0" + day
+    if (mon < 10) mon = "0" + mon;
+    if (day < 10) day = "0" + day;
     let lastday = year + 1
+    let befday = year - 1
     this.setData({
       selectdate: year + "-" + mon + "-" + day,
+      today: year + "-" + mon + "-" + day,
       lastdate: lastday + "-" + mon + "-" + day,
+      befday: befday + "-" + mon + "-" + day,
     })
+
+    let that = this;
+    wxrequest(that);
   },
 
-  onShow: function() {
-    console.log("打开话题")
-  },
-
-  bindDateChange: function(e) {
-    // console.log(e)
+  DateChange: function(e) {
     this.setData({
       selectdate: e.detail.value
     })
+    let that = this;
+    wxrequest(that);
   },
 
-  bindPickerChange: function(e) {
-    // console.log(e)
+  PickerChange: function(e) {
     this.setData({
       order: e.detail.value
     })
+    let that = this;
+    wxrequest(that);
   },
 
-  jumonote: function (e) {
-    let tid = e.currentTarget.dataset.tid;
-    // console.log("jump");
-    // console.log(tid);
-    wx.setStorageSync('tid', tid);
+  jumpnote: function(e) {
+    let taid = e.currentTarget.dataset.taid;
+    wx.setStorageSync('taid', taid);
     wx.navigateTo({
       url: 'note/note',
     });
   },
+
+  jumpcreate: function(e) {
+    wx.navigateTo({
+      url: 'createNote/createNote',
+    });
+  },
 })
+
+function wxrequest(that) {
+  let back = that.data.backAddress + that.data.backurl;
+  let cid = wx.getStorageSync('cid');
+  let order = that.data.order;
+  if (order == 0) order = "DESC";
+  else if (order == 1) order = "ASC";
+  let selectdate = that.data.selectdate;
+  let today = that.data.today;
+  let day = '';
+  if (selectdate != today) day = selectdate;
+  wx.request({
+    url: back,
+    data: {
+      do: "FindTalk",
+      cid: cid,
+      order: order,
+      day: day,
+    },
+    method: 'POST',
+    header: {
+      'content-type': 'application/x-www-form-urlencoded'
+    },
+    success: function(res) {
+      that.setData({
+        arrquer: res.data.topic
+      })
+    }
+  })
+}

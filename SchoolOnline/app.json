@@ -1,15 +1,20 @@
 {
   "pages": [
+    
     "pages/index/index",
+    "pages/index/classroom/classroom",
+    
+    "pages/topic/topic",
+    "pages/topic/createNote/createNote",
+    "pages/topic/note/note",
+
+    "pages/group/group",
+
+    "pages/myself/myself",
     "pages/myself/uploadFiles/uploadFiles",
     "pages/myself/mygroup/mygroup",
     "pages/myself/mytopic/mytopic",
-    "pages/myself/setting/setting",
-    "pages/myself/myself",
-    "pages/topic/note/note",
-    "pages/index/classroom/classroom",
-    "pages/group/group",
-    "pages/topic/topic"
+    "pages/myself/setting/setting"
   ],
   "window": {
     "backgroundTextStyle": "light",

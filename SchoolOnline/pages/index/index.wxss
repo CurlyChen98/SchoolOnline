@@ -2,9 +2,10 @@
 
 .classroom {
   background-color: #5cb85c;
+  color: #ffffff;
   font-size: 13px;
   position: fixed;
-  height: 20px;
+  height: 23px;
   width: 100%;
   display: flex;
   justify-content: space-around;
@@ -20,7 +21,7 @@
 }
 
 #arrcourse>.course:first-child {
-  margin-top: 25px;
+  margin-top: 28px;
 }
 
 #arrcourse>.course {

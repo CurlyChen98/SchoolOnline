@@ -1,9 +1,13 @@
 // node.js
 
+const app = getApp();
+
 Page({
 
   data: {
-    tid: '',
+    backAddress: app.globalData.backAddress,
+    backurl: 'Php/use.php',
+    taid: '',
     arrdetail: [{
       detail: "跟帖内容",
       name: '名字',
@@ -16,18 +20,26 @@ Page({
   },
 
   onLoad: function(options) {
-    let tid = wx.getStorageSync('tid');
-    this.setData({
-      tid: tid,
-    })
-    console.log(this.data.tid)
-  },
-
-  onShow: function() {
     console.log("进入帖子")
+    let taid = wx.getStorageSync('taid');
+    let back = this.data.backAddress + this.data.backurl;
+    wx.request({
+      url: back,
+      data: {
+        do: "FindTalkDe",
+        taid: taid,
+      },
+      method: 'POST',
+      header: {
+        'content-type': 'application/x-www-form-urlencoded'
+      },
+      success: function(res) {
+        console.log(res.data)
+      }
+    })
   },
 
-  bindFormSubmit: function (e) {
+  bindFormSubmit: function(e) {
     let intext = e.detail.value.text;
     let arr = this.data.arrdetail;
     let myarr = {

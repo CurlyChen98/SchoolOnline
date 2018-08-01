@@ -2,8 +2,6 @@
     include("conn.php");
     header('Content-type:text/json'); 
 
-    $cid = $_REQUEST["cid"];
-    $couid = $_REQUEST["couid"];
     $do = $_REQUEST["do"];
     $content = [
         "talk"=>"",
@@ -16,8 +14,9 @@
     function Dw(){
         global$content;
         global$conn;
-        global$couid;
-        global$cid;
+        
+        $cid = $_REQUEST["cid"];
+        $couid = $_REQUEST["couid"];
 
         $sql = "SELECT * FROM `course` WHERE `couid` = '$couid' AND `cid` = '$cid'";
         $que = mysqli_query($conn,$sql);

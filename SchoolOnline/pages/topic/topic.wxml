@@ -2,19 +2,26 @@
 <view id='arrorder'>
   <!-- 日期选择器 -->
   <view>
-    <picker mode="date" value="{{selectdate}}" start="2018-01-01" end="{{lastdate}}" bindchange="bindDateChange">{{selectdate}}</picker>
+    <picker mode="date" value="{{selectdate}}" start="{{befday}}" end="{{lastdate}}" bindchange="DateChange">
+      <i class="iconfont icon-activity_fill" style="font-size: 13px;">{{selectdate}}</i>
+    </picker>
   </view>
   <!-- 顺序选择器 -->
   <view>
-    <picker bindchange="bindPickerChange" value="{{order}}" range="{{arrorder}}">{{arrorder[order]}}</picker>
+    <picker bindchange="PickerChange" value="{{order}}" range="{{arrorder}}">
+      <i class="iconfont icon-dynamic_fill" style="font-size: 13px;">{{arrorder[order]}}</i>
+    </picker>
+  </view>
+  <!-- 添加话题按钮 -->
+  <view bindtap="jumpcreate">
+    <i class="iconfont icon-label_fill" style="font-size: 13px;">创建话题</i>
   </view>
 </view>
 
 <view class='arrTopic' wx:for="{{arrquer}}" wx:for-index="ind1" wx:for-item="course" wx:key="ind1">
   <text class='courseName'>{{course[0]}}</text>
-  <view class='topic' wx:for="{{course[1]}}" wx:for-index="ind2" wx:for-item="item" wx:key="ind2"  data-tid='{{item.id}}' bindtap='jumonote'>
-    <text class='title'>{{item.quer}}</text>
-    <text class='classMate'><image src='../../img/shop_fill.png'></image>{{item.classMate}}</text>
+  <view class='topic' wx:for="{{course[1]}}" wx:for-index="ind2" wx:for-item="item" wx:key="ind2" data-taid='{{item.taid}}' bindtap='jumpnote'>
+    <text class='title'>{{item.title}}</text>
     <text class='date'>{{item.date}}</text>
-  </view> 
+  </view>
 </view>

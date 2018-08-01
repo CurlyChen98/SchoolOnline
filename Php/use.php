@@ -9,6 +9,7 @@
         "use"=>"",
         "class"=>"",
         "course"=>"",
+        "topic"=>"",
     ];
     
     // 用户注册功能
@@ -86,7 +87,7 @@
         global $conn;
         global $content;
 
-        $sql = "SELECT couid,title,date FROM `course` WHERE `cid` = '1' ORDER BY `date` DESC";
+        $sql = "SELECT couid,title,date FROM `course` WHERE `cid` = '$cid' ORDER BY `date` DESC";
         $que = mysqli_query($conn,$sql);
         $num = mysqli_num_rows($que);
         $detail = mysqli_fetch_all($que,1);
@@ -111,5 +112,91 @@
         $content["course"] = $detail;
 
         echo json_encode($content);
+    }
+
+    // 课程列表展示
+    function FindCourse(){
+        global $conn;
+        global $content;
+
+        $cid = $_REQUEST["cid"];
+        
+        $sql = "SELECT couid,title,date FROM `course` WHERE `cid` = '$cid' ORDER BY `date` DESC";
+        $que = mysqli_query($conn,$sql);
+        $detail = mysqli_fetch_all($que,1);
+        $content["course"] = $detail;
+
+        echo json_encode($content);
+    }
+
+    // 创建话题
+    function CreateTalk(){
+        global $conn;
+        global $content;
+
+        $data = json_decode($_REQUEST["data"]);
+        $course = json_decode($_REQUEST["course"]);
+        $uid = $_REQUEST["uid"];
+        $dateYear = $_REQUEST["dateYear"];
+
+        $title = $data->title;
+        $detail = $data->detail;
+        $couid = $course->couid;
+        $uid;
+        $dateYear;
+        $sql = "INSERT INTO `talk` VALUES (NULL,'$uid','$couid','$title','$detail','$dateYear')";
+        if (mysqli_query($conn,$sql)) {
+            $content["talk"] = "Ok";
+        }else {
+            $content["talk"] = "NotOk";
+        }
+        echo json_encode($content);
+    }
+
+    // 话题列表展示
+    function FindTalk(){
+        global $conn;
+        global $content;
+
+        $cid = $_REQUEST["cid"];
+        $order = $_REQUEST["order"];
+        $day = $_REQUEST["day"];
+
+        
+        if($day != ""){
+            $day = "AND `date` = '$day'";
+        }
+        $sql = "SELECT `couid`,`date`,`title` FROM `course` WHERE `cid` = '$cid' ORDER BY `date` $order";
+        $que = mysqli_query($conn,$sql);
+        $detail = mysqli_fetch_all($que,1);
+        foreach ($detail as $key => $value) {
+            $couid = $value["couid"];
+            $title = $value["title"];
+            $sql = "SELECT * FROM `talk` WHERE `couid` = '$couid' $day ORDER BY `date` $order";
+            $que = mysqli_query($conn,$sql);
+            $detail2 = mysqli_fetch_all($que,1);
+            $content["topic"][$key] = [$title,$detail2];
+        }
+        
+        echo json_encode($content);
+    }
+
+    // 展示某一话题详细和跟帖
+    function FindTalkDe(){
+        global $conn;
+        global $content;
+
+        $taid = $_REQUEST["taid"];
+        $sql = "SELECT `couid`,`date`,`title` FROM `course` WHERE `cid` = '$cid' ORDER BY `date` $order";
+        $que = mysqli_query($conn,$sql);
+        $detail = mysqli_fetch_all($que,1);
+        $content["topic"] = $detail;
+
+        echo json_encode($content);
+    }
+
+    // 上传跟帖
+    function FollowTalk(){
+
     }
 ?>

@@ -1,0 +1,27 @@
+<!-- createNote.wxml -->
+<form class='box' bindsubmit="formsub">
+  <!-- 输入题目 -->
+  <view class='samllInput'>
+    输入题目
+    <input name="title" maxlength="20"></input>
+  </view>
+  <!-- 今天日期 -->
+  <view class='samllInput'>
+    今天日期
+    <input disabled='true' value='{{date}}'></input>
+  </view>
+  <!-- 选择课程 -->
+  <view class='samllInput'>
+    课程选择
+    <picker name="course" bindchange="courseChange" value="{{index}}" range="{{coursearr}}" range-key="title">
+      <input disabled='true' value='{{coursearr[index].title}}'></input>
+    </picker>
+  </view>
+  <!-- 讨论内容 -->
+  <view class='samllInput'>
+    讨论详细
+    <textarea name="detail" maxlength="300"></textarea>
+  </view>
+
+  <button form-type="submit" plain="true" class='samllInput'>发布</button>
+</form>
