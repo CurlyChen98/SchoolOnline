@@ -1,6 +1,5 @@
 {
   "pages": [
-    
     "pages/index/index",
     "pages/index/classroom/classroom",
     
@@ -11,7 +10,6 @@
     "pages/group/group",
 
     "pages/myself/myself",
-    "pages/myself/uploadFiles/uploadFiles",
     "pages/myself/mygroup/mygroup",
     "pages/myself/mytopic/mytopic",
     "pages/myself/setting/setting"

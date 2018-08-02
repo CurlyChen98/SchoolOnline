@@ -137,14 +137,12 @@
         $data = json_decode($_REQUEST["data"]);
         $course = json_decode($_REQUEST["course"]);
         $uid = $_REQUEST["uid"];
-        $dateYear = $_REQUEST["dateYear"];
 
         $title = $data->title;
         $detail = $data->detail;
         $couid = $course->couid;
         $uid;
-        $dateYear;
-        $sql = "INSERT INTO `talk` VALUES (NULL,'$uid','$couid','$title','$detail','$dateYear')";
+        $sql = "INSERT INTO `talk` VALUES (NULL,'$uid','$couid','$title','$detail',now())";
         if (mysqli_query($conn,$sql)) {
             $content["talk"] = "Ok";
         }else {
@@ -185,18 +183,42 @@
     function FindTalkDe(){
         global $conn;
         global $content;
-
+        
         $taid = $_REQUEST["taid"];
-        $sql = "SELECT `couid`,`date`,`title` FROM `course` WHERE `cid` = '$cid' ORDER BY `date` $order";
+
+        $sql = "SELECT talk.title,talk.detail,talk.date, s_use.name 
+                FROM talk, s_use WHERE talk.taid = '$taid' AND talk.uid = s_use.uid 
+                ORDER BY talk.date DESC";
         $que = mysqli_query($conn,$sql);
         $detail = mysqli_fetch_all($que,1);
         $content["topic"] = $detail;
+
+        $sql = "SELECT talkdet.detail,talkdet.date,s_use.name 
+                FROM talkdet, s_use WHERE talkdet.taid = '$taid' AND talkdet.uid = s_use.uid 
+                ORDER BY talkdet.date ASC";
+        $que = mysqli_query($conn,$sql);
+        $detail = mysqli_fetch_all($que,1);
+        $content["topicdet"] = $detail;
 
         echo json_encode($content);
     }
 
     // 上传跟帖
     function FollowTalk(){
+        global $conn;
+        global $content;
+        
+        $taid = $_REQUEST["taid"];
+        $uid = $_REQUEST["uid"];
+        $detail = $_REQUEST["detail"];
 
+        $sql = "INSERT INTO `talkdet` VALUES ('$taid','$uid','$detail',now())";
+        if (mysqli_query($conn,$sql)) {
+            $content["talk"] = "Ok";
+        }else {
+            $content["talk"] = "NotOk";
+        }
+
+        echo json_encode($content);
     }
 ?>

@@ -4,19 +4,12 @@ Page({
 
   },
 
-  onLoad: function(options) {},
+  onLoad: function(options) {
+    
+  },
 
-  onReady: function() {},
-
-  onShow: function() {},
-
-  onHide: function() {},
-
-  onUnload: function() {},
-
-  onPullDownRefresh: function() {},
-
-  onReachBottom: function() {},
-
-  onShareAppMessage: function() {},
+  onReady: function() {
+    
+  },
+  
 })

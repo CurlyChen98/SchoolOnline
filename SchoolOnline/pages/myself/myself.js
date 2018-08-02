@@ -5,20 +5,22 @@ const app = getApp();
 Page({
 
   data: {
+    backAddress: app.globalData.backAddress,
+    backurl: 'Php/use.php',
     superhidden: true,
     superkey: '',
-    key:'',
+    key: '',
     uanme: '',
-    rlevel:'',
-    cname:'',
+    rlevel: '',
+    cname: '',
   },
 
-  onLoad: function () {
+  onLoad: function() {
     let uname = wx.getStorageSync('uanme');
     let ulevel = wx.getStorageSync('ulevel');
     let rlevel = '';
     let cname = wx.getStorageSync('cname');
-    switch (ulevel){
+    switch (ulevel) {
       case "1":
         rlevel = "学生";
         break;
@@ -62,7 +64,7 @@ Page({
     let keys = e.detail.value;
     this.setData({
       superkey: keys,
-      key:'',
+      key: '',
     })
   },
 
@@ -74,4 +76,21 @@ Page({
     console.log("提交老师密匙：" + this.data.superkey)
   },
 
+  // 上传文件功能
+  upLoadFiles: function (e) {
+    let uid = wx.getStorageSync('uid');
+    let cid = wx.getStorageSync('cid');
+    let src = this.data.backAddress + "Html/upLoadFiles.html?cid=" + cid + "&uid=" + uid;
+    wx.showModal({
+      title: '提示',
+      content: '微信不支持该链接，确认复制链接到浏览器打开下载',
+      showCancel: false,
+      success: function(res) {
+        wx.setClipboardData({
+          data: src,
+          success: function(res) {}
+        })
+      }
+    })
+  }
 })

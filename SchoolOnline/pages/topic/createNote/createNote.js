@@ -93,7 +93,7 @@ Page({
             duration: 1000,
             success: function () {
               setTimeout(function () {
-                wx.switchTab({
+                wx.reLaunch({
                   url: '../topic'
                 })
               }, 1000)
@@ -106,7 +106,7 @@ Page({
             duration: 1000,
             success: function () {
               setTimeout(function () {
-                wx.switchTab({
+                wx.reLaunch({
                   url: '../topic'
                 })
               }, 1000)

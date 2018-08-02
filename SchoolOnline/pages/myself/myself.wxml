@@ -22,7 +22,7 @@
     <text bindtap='jump' data-type='mytopic'>我的话题</text>
   </view>
   <view class='selfT'>
-    <text bindtap='jump' data-type='uploadFiles'>作业提交</text>
+    <text bindtap='upLoadFiles'>作业提交</text>
   </view>
   <view class='selfT'>
     <text bindtap='jump' data-type='setting'>设置</text>

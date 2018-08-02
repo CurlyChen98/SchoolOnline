@@ -10,44 +10,115 @@
         * {
             padding: 0;
             margin: 0;
-            /* background-color: chocolate;*/
+        }
+
+        html,
+        body {
+            height: 100%;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #cccccc;
         }
 
         #box {
-            /* background-color: forestgreen; */
+            position: relative;
+            margin-top: -100px;
+            background-color: #ffffff;
+            border-radius: 5px;
+            display: flex;
+            flex-direction: column;
+            padding: 25px;
+            width: 80%;
+            color: #333333;
         }
 
         .title {
-            /* background-color: fuchsia; */
+            background-color: #4284f5;
+            height: 35px;
+            line-height: 35px;
+            width: 100px;
+            text-align: center;
+            border-radius: 5px;
+            color: #ffffff;
+            position: absolute;
+            top: -20px;
+            left: 0px;
+        }
+
+        .line {
+            margin-top: 15px;
+            outline: none;
+            height: 31px;
+        }
+
+        #file {
+            display: none;
+        }
+
+        #center {
+            border: none;
+            background-color: #f5b400;
+        }
+
+        #sub {
+            border: none;
+            background-color: #109e59;
         }
     </style>
 </head>
 
 <body>
     <div id="box">
-        <p>作业提交</p>
+        <a class="title">作业提交</a>
+        <button id="center" class="line" type="button">File</button>
         <!-- 伪input:file控件 -->
-        <span class="span">
-            <button id="select" type="button" class="btn btn-success">File</button>选择上传的文件
-        </span>
+        <input id="file" type="file" onchange="fileChange()">
         <!-- 真input:file控件被隐藏 -->
-        <input type="file" style="display: none;" id="file" onchange="fileChange()">
-        <input type="text" placeholder="TextShow" id="textShow" p>
-        <div id="show">显示等待提交的文件</div>
-        <button type="submit" onclick="upFile">Submit</button>
-
-        <a href="https://www.bigcurly.club/SchoolOnline/HomeworkDownload/01%e6%b5%8b%e8%af%951%e7%8f%ad/%e5%8b%be%e8%82%a1%e5%ae%9a%e7%90%86/%e5%8b%be%e8%82%a1%e5%ae%9a%e7%90%86.docx" download>下载</a>
+        <div id="show" class="line">显示等待提交的文件</div>
+        <div class="line">用户名</div>
+        <div class="line">班级</div>
+        <select class="line">
+            <option>归属课程</option>
+        </select>
+        <button id="sub" class="line" type="submit" onclick="upFile()">Submit</button>
     </div>
 
-
+    <script src="./jquery-3.3.1.min.js"></script>
     <script>
         let file_form = new FormData();
-        let phpurl = "";
+        let phpurl = "../Php/homework.php";
+        let arr = {};
 
         window.onload = function () {
-            document.getElementById("select").onclick = function () {
+            document.getElementById("center").onclick = function () {
                 document.getElementById("file").click();
             }
+            let test = window.location.search;
+            if(test==""){
+                alert("链接错误")
+                return;
+            }
+            test = test.slice(1);
+            let arrtest = test.split("&")
+            for (const key in arrtest) {
+                let one = arrtest[key].split("=")[0];
+                let two = arrtest[key].split("=")[1];
+                arr[one] = two;
+            }
+            arr["do"] = "Dw";
+            $.ajax({
+                type: "POST",
+                url: phpurl,
+                data: arr,
+                dataType: "JSON",
+                success: function (res) {
+                    console.log(res.data)
+                }
+            });
         }
 
         function fileChange() {
@@ -55,34 +126,10 @@
             if (file) {
                 file_form.append("file", file);
             }
-            document.getElementById("show").innerHTML = file.name;
-            document.getElementById("textShow").value = file.name;
-        }
-
-        function createXhr() {
-            if (window.XMLHttpRequest) {
-                //code buy 市面上的浏览器
-                var Xhr = new window.XMLHttpRequest;
-            } else {
-                //code buy IE8以下
-                var Xhr = new ActiveXObject("Microsoft.XMLHttp");
-            }
-            return Xhr;
+            document.getElementById("show").innerHTML = "等待提交：" + file.name;
         }
 
         function upFile() {
-            let text = document.getElementById("textShow").value;
-            if (text == "") {
-                text = "doNotChange";
-            }
-            file_form.append("text", JSON.stringify(text));
-
-            var xhr = createXhr();
-            xhr.open("post", phpurl, true);
-            xhr.onload = function () {
-                var get = JSON.parse(xhr.responseText)
-            }
-            // xhr.send(file_form);
             console.log(file_form)
         }
     </script>

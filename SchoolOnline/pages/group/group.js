@@ -10,10 +10,26 @@ Page({
     show: false,
   },
 
-  onShow: function() {
-    console.log("打开小组")
+  onLoad: function(options) {
+    console.log("打开小组讨论");
+    let gid = wx.getStorageSync('gid')
+    let cid = wx.getStorageSync('cid')
+    let uid = wx.getStorageSync('uid')
+    if (gid == "0") {
+      wx.showModal({
+        title: '警告',
+        content: '暂未有小组',
+        showCancel: false,
+        success: function(res) {
+          wx.reLaunch({
+            url: "../myself/myself",
+          })
+        }
+      })
+      return;
+    }
   },
-  
+
   bindFormSubmit: function(e) {
     console.log(e.detail.value.text)
     let details = ['dfd', 'dssdsdsadsa'];

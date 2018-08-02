@@ -26,4 +26,14 @@
         echo json_encode($content);
     }
 
+    // 上传页面寻找用户信息的方法
+    function FindUse(){
+        global$content;
+        global$conn;
+        
+        $cid = $_REQUEST["cid"];
+        $content["cid"] = $cid;
+
+        echo json_encode($content);
+    }
 ?>

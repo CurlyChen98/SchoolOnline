@@ -43,10 +43,14 @@
     <!-- <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script> -->
     <script src="./jquery-3.3.1.min.js"></script>
     <script>
-        let src = "https://www.bigcurly.club/SchoolOnline/HomeworkDownload/"
+        let phpurl = "../Php/homework.php";
 
         function dw() {
             let test = window.location.search;
+            if(test==""){
+                alert("链接错误")
+                return;
+            }
             test = test.slice(1);
             let arrtest = test.split("&")
             let arr = {};
@@ -58,7 +62,7 @@
             arr["do"] = "Dw";
             $.ajax({
                 type: "POST",
-                url: "../Php/homework.php",
+                url: phpurl,
                 data: arr,
                 dataType: "JSON",
                 success: function (res) {

@@ -1,7 +1,7 @@
 /* note.wxss */
 
 .box {
-  padding: 10px;
+  padding: 11px;
   margin-bottom: 100px;
 }
 .titlebox {
@@ -13,11 +13,12 @@
 }
 
 .titlebox >.detail {
+  line-height: 25px;
   font-size: 17px;
   color: #343434;
-  display: block;
   margin-top: 15px;
   margin-bottom: 50px;
+  display: block;
   word-break: break-all;
 }
 
@@ -49,10 +50,12 @@
 }
 
 .detailbox>.detail {
+  line-height: 25px;
   margin-bottom: 60px;
-  display: inline-block;
   font-size: 16px;
   color: #343434;
+  display: block;
+  word-break: break-all;
 }
 
 .detailbox >.name {
