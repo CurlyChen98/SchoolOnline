@@ -68,6 +68,10 @@
             border: none;
             background-color: #109e59;
         }
+
+        option{
+            width: 100%;
+        }
     </style>
 </head>
 
@@ -79,8 +83,8 @@
         <input id="file" type="file" onchange="fileChange()">
         <!-- 真input:file控件被隐藏 -->
         <div id="show" class="line">显示等待提交的文件</div>
-        <div class="line">用户名</div>
-        <div class="line">班级</div>
+        <div id="name" class="line"></div>
+        <div id="class" class="line"></div>
         <select class="line">
             <option>归属课程</option>
         </select>
@@ -100,6 +104,7 @@
             let test = window.location.search;
             if(test==""){
                 alert("链接错误")
+                $("#box").html("<a>None</a>");
                 return;
             }
             test = test.slice(1);
@@ -109,14 +114,22 @@
                 let two = arrtest[key].split("=")[1];
                 arr[one] = two;
             }
-            arr["do"] = "Dw";
+            arr["do"] = "Find";
             $.ajax({
                 type: "POST",
                 url: phpurl,
                 data: arr,
                 dataType: "JSON",
                 success: function (res) {
-                    console.log(res.data)
+                    console.log(res)
+                    $("#name").html(res.use.stuName);
+                    $("#class").html(res.use.claName);
+                    let html = "";
+                    for(;;){
+                        html +=`
+                            <option>归属课程</option>
+                        `;
+                    }
                 }
             });
         }
