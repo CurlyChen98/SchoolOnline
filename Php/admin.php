@@ -91,7 +91,7 @@ function ShowStudent()
     // 是否小组展示
     $addsqlgroup = "";
     if ($showGroup == "Y") {
-        $sql = "SELECT * FROM `s_group` WHERE `cid` = $cid";
+        $sql = "SELECT * FROM `s_group` WHERE `cid` = $cid ORDER BY `s_group`.`gid` ASC";
         $que = mysqli_query($conn, $sql);
         $num = mysqli_num_rows($que);
         if ($num == 0) {
@@ -115,7 +115,7 @@ function ShowStudent()
         $addsqlgroup = " AND s_use.`gid` = '$gid'";
         $content["groupOne"] = $detail["name"];
     }
-    $addsql = $addsqlgroup;
+    $addsql = $addsql . $addsqlgroup;
     if ($updateGroup == "Y") {
         echo json_encode($content);
         return;
@@ -153,7 +153,8 @@ function UpdateStudent()
     global $conn;
     global $content;
     // 获取前端数据
-    $uid = $_REQUEST["uid"];
+    @$uid = $_REQUEST["uid"];
+    @$gid = $_REQUEST["gid"];
     $how = $_REQUEST["how"];
     // 判断动作并加以修饰
     $sql = "";
@@ -163,12 +164,36 @@ function UpdateStudent()
         $sql = "UPDATE `s_use` SET `level`='1' WHERE `uid` ='$uid'";
     } else if ($how == "kickOut") {
         $sql = "UPDATE `s_use` SET `cid`='0' WHERE `uid` ='$uid'";
+    } else if ($how == "kickOutGroup") {
+        $sql = "UPDATE `s_use` SET `gid`='0' WHERE `uid` ='$uid'";
+    } else if ($how == "deleteGroup") {
+        $sql = "DELETE FROM `s_group` WHERE `gid` ='$gid'";
     }
     // 执行动作
     $que = mysqli_query($conn, $sql);
     $res = mysqli_affected_rows($conn);
     if ($res > 0) {
-        $content["talk"] = "Ok";
+        // 判断第二次动作并加以修饰
+        if ($how == "kickOutGroup") {
+            $sql = "SELECT * FROM `s_use` WHERE `gid` = $gid";
+            $que = mysqli_query($conn, $sql);
+            $num = mysqli_num_rows($que);
+            if ($num == 0) {
+                $sql = "DELETE FROM `s_group` WHERE `gid` = $gid";
+                $que = mysqli_query($conn, $sql);
+                $res = mysqli_affected_rows($conn);
+            }
+        } else if ($how == "deleteGroup") {
+            $sql = "UPDATE `s_use` SET `gid` = '0' WHERE `gid` = $gid;";
+            $que = mysqli_query($conn, $sql);
+            $res = mysqli_affected_rows($conn);
+        }
+        // 执行第二次动作
+        if ($res > 0) {
+            $content["talk"] = "Ok";
+        } else {
+            $content["talk"] = "NotOk";
+        }
     } else {
         $content["talk"] = "NotOk";
     }
@@ -192,7 +217,7 @@ function CreateClass()
         return;
     } else {
         $arrcode1 = "PLOKMIJNUHBYGVTFCRDXESZWAQ123456789";
-        $arrcode2 = "PLOKMIJNUHBYGVTFCRDXESZWAQ";
+        $arrcode2 = "PLOKMIJNUHBYGVTFCRDXESZWAQzxcvbnmlkjhgfdsapoiuytrewq";
         $classcode = "";
         $teachercode = "";
         for (;; ) {
@@ -223,19 +248,19 @@ function CreateClass()
     }
 }
 
-// 查看班级
-function ShowClass()
+// 查看小组密匙
+function ShowGroupKey()
 {
     global $conn;
     global $content;
     // 获取前端数据
-    $uid = $_REQUEST["uid"];
-    $cid = $_REQUEST["cid"];
-    $level = $_REQUEST["level"];
-    if ($level <= 5) {
-        $sql = "SELECT * FROM `class` WHERE `cid` = $cid";
-    } else {
-        $sql = "SELECT * FROM `class`";
-    }
+    $gid = $_REQUEST["gid"];
+
+    $sql = "SELECT * FROM `s_group` WHERE `gid` = $gid";
+    $que = mysqli_query($conn, $sql);
+    $detail = mysqli_fetch_assoc($que);
+    $content["group"] = $detail;
+
+    echo json_encode($content);
 }
 ?>
