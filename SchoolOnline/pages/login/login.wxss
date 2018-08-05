@@ -1,0 +1,40 @@
+/* login.wxss */
+.box{
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #212121;
+  background-color: #f9f9f9;
+}
+
+.view_input{
+  width: 100%;
+  margin-top: -30px;
+  position: relative;
+}
+
+.view_input>input{
+  background-color: #bcbcbc;
+  padding: 8px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  color: #f9f9f9;
+}
+
+.button_sub{
+  width: 100px;
+  background-color: #03a8f3;
+  color: #f9f9f9;
+  position: absolute;
+  bottom: -70%;
+  right: 0px;
+}
+
+.img{
+  width: 80%;
+  position: absolute;
+  top: -5%;
+}

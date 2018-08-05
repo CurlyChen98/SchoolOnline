@@ -3,12 +3,12 @@ App({
   // 自定义全局变量
   globalData: {
     // 后台地址
-    backAddress: 'http://localhost/SchoolOnline/',
-    // backAddress: 'https://www.bigcurly.club/SchoolOnline/',    
+    backAddress: 'http://localhost/SchoolOnline/Php/use.php',
+    // backAddress: 'https://www.bigcurly.club/SchoolOnline/Php/use.php',
   },
 
-  onLaunch: function() {
-
+  onLaunch: function () {
+    console.log("打开小程序");
   },
 
   onShow: function(options) {

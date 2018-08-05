@@ -1,10 +1,11 @@
 /* app.wxss */
 @import "utils/template.wxss";
 
-view, text {
+page{
   font-family: Microsoft Yahei;
+  font-size: 18px;
+  height: 100%;
 }
-
 /*
 // Page({
 

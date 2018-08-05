@@ -1,0 +1,12 @@
+<view class='box'>
+  <image src='../../img/logo.png' mode='aspectFit' class='img'></image>
+  <form style='width: 80%;' bindsubmit='formSubmit'>
+    <view class='view_input'>
+      班级密匙：
+      <input name='classkey'></input>
+      学生姓名：
+      <input name='studentkey'></input>
+      <button class='button_sub' hover-class='hover_button_sub' form-type='submit'>提交</button>
+    </view>
+  </form>
+</view>
