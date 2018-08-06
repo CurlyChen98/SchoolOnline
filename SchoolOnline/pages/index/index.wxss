@@ -1,47 +1,34 @@
 /**index.wxss**/
 
-.classroom {
-  background-color: #5cb85c;
-  color: #ffffff;
-  font-size: 13px;
+.classroom{
+  background-color: #03a8f3;
+  color: #f9f9f9;
+  font-size: 12px;
+  padding: 3px 0 3px 0;
   position: fixed;
-  height: 23px;
+  z-index: 99;
   width: 100%;
   display: flex;
   justify-content: space-around;
-  align-items: center;
-  z-index: 99;
 }
 
-#arrcourse {
+.arrcourse{
+  color: #f9f9f9;
+  font-size: 16px;
+  padding-top: 30px;
   width: 100%;
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
 }
 
-#arrcourse>.course:first-child {
-  margin-top: 28px;
-}
-
-#arrcourse>.course {
-  background-color: #7d8f9d;
-  border-radius: 10px;
-  height: 50px;
-  width: 90%;
-  margin: 5px 0 5px 0;
-  padding: 10px;
-  color: white;
+.arrcourse>.course{
+  background-color: #5f7c8a;
+  width: 95%;
+  margin-bottom: 15px;
   position: relative;
-}
-
-#arrcourse>.course>.course-date {
-  font-size: 15px;
-  position: absolute;
-  bottom: 5px;
-  right: 10px;
-}
-
-#arrcourse>.course>.course-name {
-  font-size: 18px;
+  border-radius: 5px;
+  height: 100px;
+  padding: 8px;
+  box-sizing: border-box;
 }

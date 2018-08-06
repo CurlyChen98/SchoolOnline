@@ -5,16 +5,14 @@ const app = getApp();
 Page({
 
   data: {
-    classhidden: true,
-    studenthidden: true,
-    classkey: '',
-    studentkey: '',
-    key: '',
     arrcourse: '',
   },
 
   onLoad: function(options) {
-    console.log("打开课程")
+    wx.showLoading({
+      title: '加载中',
+      mask: true,
+    });
     let back = app.globalData.backAddress;
     let that = this;
     wx.login({
@@ -23,7 +21,7 @@ Page({
         wx.request({
           url: back,
           data: {
-            do: "CreateUse",
+            do: "SelectUse",
             code: code
           },
           method: 'POST',
@@ -31,33 +29,34 @@ Page({
             'content-type': 'application/x-www-form-urlencoded'
           },
           success: function(res) {
+            wx.hideLoading()
             console.log(res.data)
-            if (res.data.talk == "NotHave") {
+            if (res.data.talk == "NotOk") {
               wx.reLaunch({
                 url: '../login/login'
               })
-            } else if (res.data.talk == "Have") {
-              let data = res.data;
-              wx.showTabBar();
-              let use = data.use[0];
-              let uclass = data.class[0];
-              let course = data.course;
+            } else if (res.data.talk == "Ok") {
               that.setData({
-                classkey: uclass.name,
-                studentkey: use.name,
-                arrcourse: course,
+                classkey: res.data.class.name,
+                studentkey: res.data.use.name,
+                arrcourse: res.data.course,
               })
-              wx.setStorageSync("cid", uclass.cid);
-              wx.setStorageSync("cname", uclass.name);
-              wx.setStorageSync("uid", use.uid);
-              wx.setStorageSync("uanme", use.name);
-              wx.setStorageSync("ulevel", use.level);
-              wx.setStorageSync("gid", use.gid);
+              wx.clearStorageSync();
+              wx.setStorageSync("cid", res.data.class.cid);
+              wx.setStorageSync("cname", res.data.class.name);
+              wx.setStorageSync("uid", res.data.use.uid);
+              wx.setStorageSync("uanme", res.data.use.name);
+              wx.setStorageSync("ulevel", res.data.use.level);
+              wx.setStorageSync("gid", res.data.use.gid);
             }
           }
         })
       }
     });
+  },
+
+  onShow: function () {
+    console.log("打开课程")
   },
 
   // 点击触发课程事件

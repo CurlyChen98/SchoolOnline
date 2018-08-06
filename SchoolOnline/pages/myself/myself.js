@@ -5,7 +5,6 @@ const app = getApp();
 Page({
 
   data: {
-    backAddress: app.globalData.backAddress,
     backurl: 'Php/use.php',
     superhidden: true,
     superkey: '',
@@ -42,6 +41,9 @@ Page({
       rlevel: rlevel,
       cname: cname,
     })
+  },
+
+  onShow: function() {
     console.log("打开我的");
   },
 
@@ -77,10 +79,10 @@ Page({
   },
 
   // 上传文件功能
-  upLoadFiles: function (e) {
+  upLoadFiles: function(e) {
     let uid = wx.getStorageSync('uid');
     let cid = wx.getStorageSync('cid');
-    let src = this.data.backAddress + "Html/upLoadFiles.html?cid=" + cid + "&uid=" + uid;
+    let src = app.globalData.backAddress + "Html/upLoadFiles.html?cid=" + cid + "&uid=" + uid;
     wx.showModal({
       title: '提示',
       content: '微信不支持该链接，确认复制链接到浏览器打开下载',

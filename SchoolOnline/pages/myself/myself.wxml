@@ -1,30 +1,37 @@
 <!-- myself.wxml -->
 <view class='self'>
-  <view class='ava'>
-    <open-data type="userAvatarUrl"></open-data>
-  </view>
-  <view class='selfT nickname'>
+  <view class='user'>
+    <view class='userAva'>
+      <open-data type="userAvatarUrl"></open-data>
+    </view>
     <open-data type="userNickName"></open-data>
   </view>
   <view class='selfT'>
+    <i class='iconfont icon-brush_fill'></i>
     <text>{{uanme}}</text>
   </view>
   <view class='selfT'>
+    <i class='iconfont icon-collection_fill'></i>
     <text>{{cname}}</text>
   </view>
   <view class='selfT'>
+    <i class='iconfont icon-addressbook_fill'></i>
     <text bindlongpress='superCheck'>{{rlevel}}</text>
   </view>
   <view class='selfT'>
+    <i class='iconfont icon-manage_fill'></i>
     <text bindtap='jump' data-type='mygroup'>我的小组</text>
   </view>
   <view class='selfT'>
+    <i class='iconfont icon-flag_fill'></i>
     <text bindtap='jump' data-type='mytopic'>我的话题</text>
   </view>
   <view class='selfT'>
+    <i class='iconfont icon-document_fill'></i>
     <text bindtap='upLoadFiles'>作业提交</text>
   </view>
   <view class='selfT'>
+    <i class='iconfont icon-decoration_fill'></i>
     <text bindtap='jump' data-type='setting'>设置</text>
   </view>
 </view>

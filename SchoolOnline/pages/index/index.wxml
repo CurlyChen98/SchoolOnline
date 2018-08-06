@@ -7,16 +7,9 @@
   <text>同学：{{studentkey}}</text>
 </view>
 
-<view id="arrcourse">
+<view class="arrcourse">
   <view wx:for="{{arrcourse}}" wx:key="item.courseDate" class="course" data-couid='{{item.couid}}' bindtap='jumpnext'>
     <view class='course-name'>{{item.title}}</view>
     <view class='course-date'>{{dateFr.getDate(item.date,'/')}}</view>
   </view>
 </view>
-
-<modal hidden="{{classhidden}}" title="请输入班级密匙" confirm-text="提交" bindconfirm="classconfirm" no-cancel="true">
-  <input placeholder="Key" bindblur="classinput" placeholder="请输入" value='{{key}}'></input>
-</modal>
-<modal hidden="{{studenthidden}}" title="请输入真实姓名" confirm-text="提交" bindconfirm="studentconfirm" no-cancel="true">
-  <input placeholder="Key" bindblur="studentinput" placeholder="请输入" value='{{key}}'></input>
-</modal>

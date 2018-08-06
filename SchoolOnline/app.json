@@ -1,9 +1,10 @@
 {
   "pages": [
-    "pages/login/login",
-
+    "pages/myself/myself",
     "pages/index/index",
     "pages/index/classroom/classroom",
+
+    "pages/login/login",
     
     "pages/topic/topic",
     "pages/topic/createNote/createNote",
@@ -11,7 +12,6 @@
 
     "pages/group/group",
 
-    "pages/myself/myself",
     "pages/myself/mygroup/mygroup",
     "pages/myself/mytopic/mytopic",
     "pages/myself/setting/setting"
@@ -23,32 +23,26 @@
     "navigationBarTextStyle": "black"
   },
   "tabBar": {
-    "color": "#5296d5",
-    "selectedColor": "#0275d8",
+    "color": "#ced7db",
+    "selectedColor": "#03a8f3",
     "backgroundColor": "#ffffff",
     "borderStyle": "black",
     "list": [
       {
-        "iconPath": "img/shop_fill33.png",
-        "selectedIconPath": "img/shop_fill3.png",
+        "iconPath": "img/1.png",
+        "selectedIconPath": "img/11.png",
         "pagePath": "pages/index/index",
         "text": "课程"
       },
       {
-        "iconPath": "img/interactive_fill33.png",
-        "selectedIconPath": "img/interactive_fill3.png",
+        "iconPath": "img/2.png",
+        "selectedIconPath": "img/22.png",
         "pagePath": "pages/topic/topic",
-        "text": "话题"
+        "text": "讨论"
       },
       {
-        "iconPath": "img/group_fill33.png",
-        "selectedIconPath": "img/group_fill3.png",
-        "pagePath": "pages/group/group",
-        "text": "小组"
-      },
-      {
-        "iconPath": "img/people_fill33.png",
-        "selectedIconPath": "img/people_fill3.png",
+        "iconPath": "img/3.png",
+        "selectedIconPath": "img/33.png",
         "pagePath": "pages/myself/myself",
         "text": "我的"
       }

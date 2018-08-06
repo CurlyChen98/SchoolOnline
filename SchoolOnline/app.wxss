@@ -5,6 +5,7 @@ page{
   font-family: Microsoft Yahei;
   font-size: 18px;
   height: 100%;
+  background-color: #f9f9f9;
 }
 /*
 // Page({

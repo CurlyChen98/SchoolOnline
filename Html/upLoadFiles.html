@@ -102,8 +102,8 @@
             }
             let test = window.location.search;
             if (test == "") {
-                alert("链接错误")
                 $("#box").html("<a>None</a>");
+                alert("链接错误")
                 return;
             }
             test = test.slice(1);
@@ -112,6 +112,7 @@
                 let one = arrtest[key].split("=")[0];
                 let two = arrtest[key].split("=")[1];
                 arr[one] = two;
+                file_form.append(one, two);
             }
             arr["do"] = "Find";
             $.ajax({
@@ -120,44 +121,72 @@
                 data: arr,
                 dataType: "JSON",
                 success: function (res) {
-                    $("#name").html(res.use.stuName);
-                    $("#class").html(res.use.claName);
-                    coursearr = res.course;
-                    let html = `<option value="None">选择课程</option>`;
-                    for (const key in res.course) {
-                        html += `
+                    if (res.talk == "Ok") {
+                        $("#name").html(res.use.stuName);
+                        $("#class").html(res.use.claName);
+                        coursearr = res.course;
+                        let html = `<option value="None">选择课程</option>`;
+                        for (const key in res.course) {
+                            html += `
                             <option value="${res.course[key].couid}">${res.course[key].title}</option>
                         `;
+                        }
+                        $("#select").html(html);
+                    } else if (res.talk == "NOtOk") {
+                        $("#box").html("<a>None</a>");
+                        alert("链接错误")
+                    } else {
+                        $("#box").html("<a>None</a>");
+                        alert("错误！请联系管理员")
                     }
-                    $("#select").html(html);
                 }
             });
         }
 
         function fileChange() {
-            var file = document.getElementById("file").files[0];
+            let file = document.getElementById("file").files[0];
             if (file) {
                 file_form.append("file", file);
+                document.getElementById("show").innerHTML = "等待提交：" + file.name;
             }
-            document.getElementById("show").innerHTML = "等待提交：" + file.name;
         }
 
         function upFile() {
             let val = $('#select').val();
+            if (val == "None") {
+                alert("没有选择课程");
+                return;
+            }
             let select = coursearr[val - 1];
 
+            let file = document.getElementById("file").files[0];
+            if (file == undefined) {
+                alert("没有选择文件");
+                return;
+            }
+            if (file.size > 2 * 1024 * 1024) {
+                document.getElementById("file").files[0] = undefined;
+                alert("文件必须小于2M");
+                location.reload();
+                return;
+            }
+
+            file_form.append("select", select.title);
             file_form.append("do", "GetFile");
             $.ajax({
                 type: "POST",
                 url: phpurl,
                 data: file_form,
-                // dataType: "JSON",
-                // 告诉jQuery不要去处理发送的数据
+                dataType: "JSON",
                 processData: false,
-                // 告诉jQuery不要去设置Content-Type请求头
                 contentType: false,
                 success: function (res) {
                     console.log(res)
+                    if (res.talk == "Ok") {
+                        alert("上传成功");
+                    } else if (res.talk == "NotOk") {
+                        alert(res.error)
+                    }
                 }
             });
         }

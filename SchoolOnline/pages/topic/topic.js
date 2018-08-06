@@ -5,8 +5,6 @@ const app = getApp();
 Page({
 
   data: {
-    backAddress: app.globalData.backAddress,
-    backurl: 'Php/use.php',
     selectdate: '',
     lastdate: '',
     befday: '',
@@ -69,7 +67,7 @@ Page({
 })
 
 function wxrequest(that) {
-  let back = that.data.backAddress + that.data.backurl;
+  let back = app.globalData.backAddress;
   let cid = wx.getStorageSync('cid');
   let order = that.data.order;
   if (order == 0) order = "DESC";

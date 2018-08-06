@@ -29,8 +29,12 @@
   background-color: #03a8f3;
   color: #f9f9f9;
   position: absolute;
-  bottom: -70%;
+  bottom: -100%;
   right: 0px;
+}
+
+.hover_button_sub{
+  background-color: #2195f2;
 }
 
 .img{

@@ -13,6 +13,10 @@ Page({
   },
 
   formSubmit: function(e) {
+    wx.showLoading({
+      title: '加载中',
+      mask: true,
+    });
     let classkey = e.detail.value.classkey;
     let studentkey = e.detail.value.studentkey;
     let back = app.globalData.backAddress;
@@ -34,10 +38,37 @@ Page({
           },
           success: function(res) {
             console.log(res.data)
+            wx.hideLoading();
+            if (res.data.talk == "Ok") {
+              wx.showToast({
+                title: '添加成功',
+                icon: 'success',
+                duration: 1000,
+                success: function(res) {
+                  setTimeout(function() {
+                    wx.reLaunch({
+                      url: '../index/index'
+                    })
+                  }, 1000)
+                }
+              })
+            } else if (res.data.talk == "NotOk") {
+              wx.showModal({
+                title: '',
+                content: res.data.error,
+                showCancel: '',
+                success: function(res) {}
+              })
+            }
           }
         })
       }
     });
   },
 
+  onGotUserInfo: function (e) {
+    console.log(e.detail.errMsg)
+    console.log(e.detail.userInfo)
+    console.log(e.detail.rawData)
+  },
 })

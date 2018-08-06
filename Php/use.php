@@ -7,7 +7,7 @@ $do();
 $content = [];
     
 // 查找用户
-function CreateUse()
+function SelectUse()
 {
     global $conn;
     global $content;
@@ -21,9 +21,19 @@ function CreateUse()
     $num = mysqli_num_rows($que);
     if ($num > 0) {
         $content["talk"] = "Ok";
-        $detail = mysqli_fetch_all($que, 1);
+        $detail = mysqli_fetch_assoc($que);
         $content["use"] = $detail;
-        LoadCourse($detail[0]["cid"]);
+
+        $cid = $detail["cid"];
+        $sql = "SELECT couid,title,date FROM `course` WHERE `cid` = '$cid' ORDER BY `date` DESC";
+        $que = mysqli_query($conn, $sql);
+        $detail = mysqli_fetch_all($que, 1);
+        $content["course"] = $detail;
+
+        $sql = "SELECT * FROM `class` WHERE `cid` = '$cid'";
+        $que = mysqli_query($conn, $sql);
+        $detail = mysqli_fetch_assoc($que);
+        $content["class"] = $detail;
     } else {
         $content["talk"] = "NotOk";
     }
@@ -47,18 +57,27 @@ function InsertUse()
     $que = mysqli_query($conn, $sql);
     $num = mysqli_num_rows($que);
     if ($num > 0) {
-        $content["talk"] = "Ok";
         $detail = mysqli_fetch_assoc($que);
-        $cid = $detail["cid"];
-        $sql = "INSERT INTO `s_use`(`uid`, `gid`, `cid`, `opid`, `name`, `level`, `lastdate`) 
-                VALUES (NULL,'0','$cid','$mdOpenId','$studentkey','1',now())";
-        if(mysqli_query($conn, $sql)){
-            $content["talk"] = "Ok";
-        }else{
+        $cid = $detail['cid'];
+        $sql = "SELECT * FROM `s_use` WHERE `opid` = '$mdOpenId'";
+        $que = mysqli_query($conn, $sql);
+        $num = mysqli_num_rows($que);
+        if ($num == 0) {
+            $sql = "INSERT INTO `s_use`(`uid`, `gid`, `cid`, `opid`, `name`, `level`, `lastdate`) 
+                    VALUES (NULL,'0','$cid','$mdOpenId','$studentkey','1',now())";
+            if (mysqli_query($conn, $sql)) {
+                $content["talk"] = "Ok";
+            } else {
+                $content["talk"] = "NotOk";
+                $content["error"] = "未知错误";
+            }
+        } else {
             $content["talk"] = "NotOk";
+            $content["error"] = "该OpenId已存在";
         }
     } else {
         $content["talk"] = "NotOk";
+        $content["error"] = "班级密匙错误";
     }
     echo json_encode($content);
 }
@@ -76,25 +95,7 @@ function FindOpenId($code)
     return $mdOpenId;
 }
 
-// 加载班级课程以及班级信息
-function LoadCourse($cid)
-{
-    global $conn;
-    global $content;
-
-    $sql = "SELECT couid,title,date FROM `course` WHERE `cid` = '$cid' ORDER BY `date` DESC";
-    $que = mysqli_query($conn, $sql);
-    $num = mysqli_num_rows($que);
-    $detail = mysqli_fetch_all($que, 1);
-    $content["course"] = $detail;
-
-    $sql = "SELECT * FROM `class` WHERE `cid` = '$cid'";
-    $que = mysqli_query($conn, $sql);
-    $detail = mysqli_fetch_all($que, 1);
-    $content["class"] = $detail;
-}
-
-    // 课程详细展示
+// 课程详细展示
 function ClassRoom()
 {
     global $conn;
