@@ -63,8 +63,8 @@ function InsertUse()
         $que = mysqli_query($conn, $sql);
         $num = mysqli_num_rows($que);
         if ($num == 0) {
-            $sql = "INSERT INTO `s_use`(`uid`, `gid`, `cid`, `opid`, `name`, `level`, `lastdate`) 
-                    VALUES (NULL,'0','$cid','$mdOpenId','$studentkey','1',now())";
+            $sql = "INSERT INTO `s_use`(`uid`, `gid`, `cid`, `opid`, `name`, `level`, `lastdate`,`password`) 
+                    VALUES (NULL,'0','$cid','$mdOpenId','$studentkey','1',now(),'0')";
             if (mysqli_query($conn, $sql)) {
                 $content["talk"] = "Ok";
             } else {
@@ -111,7 +111,7 @@ function ClassRoom()
     echo json_encode($content);
 }
 
-    // 课程列表展示
+// 课程列表展示
 function FindCourse()
 {
     global $conn;
@@ -127,7 +127,7 @@ function FindCourse()
     echo json_encode($content);
 }
 
-    // 创建话题
+// 创建话题
 function CreateTalk()
 {
     global $conn;
@@ -150,7 +150,7 @@ function CreateTalk()
     echo json_encode($content);
 }
 
-    // 话题列表展示
+// 话题列表展示
 function FindTalk()
 {
     global $conn;
@@ -179,7 +179,7 @@ function FindTalk()
     echo json_encode($content);
 }
 
-    // 展示某一话题详细和跟帖
+// 展示某一话题详细和跟帖
 function FindTalkDe()
 {
     global $conn;
@@ -204,7 +204,7 @@ function FindTalkDe()
     echo json_encode($content);
 }
 
-    // 上传跟帖
+// 上传跟帖
 function FollowTalk()
 {
     global $conn;
@@ -219,6 +219,37 @@ function FollowTalk()
         $content["talk"] = "Ok";
     } else {
         $content["talk"] = "NotOk";
+        $content["error"] = "未知的错误";
+    }
+
+    echo json_encode($content);
+}
+
+// 检查小组Key
+function CheckGroup()
+{
+    global $conn;
+    global $content;
+
+    $groupkey = $_REQUEST["groupkey"];
+    $uid = $_REQUEST["uid"];
+
+    $sql = "SELECT * FROM `s_group` WHERE `groupkey` = '$groupkey'";
+    $que = mysqli_query($conn, $sql);
+    $num = mysqli_num_rows($que);
+    if ($num > 0) {
+        $detail = mysqli_fetch_assoc($que);
+        $gid = $detail['gid'];
+        $sql = "UPDATE `s_use` SET `gid` = '$gid' WHERE `uid` = '$uid'";
+        if (mysqli_query($conn, $sql)) {
+            $content["talk"] = "Ok";
+        } else {
+            $content["talk"] = "NotOk";
+            $content["error"] = "未知的错误";
+        }
+    } else {
+        $content["talk"] = "NotOk";
+        $content["error"] = "小组密匙错误";
     }
 
     echo json_encode($content);

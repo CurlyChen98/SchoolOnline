@@ -19,13 +19,12 @@ Page({
     });
     let classkey = e.detail.value.classkey;
     let studentkey = e.detail.value.studentkey;
-    let back = app.globalData.backAddress;
     let that = this;
     wx.login({
       success: function(res) {
         let code = res.code;
         wx.request({
-          url: back,
+          url: app.globalData.backAddress,
           data: {
             do: "InsertUse",
             code: code,
@@ -57,7 +56,6 @@ Page({
                 title: '',
                 content: res.data.error,
                 showCancel: '',
-                success: function(res) {}
               })
             }
           }

@@ -1,5 +1,55 @@
 <!-- mygroup.wxml -->
 
-<view>
-  
+<view class='showman'>
+  <view class='man'>
+    <i class='iconfont icon-select_fill' wx:if="{{level1 == 2}}"></i>
+    <i class='iconfont icon-select_fill lock' wx:else></i>
+    <text class='name'>欧阳震华</text>
+    <i class='iconfont icon-delete deleteIco'></i>
+  </view>
+  <view class='man'>
+    <i class='iconfont icon-select_fill' wx:if="{{level2 == 2}}"></i>
+    <i class='iconfont icon-select_fill lock' wx:else></i>
+    <text class='name'>欧阳震华</text>
+    <i class='iconfont icon-delete deleteIco'></i>
+  </view>
+  <view class='man'>
+    <i class='iconfont icon-select_fill' wx:if="{{level2 == 2}}"></i>
+    <i class='iconfont icon-select_fill lock' wx:else></i>
+    <text class='name'>欧阳震华</text>
+    <i class='iconfont icon-delete deleteIco'></i>
+  </view>
+  <view class='man'>
+    <i class='iconfont icon-select_fill' wx:if="{{level2 == 2}}"></i>
+    <i class='iconfont icon-select_fill lock' wx:else></i>
+    <text class='name'>欧阳震华</text>
+    <i class='iconfont icon-delete deleteIco'></i>
+  </view>
+  <view class='man'>
+    <i class='iconfont icon-select_fill' wx:if="{{level2 == 2}}"></i>
+    <i class='iconfont icon-select_fill lock' wx:else></i>
+    <text class='name'>欧阳震华</text>
+    <i class='iconfont icon-delete deleteIco'></i>
+  </view>
+  <view class='man'>
+    <i class='iconfont icon-select_fill' wx:if="{{level2 == 2}}"></i>
+    <i class='iconfont icon-select_fill lock' wx:else></i>
+    <text class='name'>欧阳震华</text>
+    <i class='iconfont icon-delete deleteIco'></i>
+  </view>
 </view>
+
+<view style="color: #bdbdbd;text-align: center;margin-top: 10px;">No Group~</view>
+
+<view class='button'>
+  <view>
+    退出小组
+  </view>
+  <!-- <view>进入小组</view> -->
+  <!-- <view>创建小组</view> -->
+</view>
+
+
+<modal hidden="{{modalHidden}}" title="{{modalTitle}}" confirm-text="提交" bindconfirm="modalConfirm" no-cancel="true">
+  <input bindblur="modalInput" placeholder="请输入" value='{{modalKey}}'></input>
+</modal>

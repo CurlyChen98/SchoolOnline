@@ -1,11 +1,12 @@
 {
   "pages": [
-    "pages/myself/myself",
+    "pages/myself/mytopic/mytopic",
+
     "pages/index/index",
     "pages/index/classroom/classroom",
 
     "pages/login/login",
-    
+
     "pages/topic/topic",
     "pages/topic/createNote/createNote",
     "pages/topic/note/note",
@@ -13,17 +14,18 @@
     "pages/group/group",
 
     "pages/myself/mygroup/mygroup",
-    "pages/myself/mytopic/mytopic",
+    "pages/myself/myself",
     "pages/myself/setting/setting"
+    
   ],
   "window": {
     "backgroundTextStyle": "light",
-    "navigationBarBackgroundColor": "#f9f9f9",
+    "navigationBarBackgroundColor": "#ffffff",
     "navigationBarTitleText": "WeChat",
     "navigationBarTextStyle": "black"
   },
   "tabBar": {
-    "color": "#ced7db",
+    "color": "#9e9e9e",
     "selectedColor": "#03a8f3",
     "backgroundColor": "#ffffff",
     "borderStyle": "black",
@@ -43,6 +45,12 @@
       {
         "iconPath": "img/3.png",
         "selectedIconPath": "img/33.png",
+        "pagePath": "pages/group/group",
+        "text": "讨论"
+      },
+      {
+        "iconPath": "img/4.png",
+        "selectedIconPath": "img/44.png",
         "pagePath": "pages/myself/myself",
         "text": "我的"
       }

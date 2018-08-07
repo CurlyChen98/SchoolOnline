@@ -1,0 +1,37 @@
+<view class="swiper_tab">
+  <view class="swiper_tab_list {{currentTab==0 ? 'on' : ''}}" data-current="0" bindtap="swichNav">我的帖子</view>
+  <view class="swiper_tab_list {{currentTab==1 ? 'on' : ''}}" data-current="1" bindtap="swichNav">我的跟帖</view>
+</view>
+<swiper current="{{currentTab}}" class="swiper-box" duration="300" style="height:{{winHeight-42}}px" bindchange="bindChange">
+  <swiper-item>
+    <scroll-view scroll-y style="height: 100%;">
+      <view class='floor'>
+        <view class='title_box'>
+          <i class='iconfont icon-enterinto_fill'></i>
+          <text class='title'>这一个问题很有趣</text>
+        </view>
+        <text class='from'>陈建浩   2018-02-03 12:00:00</text>
+        <view class='msg_box'>
+          <i class='iconfont icon-message'></i>
+          <text class='num_msg'>20</text>
+        </view>
+      </view>
+      <view class='floor'>
+        <view class='title_box'>
+          <i class='iconfont icon-enterinto_fill'></i>
+          <text class='title'>这一个问题很有趣</text>
+        </view>
+        <text class='from'>陈建浩\t2018-02-03\t12:00:00</text>
+        <view class='msg_box'>
+          <i class='iconfont icon-message'></i>
+          <text class='num_msg' decode="true">&nbsp;20</text>
+        </view>
+      </view>
+    </scroll-view>
+  </swiper-item>
+  <swiper-item>
+    <scroll-view scroll-y style="height: 100%;">
+      <view>我的跟帖</view>
+    </scroll-view>
+  </swiper-item>
+</swiper>

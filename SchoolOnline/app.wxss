@@ -3,31 +3,9 @@
 
 page{
   font-family: Microsoft Yahei;
-  font-size: 18px;
+  font-size: 16px;
   height: 100%;
-  background-color: #f9f9f9;
+  width: 100%;
+  background-color: #ffffff;
+  color: #212121;
 }
-/*
-// Page({
-
-//   data: {
-
-//   },
-
-//   onLoad: function(options) {},
-
-//   onReady: function() {},
-
-//   onShow: function() {},
-
-//   onHide: function() {},
-
-//   onUnload: function() {},
-
-//   onPullDownRefresh: function() {},
-
-//   onReachBottom: function() {},
-
-//   onShareAppMessage: function() {},
-// })
-*/
