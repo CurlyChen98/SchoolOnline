@@ -254,4 +254,78 @@ function CheckGroup()
 
     echo json_encode($content);
 }
+
+// 寻找我发布的帖子
+function FindMyTopic()
+{
+    global $conn;
+    global $content;
+
+    $uid = $_REQUEST["uid"];
+
+    $sql = "SELECT k.taid,k.title,k.date,k.msg_count,p.title AS courseTitle
+            FROM
+                (
+                SELECT  u.taid AS taid,u.title AS title,u.date AS date,u.couid AS couid,COUNT(f.taid) AS msg_count
+                FROM
+                    (
+                    SELECT taid,title,date,couid
+                    FROM talk
+                    WHERE uid = $uid
+                    ) u
+                LEFT JOIN talkdet f ON f.taid = u.taid
+                GROUP BY f.taid
+                ) k
+            LEFT JOIN course p ON p.couid = k.couid;
+            ";
+    $que = mysqli_query($conn, $sql);
+    $detail = mysqli_fetch_all($que, 1);
+    $content["topic"] = $detail;
+
+    $sql = "SELECT `uid`, `gid`, `cid`, `name`, `level`, `lastdate` FROM `s_use` WHERE `uid` = '$uid'";
+    $que = mysqli_query($conn, $sql);
+    $detail = mysqli_fetch_assoc($que);
+    $content["use"] = $detail;
+
+    echo json_encode($content);
+}
+
+// 寻找我跟帖的
+function FindMyFollow()
+{
+    global $conn;
+    global $content;
+
+    $uid = $_REQUEST["uid"];
+
+    $sql = "SELECT kte.taid AS taid,kte.det_detail AS det_detail,kte.det_detdate AS det_detdate,kte.top_title AS top_title,kte.top_date AS top_date,kte.course_title AS course_title,u.name AS top_name
+            FROM
+                (
+                    SELECT kt.taid AS taid,kt.det_detail AS det_detail,kt.det_detdate AS det_detdate,kt.top_title AS top_title,kt.top_date AS top_date,kt.top_uid AS top_uid,e.title AS course_title
+                    FROM
+                        (
+                            SELECT t.taid AS taid,t.detail AS det_detail,t.date AS det_detdate,k.title AS top_title,k.date AS top_date,k.couid AS top_couid,k.uid AS top_uid
+                            FROM
+                                (
+                                    SELECT taid,detail,DATE
+                                    FROM
+                                        talkdet
+                                    WHERE
+                                        uid = 1
+                                ) t
+                            LEFT JOIN talk k ON t.taid = k.taid
+                        ) kt
+                    LEFT JOIN course e ON e.couid = kt.top_couid
+                ) kte
+            LEFT JOIN s_use u ON u.uid = kte.top_uid;
+            ";
+    $que = mysqli_query($conn, $sql);
+    $detail = mysqli_fetch_all($que, 1);
+    $content["topic"] = $detail;
+
+    echo json_encode($content);
+}
 ?>
+
+
+

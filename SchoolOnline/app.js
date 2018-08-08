@@ -3,8 +3,11 @@ App({
   // 自定义全局变量
   globalData: {
     // 后台地址
-    backAddress: 'http://localhost/SchoolOnline/Php/use.php',
-    // backAddress: 'https://www.bigcurly.club/SchoolOnline/Php/use.php',
+    backAddress: 'http://localhost/SchoolOnline/',
+    // backAddress: 'https://www.bigcurly.club/SchoolOnline',
+    backPage: 'Php/use.php',
+    backDownloadJob: 'Php/use.php',
+    backUploadJob: 'Php/use.php',
   },
 
   onLaunch: function () {

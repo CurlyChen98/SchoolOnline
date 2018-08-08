@@ -13,8 +13,19 @@ var DateFr = {
     if (splitStr)
       return M + splitStr + d;
   }
-}
+};
+
+var Msg = {
+  msgCount: function(num) {
+    num = parseInt(num);
+    if (num > 99) {
+      num = "99+";
+    }
+    return num;
+  }
+};
 
 module.exports = {
-  getDate: DateFr.getDate
+  getDate: DateFr.getDate,
+  msgCount: Msg.msgCount,
 }

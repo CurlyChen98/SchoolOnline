@@ -1,37 +1,62 @@
+<!--  -->
+
+<wxs module="template" src="../../../utils/template.wxs"></wxs>
+
 <view class="swiper_tab">
-  <view class="swiper_tab_list {{currentTab==0 ? 'on' : ''}}" data-current="0" bindtap="swichNav">我的帖子</view>
-  <view class="swiper_tab_list {{currentTab==1 ? 'on' : ''}}" data-current="1" bindtap="swichNav">我的跟帖</view>
+  <view class="swiper_tab_list {{currentTab==0 ? 'on' : ''}}" data-current="0" bindtap="switchNav">我的帖子</view>
+  <view class="swiper_tab_list {{currentTab==1 ? 'on' : ''}}" data-current="1" bindtap="switchNav">我的跟帖</view>
 </view>
-<swiper current="{{currentTab}}" class="swiper-box" duration="300" style="height:{{winHeight-42}}px" bindchange="bindChange">
+<swiper current="{{currentTab}}" class="swiper-box" duration="300" style="height:{{winHeight-42}}px" bindchange="swiperChange">
   <swiper-item>
-    <scroll-view scroll-y style="height: 100%;">
-      <view class='floor'>
-        <view class='title_box'>
-          <i class='iconfont icon-enterinto_fill'></i>
-          <text class='title'>这一个问题很有趣</text>
+    <scroll-view scroll-y style="height: 100%;" class='my_create'>
+      <!--  -->
+      <view wx:for="{{myTopic}}" wx:key="date">
+        <!--  -->
+        <view class='floor' bindtap='jump' data-taid='{{item.taid}}'>
+          <view class='title_box'>
+            <i class='iconfont icon-flag_fill'></i>
+            <text class='title'>{{item.title}}</text>
+          </view>
+          <text class='from'decode="true">{{myUse.name}}&nbsp;{{item.date}}</text>
+          <view class='course_box'>
+            <text class='num_msg' decode="true">{{item.courseTitle}}</text>
+          </view>
+          <view class='msg_box'>
+            <i class='iconfont icon-message'></i>
+            <text class='num_msg' decode="true">&nbsp;{{template.msgCount(item.msg_count)}}</text>
+          </view>
         </view>
-        <text class='from'>陈建浩   2018-02-03 12:00:00</text>
-        <view class='msg_box'>
-          <i class='iconfont icon-message'></i>
-          <text class='num_msg'>20</text>
-        </view>
+        <!--  -->
       </view>
-      <view class='floor'>
-        <view class='title_box'>
-          <i class='iconfont icon-enterinto_fill'></i>
-          <text class='title'>这一个问题很有趣</text>
-        </view>
-        <text class='from'>陈建浩\t2018-02-03\t12:00:00</text>
-        <view class='msg_box'>
-          <i class='iconfont icon-message'></i>
-          <text class='num_msg' decode="true">&nbsp;20</text>
-        </view>
-      </view>
+      <!--  -->
     </scroll-view>
   </swiper-item>
   <swiper-item>
-    <scroll-view scroll-y style="height: 100%;">
-      <view>我的跟帖</view>
+    <scroll-view scroll-y style="height: 100%;" class='my_follow'>
+      <!--  -->
+      <view wx:for="{{myFollow}}" wx:key="det_detdate">
+        <!--  -->
+        <view class='floor'>
+          <view class='title_box'>
+            <i class='iconfont icon-flag_fill'></i>
+            <text class='title'>{{myUse.name}}</text>
+          </view>
+          <text class='from'>{{item.det_detdate}}</text>
+          <text class='detail'>{{item.det_detail}}</text>
+          <view class='top_floor'>
+            <view class='title'>{{item.top_title}}</view>
+            <view class='from'>{{item.top_name}}{{item.top_date}}</view>
+          </view>
+          <view class='course_box'>
+            <text class='num_msg' decode="true">{{item.course_title}}</text>
+          </view>
+          <view class='floor_box'>
+            <text class='num_msg' decode="true">0楼</text>
+          </view>
+        </view>
+        <!--  -->
+      </view>
+      <!--  -->
     </scroll-view>
   </swiper-item>
 </swiper>

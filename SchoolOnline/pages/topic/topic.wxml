@@ -1,6 +1,6 @@
 <!-- topic.wxml -->
 
-<wxs module="dateFr" src="../../utils/date.wxs"></wxs>
+<wxs module="template" src="../../utils/template.wxs"></wxs>
 
 <view id='arrorder'>
   <!-- 日期选择器 -->
@@ -25,6 +25,6 @@
   <text class='courseName'>{{course[0]}}</text>
   <view class='topic' wx:for="{{course[1]}}" wx:for-index="ind2" wx:for-item="item" wx:key="ind2" data-taid='{{item.taid}}' bindtap='jumpnote'>
     <text class='title'>{{item.title}}</text>
-    <text class='date'>{{dateFr.getDate(item.date,'/')}}</text>
+    <text class='date'>{{template.getDate(item.date,'/')}}</text>
   </view>
 </view>

@@ -5,8 +5,6 @@ const app = getApp();
 Page({
 
   data: {
-    backAddress: app.globalData.backAddress,
-    backurl: 'Php/use.php',
     taid: '',
     arrdetail: '',
     topic:'',
@@ -15,7 +13,7 @@ Page({
   onLoad: function(options) {
     console.log("进入帖子")
     let taid = wx.getStorageSync('taid');
-    let back = this.data.backAddress + this.data.backurl;
+    let back = app.globalData.backAddress + app.globalData.backPage;
     let that = this;
     wx.request({
       url: back,
