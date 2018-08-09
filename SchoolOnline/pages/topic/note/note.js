@@ -7,18 +7,16 @@ Page({
   data: {
     taid: '',
     arrdetail: '',
-    topic:'',
+    topic: '',
   },
 
   onLoad: function(options) {
-    console.log("进入帖子")
-    let taid = wx.getStorageSync('taid');
-    let back = app.globalData.backAddress + app.globalData.backPage;
+    let taid = options.taid;
     let that = this;
     wx.request({
-      url: back,
+      url: app.globalData.backAddress + app.globalData.backPage,
       data: {
-        do: "FindTalkDe",
+        do: "FindTopicDe",
         taid: taid,
       },
       method: 'POST',
@@ -26,15 +24,20 @@ Page({
         'content-type': 'application/x-www-form-urlencoded'
       },
       success: function(res) {
+        console.log(res.data)
         let topicdet = res.data.topicdet;
-        let topic = res.data.topic[0];
+        let topic = res.data.topic;
         that.setData({
           arrdetail: topicdet,
-          topic: topic, 
+          topic: topic,
           taid: taid,
         })
       }
     })
+  },
+
+  onShow: function() {
+    console.log("进入帖子")
   },
 
   bindFormSubmit: function(e) {
@@ -63,14 +66,14 @@ Page({
       header: {
         'content-type': 'application/x-www-form-urlencoded'
       },
-      success: function (res) {
+      success: function(res) {
         if (res.data.talk == "Ok") {
           wx.showToast({
             title: 'Follow成功',
             icon: 'success',
             duration: 1000,
-            success: function () {
-              setTimeout(function () {
+            success: function() {
+              setTimeout(function() {
                 wx.redirectTo({
                   url: '../note/note'
                 })

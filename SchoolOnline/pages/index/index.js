@@ -13,13 +13,12 @@ Page({
       title: '加载中',
       mask: true,
     });
-    let back = app.globalData.backAddress;
     let that = this;
     wx.login({
       success: function(res) {
         let code = res.code;
         wx.request({
-          url: back,
+          url: app.globalData.backAddress + app.globalData.backPage,
           data: {
             do: "SelectUse",
             code: code
@@ -30,7 +29,6 @@ Page({
           },
           success: function(res) {
             wx.hideLoading()
-            console.log(res.data)
             if (res.data.talk == "NotOk") {
               wx.reLaunch({
                 url: '../login/login'
@@ -55,7 +53,7 @@ Page({
     });
   },
 
-  onShow: function () {
+  onShow: function() {
     console.log("打开课程")
   },
 

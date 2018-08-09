@@ -1,12 +1,14 @@
 /* setting.wxss */
 
-.setting {
-  font-size: 16px;
-  padding: 10px;
-  color: #343434;
+.box{
+  margin-top: 20px;
 }
 
-.setting>view {
-  padding: 10px;
-  border-bottom: 1px #e0e0e0 solid;
+.box>.setting{
+  padding: 0 20px 0 20px;
+  line-height: 50px;
+  font-size: 17px;
+  border-bottom: 1px inset #dadada;
+  display: flex;
+  justify-content: space-between;
 }

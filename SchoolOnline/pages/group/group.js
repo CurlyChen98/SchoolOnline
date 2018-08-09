@@ -3,9 +3,7 @@
 Page({
   data: {
     arrtalk: [
-      ['王小明', 'zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz'],
-      ['李二花', 'ssssssssssssssssssssssssssssssssssssssssssssssssssssssssss'],
-      ['三大爷', 'ss'],
+      ['Unknown', 'Unknown'],
     ],
     show: false,
   },

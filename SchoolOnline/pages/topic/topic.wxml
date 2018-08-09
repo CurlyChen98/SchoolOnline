@@ -5,14 +5,14 @@
 <view id='arrorder'>
   <!-- 日期选择器 -->
   <view>
-    <picker mode="date" value="{{selectdate}}" start="{{befday}}" end="{{lastdate}}" bindchange="DateChange">
-      <i class="iconfont icon-activity_fill" style="font-size: 13px;">{{selectdate}}</i>
+    <picker mode="date" value="{{today}}" start="{{befday}}" end="{{lastdate}}" bindchange="dateChange">
+      <i class="iconfont icon-activity_fill" style="font-size: 13px;">{{today}}</i>
     </picker>
   </view>
   <!-- 顺序选择器 -->
   <view>
-    <picker bindchange="PickerChange" value="{{order}}" range="{{arrorder}}">
-      <i class="iconfont icon-dynamic_fill" style="font-size: 13px;">{{arrorder[order]}}</i>
+    <picker bindchange="orderChange" value="{{order}}" range="{{arrOrder}}">
+      <i class="iconfont icon-dynamic_fill" style="font-size: 13px;">{{arrOrder[order]}}</i>
     </picker>
   </view>
   <!-- 添加话题按钮 -->
@@ -21,10 +21,21 @@
   </view>
 </view>
 
-<view class='arrTopic' wx:for="{{arrquer}}" wx:for-index="ind1" wx:for-item="course" wx:key="ind1">
-  <text class='courseName'>{{course[0]}}</text>
-  <view class='topic' wx:for="{{course[1]}}" wx:for-index="ind2" wx:for-item="item" wx:key="ind2" data-taid='{{item.taid}}' bindtap='jumpnote'>
-    <text class='title'>{{item.title}}</text>
-    <text class='date'>{{template.getDate(item.date,'/')}}</text>
+<view class='arrTopic' wx:for="{{arrTopic}}" wx:for-index="index" wx:for-item="item" wx:key="topData" data-taid='{{item.taid}}' bindtap='jumpnote'>
+  <view class='title_box'>
+    <i class='iconfont icon-accessory'></i>
+    <text class='title'>{{item.topTitle}}</text>
+  </view>
+  <text class='from' decode="true">{{item.uName}}&nbsp;{{item.topData}}</text>
+  <view class='course_box'>
+    <text class='num_msg' decode="true">{{item.couTitle}}</text>
+  </view>
+  <view class='like_box'>
+    <i class='iconfont icon-like_fill'></i>
+    <text class=''>0</text>
+  </view>
+  <view class='msg_box'>
+    <i class='iconfont icon-message'></i>
+    <text class=''>0</text>
   </view>
 </view>

@@ -1,21 +1,21 @@
 {
   "pages": [
-    "pages/myself/mytopic/mytopic",
-
+    "pages/topic/topic",
+    
     "pages/index/index",
     "pages/index/classroom/classroom",
 
     "pages/login/login",
 
-    "pages/topic/topic",
     "pages/topic/createNote/createNote",
     "pages/topic/note/note",
 
     "pages/group/group",
 
+    "pages/myself/setting/setting",
+    "pages/myself/mytopic/mytopic",
     "pages/myself/mygroup/mygroup",
-    "pages/myself/myself",
-    "pages/myself/setting/setting"
+    "pages/myself/myself"
     
   ],
   "window": {

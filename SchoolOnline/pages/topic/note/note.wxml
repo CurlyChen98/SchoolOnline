@@ -3,10 +3,10 @@
 <view class='box'>
 
   <view class='titlebox'>
-    <text class='title'>{{topic.title}}</text>
-    <view class='detail'>{{topic.detail}}</view>
-    <text class='name'>{{topic.name}}</text>
-    <text class='date'>{{topic.date}}</text>
+    <view class='title'>{{topic.topTitle}}</view>
+    <view class='name'>{{topic.uName}}</view>
+    <view class='date'>{{topic.topData}}</view>
+    <view class='detail'>{{topic.topDetail}}</view>
   </view>
 
   <view class='detailbox' wx:for="{{arrdetail}}" wx:for-index="ind" wx:for-item="item" wx:key="ind">

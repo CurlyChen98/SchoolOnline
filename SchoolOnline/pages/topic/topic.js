@@ -5,57 +5,59 @@ const app = getApp();
 Page({
 
   data: {
-    selectdate: '',
-    lastdate: '',
-    befday: '',
+    selectDate: '',
+    lastDate: '',
+    befDay: '',
     today: '',
     order: 0,
-    arrorder: ["倒叙", "顺序"],
-    arrquer: '',
+    arrOrder: ["倒叙", "顺序"],
+    arrTopic: '',
+    cid: '',
   },
 
   onLoad: function(options) {
-    console.log("打开话题")
-    let nowdate = new Date()
-    let year = nowdate.getFullYear();
-    let mon = nowdate.getMonth() + 1;
-    let day = nowdate.getDate();
+    let nowDate = new Date()
+    let year = nowDate.getFullYear();
+    let mon = nowDate.getMonth() + 1;
+    let day = nowDate.getDate();
     if (mon < 10) mon = "0" + mon;
     if (day < 10) day = "0" + day;
-    let lastday = year + 1
-    let befday = year - 1
+    let lastDay = year + 1
+    let befDay = year - 1
+    let cid = wx.getStorageSync('cid');
+    console.log(lastDay + "-" + mon + "-" + day)
     this.setData({
-      selectdate: year + "-" + mon + "-" + day,
+      cid: cid,
+      lastDate: lastDay + "-" + mon + "-" + day,
       today: year + "-" + mon + "-" + day,
-      lastdate: lastday + "-" + mon + "-" + day,
-      befday: befday + "-" + mon + "-" + day,
+      befDay: befDay + "-" + mon + "-" + day,
     })
-
-    let that = this;
-    wxrequest(that);
+    wxrequest(this);
   },
 
-  DateChange: function(e) {
+  onShow: function() {
+    console.log("打开话题")
+  },
+
+  dateChange: function(e) {
     this.setData({
-      selectdate: e.detail.value
+      selectDate: e.detail.value,
+      today: e.detail.value,
     })
-    let that = this;
-    wxrequest(that);
+    wxrequest(this);
   },
 
-  PickerChange: function(e) {
+  orderChange: function(e) {
     this.setData({
       order: e.detail.value
     })
-    let that = this;
-    wxrequest(that);
+    wxrequest(this);
   },
 
   jumpnote: function(e) {
     let taid = e.currentTarget.dataset.taid;
-    wx.setStorageSync('taid', taid);
     wx.navigateTo({
-      url: 'note/note',
+      url: 'note/note?taid=' + taid,
     });
   },
 
@@ -67,30 +69,27 @@ Page({
 })
 
 function wxrequest(that) {
-  let back = app.globalData.backAddress;
-  let cid = wx.getStorageSync('cid');
+  let cid = that.data.cid;
   let order = that.data.order;
   if (order == 0) order = "DESC";
   else if (order == 1) order = "ASC";
-  let selectdate = that.data.selectdate;
-  let today = that.data.today;
-  let day = '';
-  if (selectdate != today) day = selectdate;
+  let selectDate = that.data.selectDate;
   wx.request({
-    url: back,
+    url: app.globalData.backAddress + app.globalData.backPage,
     data: {
-      do: "FindTalk",
+      do: "FindTopic",
       cid: cid,
       order: order,
-      day: day,
+      day: selectDate,
     },
     method: 'POST',
     header: {
       'content-type': 'application/x-www-form-urlencoded'
     },
     success: function(res) {
+      console.log(res.data)
       that.setData({
-        arrquer: res.data.topic
+        arrTopic: res.data.topic
       })
     }
   })

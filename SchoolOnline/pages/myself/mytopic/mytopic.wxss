@@ -13,8 +13,8 @@
 }
 
 .on {
-  color: #0288d1;
-  border-bottom: 2px inset #0288d1;
+  color: #03a9f4;
+  border-bottom: 2px inset #03a9f4;
 }
 
 .swiper-box {
@@ -48,9 +48,6 @@
 
 .floor>.title_box>text {
   width: 90%;
-  /* overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap; */
 }
 
 .floor>.msg_box {

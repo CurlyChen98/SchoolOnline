@@ -3,7 +3,7 @@
 
 page{
   font-family: Microsoft Yahei;
-  font-size: 15px;
+  font-size: 17px;
   height: 100%;
   width: 100%;
   background-color: #ffffff;

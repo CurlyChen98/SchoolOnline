@@ -1,7 +1,14 @@
-<view class='setting'>
-  <view bindtap='enterkey'>输入班级密匙</view>
+<!-- setting.wxml -->
+
+<view class='box'>
+  <view class='setting'>
+    <text bindtap='levelCheck'>输入老师密匙</text>
+  </view>
+  <view class='setting'>
+    <text>版本</text><text>v0.8</text>
+  </view>
 </view>
 
-<modal hidden="{{classkeyhidden}}" title="请输入班级密匙" confirm-text="提交" bindconfirm="confirm" no-cancel="true">
-  <input placeholder="Key" bindblur="classinput" value="{{key}}"></input>
+<modal hidden="{{modalHidden}}" title="{{modalTitle}}" confirm-text="提交" bindconfirm="confirm" no-cancel="true">
+  <input bindblur="modalInput" placeholder="请输入" value='{{key}}'></input>
 </modal>

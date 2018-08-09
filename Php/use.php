@@ -151,7 +151,7 @@ function CreateTalk()
 }
 
 // 话题列表展示
-function FindTalk()
+function FindTopic()
 {
     global $conn;
     global $content;
@@ -160,38 +160,48 @@ function FindTalk()
     $order = $_REQUEST["order"];
     $day = $_REQUEST["day"];
 
-
     if ($day != "") {
-        $day = "AND `date` = '$day'";
+        $day = "AND DATE(k.date) = '$day'";
     }
-    $sql = "SELECT `couid`,`date`,`title` FROM `course` WHERE `cid` = '$cid' ORDER BY `date` $order";
+
+    $sql = "SELECT ek.couTitle AS couTitle,ek.topData AS topData,ek.topTitle AS topTitle,ek.taid AS taid,u.name AS uName
+            FROM
+                (
+                    SELECT e.title AS couTitle,k.date AS topData,k.title AS topTitle,k.taid AS taid,k.uid AS uid
+                    FROM course e,talk k
+                    WHERE e.couid = k.couid AND e.cid = '$cid' $day
+                ) ek
+            LEFT JOIN s_use u ON u.uid = ek.uid
+            ORDER BY `ek`.`topData` $order";
+    // $content["sql"] = $sql;
     $que = mysqli_query($conn, $sql);
-    $detail = mysqli_fetch_all($que, 1);
-    foreach ($detail as $key => $value) {
-        $couid = $value["couid"];
-        $title = $value["title"];
-        $sql = "SELECT * FROM `talk` WHERE `couid` = '$couid' $day ORDER BY `date` $order";
-        $que = mysqli_query($conn, $sql);
-        $detail2 = mysqli_fetch_all($que, 1);
-        $content["topic"][$key] = [$title, $detail2];
+    $num = mysqli_num_rows($que);
+    if ($num > 0) {
+        $content["talk"] = "Ok";
+        $detail = mysqli_fetch_all($que, 1);
+        $content["topic"] = $detail;
+    } else {
+        $content["talk"] = "NotOk";
+        $content["error"] = "没有数据错误";
     }
+
 
     echo json_encode($content);
 }
 
 // 展示某一话题详细和跟帖
-function FindTalkDe()
+function FindTopicDe()
 {
     global $conn;
     global $content;
 
     $taid = $_REQUEST["taid"];
 
-    $sql = "SELECT talk.title,talk.detail,talk.date, s_use.name 
-                FROM talk, s_use WHERE talk.taid = '$taid' AND talk.uid = s_use.uid 
-                ORDER BY talk.date DESC";
+    $sql = "SELECT u.name AS uName,k.date AS topData,k.title AS topTitle,k.detail AS topDetail
+            FROM s_use u,talk k
+            WHERE u.uid = k.uid AND k.taid = '$taid'";
     $que = mysqli_query($conn, $sql);
-    $detail = mysqli_fetch_all($que, 1);
+    $detail = mysqli_fetch_assoc($que);
     $content["topic"] = $detail;
 
     $sql = "SELECT talkdet.detail,talkdet.date,s_use.name 
@@ -255,6 +265,34 @@ function CheckGroup()
     echo json_encode($content);
 }
 
+// 检查老师Key
+function CheckTeacher()
+{
+    global $conn;
+    global $content;
+
+    $teacherkey = $_REQUEST["teacherkey"];
+    $uid = $_REQUEST["uid"];
+
+    $sql = "SELECT * FROM `class` WHERE `teacherkey` = '$teacherkey'";
+    $que = mysqli_query($conn, $sql);
+    $num = mysqli_num_rows($que);
+    if ($num > 0) {
+        $sql = "UPDATE `s_use` SET `level` = '5' WHERE `uid` = '$uid'";
+        if (mysqli_query($conn, $sql)) {
+            $content["talk"] = "Ok";
+        } else {
+            $content["talk"] = "NotOk";
+            $content["error"] = "未知的错误";
+        }
+    } else {
+        $content["talk"] = "NotOk";
+        $content["error"] = "老师密匙错误";
+    }
+
+    echo json_encode($content);
+}
+
 // 寻找我发布的帖子
 function FindMyTopic()
 {
@@ -276,8 +314,7 @@ function FindMyTopic()
                 LEFT JOIN talkdet f ON f.taid = u.taid
                 GROUP BY f.taid
                 ) k
-            LEFT JOIN course p ON p.couid = k.couid;
-            ";
+            LEFT JOIN course p ON p.couid = k.couid;";
     $que = mysqli_query($conn, $sql);
     $detail = mysqli_fetch_all($que, 1);
     $content["topic"] = $detail;

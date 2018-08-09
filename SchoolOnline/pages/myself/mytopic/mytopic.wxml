@@ -14,10 +14,10 @@
         <!--  -->
         <view class='floor' bindtap='jump' data-taid='{{item.taid}}'>
           <view class='title_box'>
-            <i class='iconfont icon-flag_fill'></i>
+            <i class='iconfont icon-text'></i>
             <text class='title'>{{item.title}}</text>
           </view>
-          <text class='from'decode="true">{{myUse.name}}&nbsp;{{item.date}}</text>
+          <text class='from' decode="true">{{myUse.name}}&nbsp;{{item.date}}</text>
           <view class='course_box'>
             <text class='num_msg' decode="true">{{item.courseTitle}}</text>
           </view>
@@ -38,12 +38,12 @@
         <!--  -->
         <view class='floor'>
           <view class='title_box'>
-            <i class='iconfont icon-flag_fill'></i>
+            <i class='iconfont icon-undo'></i>
             <text class='title'>{{myUse.name}}</text>
           </view>
           <text class='from'>{{item.det_detdate}}</text>
           <text class='detail'>{{item.det_detail}}</text>
-          <view class='top_floor'>
+          <view class='top_floor' bindtap='jump' data-taid='{{item.taid}}'>
             <view class='title'>{{item.top_title}}</view>
             <view class='from'>{{item.top_name}}{{item.top_date}}</view>
           </view>
