@@ -88,9 +88,15 @@ function wxrequest(that) {
     },
     success: function(res) {
       console.log(res.data)
-      that.setData({
-        arrTopic: res.data.topic
-      })
+      if(res.data.talk=="Ok"){
+        that.setData({
+          arrTopic: res.data.topic
+        })
+      }else{
+        that.setData({
+          arrTopic: ''
+        })
+      }
     }
   })
 }

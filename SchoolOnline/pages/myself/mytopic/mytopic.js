@@ -75,9 +75,8 @@ Page({
 
   jump: function(e) {
     let taid = e.currentTarget.dataset.taid;
-    wx.setStorageSync('taid', taid);
     wx.navigateTo({
-      url: '../../topic/note/note',
+      url: '../../topic/note/note?taid='+taid,
     });
   },
 })
@@ -99,6 +98,7 @@ function getData(that, uid, does) {
       'content-type': 'application/x-www-form-urlencoded'
     },
     success: function(res) {
+      console.log(res.data)
       common.hideLoading("加载中", true);
       switch (currentTabs) {
         case 0:

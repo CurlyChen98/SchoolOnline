@@ -43,7 +43,7 @@ Page({
               wx.setStorageSync("cid", res.data.class.cid);
               wx.setStorageSync("cname", res.data.class.name);
               wx.setStorageSync("uid", res.data.use.uid);
-              wx.setStorageSync("uanme", res.data.use.name);
+              wx.setStorageSync("uname", res.data.use.name);
               wx.setStorageSync("ulevel", res.data.use.level);
               wx.setStorageSync("gid", res.data.use.gid);
             }

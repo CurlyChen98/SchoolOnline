@@ -5,24 +5,14 @@ const app = getApp();
 Page({
 
   data: {
-    backAddress: app.globalData.backAddress,
-    backurl: 'Php/use.php',
-    cid: '',
-    couid: '',
-    title: '',
-    content: '',
-    video_src: '',
-    task_src: '',
-    date: '',
+    data: '',
   },
 
   onLoad: function(options) {
-    console.log("打开课程")
     let couid = wx.getStorageSync('couid');
-    let back = this.data.backAddress + this.data.backurl;
     let that = this;
     wx.request({
-      url: back,
+      url: app.globalData.backAddress + app.globalData.backPage,
       data: {
         do: "ClassRoom",
         couid: couid
@@ -33,24 +23,23 @@ Page({
       },
       success: function(res) {
         let data = res.data.course[0];
+        console.log(data)
         that.setData({
-          cid: data.cid,
-          couid: data.couid,
-          title: data.title,
-          content: data.content,
-          video_src: data.video_src,
-          task_src: data.task_src,
-          date: data.date,
+          data: data,
         })
       }
     })
   },
 
+  onShow: function() {
+    console.log("打开课程")
+  },
+
   homeworkDownload: function() {
-    let task_src = this.data.task_src;
-    let cid = this.data.cid;
-    let couid = this.data.couid;
-    let src = this.data.backAddress + "Html/dwLoadFiles.html?cid=" + cid + "&couid=" + couid;
+    let data = this.data.data;
+    let cid = data.cid;
+    let couid = data.couid;
+    let src = app.globalData.backAddress + app.globalData.backDownloadJob + "?cid=" + cid + "&couid=" + couid;
     wx.showModal({
       title: '提示',
       content: '微信不支持该链接，确认复制链接到浏览器打开下载',
@@ -58,7 +47,7 @@ Page({
       success: function(res) {
         wx.setClipboardData({
           data: src,
-          success: function (res) { }
+          success: function(res) {}
         })
       }
     })

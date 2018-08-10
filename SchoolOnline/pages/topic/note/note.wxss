@@ -1,102 +1,149 @@
 /* note.wxss */
 
-.box {
-  margin-top: 15px;
-  margin-bottom: 100px;
+.title {
+  font-weight: bolder;
+  /* color: #03a9f4; */
+  font-size: 17px;
+  padding: 10px 15px 10px 15px;
+  border-bottom: 1px #f0f3fa solid;
 }
 
-.titlebox {
-  border-bottom: 15px #dadada solid;
+.titleBox {
   position: relative;
+  border-bottom: 10px solid #f0f3fa;
+  padding-left: 50px;
+  padding-right: 15px;
 }
 
-.titlebox >.title {
-  padding-left: 20px;
-  padding-right: 10px;
-  box-sizing: border-box;
-  font-size: 18px;
-  font-weight: bold;
-  width: 100%;
-  border-bottom: 1px #dadada solid;
-  padding-bottom: 15px;
-  color: #03a9f4;
+.titleBox>image {
+  width: 30px;
+  height: 30px;
+  border-radius: 30px;
+  position: absolute;
+  margin-top: 2px;
+  left: 10px;
 }
 
-.titlebox >.name {
-  padding-left: 20px;
-  margin-top: 10px;
-  /* font-size: 15px; */
-}
-
-.titlebox >.date {
-  padding-left: 20px;
-  font-size: 13px;
-  margin-top: 3px;
-  color: #9e9e9e;
-}
-
-.titlebox >.detail {
-  padding-left: 20px;
-  padding-right: 10px;
-  margin-top: 20px;
-  margin-bottom: 20px;
-  display: block;
-  word-break: break-all;
-}
-
-.detailbox {
-  border-bottom: #e0e1db 1px solid;
-  margin-top: 10px;
-  position: relative;
+.titleBox>.name {
+  margin-top: 8px;
   font-size: 14px;
-  color: #818e9e;
 }
 
-.detailbox>.detail {
+.titleBox>.date {
+  color: #d6d6d6;
+  font-size: 12px;
+}
+
+.titleBox>.detail {
+  margin: 10px 0 10px 0;
   line-height: 25px;
-  margin-bottom: 60px;
-  font-size: 16px;
-  color: #343434;
-  display: block;
-  word-break: break-all;
 }
 
-.detailbox >.name {
-  position: absolute;
-  left: 0;
-  bottom: 10px;
+.detailBox {
+  position: relative;
+  padding-left: 50px;
+  padding-right: 15px;
+  border-bottom: 1px solid #f0f3fa;
 }
 
-.detailbox >.date {
+.detailBox>image {
+  width: 30px;
+  height: 30px;
+  border-radius: 30px;
   position: absolute;
-  right: 10px;
-  bottom: 10px;
+  margin-top: 2px;
+  left: 10px;
+}
+
+.detailBox>.name {
+  margin-top: 8px;
+  font-size: 14px;
+}
+
+.detailBox>.date {
+  color: #d6d6d6;
+  font-size: 12px;
+}
+
+.detailBox>.detail {
+  margin: 10px 0 10px 0;
+  line-height: 25px;
+}
+
+.line {
+  height: 40px;
 }
 
 .send {
+  width: 100%;
+  height: 120px;
   position: fixed;
-  bottom: 0;
-  width: 100%;
-}
-
-.useinput {
-  box-sizing: border-box;
+  z-index: 99;
+  bottom: 0px;
+  background-color: #f0f3fa;
   font-size: 15px;
-  background-color: #dcdcdd;
-  width: 100%;
-  height: 50px;
-  padding: 10px;
-  border-radius: 5px;
-  z-index: 99;
-  display: flex;
-  word-break: break-all;
+  padding: 10px 10px 10px 10px;
+  box-sizing: border-box;
 }
 
-.submit {
-  border-radius: 0 5px 5px 0;
-  height: 30px;
+.send>form .useinput {
   width: 100%;
-  text-align: center;
-  z-index: 99;
+  background-color: #fff;
+  padding: 5px;
+  height: 50px;
+  box-sizing: border-box;
+}
+
+.send>form .uName {
+  position: absolute;
+  left: 15px;
+  bottom: 20px;
+}
+
+.send>form .inButton {
+  position: absolute;
+  right: 0px;
+  bottom: 10px;
+}
+
+.send>form button {
+  font-size: 14px;
+  border: none;
+  color: #03a9f4;
+}
+
+.sendFirst {
+  font-size: 15px;
+  position: fixed;
+  z-index: 97;
+  bottom: 0px;
+  background-color: #d6d6d6;
+  width: 100%;
+  height: 40px;
+  padding: 2px 10px 2px 10px;
+  box-sizing: border-box;
   display: flex;
+  align-items: center;
+}
+
+.sendFirst text {
+  display: block;
+  width: 100%;
+  height: 20px;
+  background-color: #ffffff;
+  padding: 2px;
+  border-radius: 5px;
+}
+
+.uName {
+  color: #03a9f4;
+}
+
+.lock {
+  height: 100%;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  background-color: black;
+  opacity: 0.5;
 }

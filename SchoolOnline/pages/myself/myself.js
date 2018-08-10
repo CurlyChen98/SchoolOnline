@@ -32,6 +32,15 @@ Page({
 
   jump: function(e) {
     let url = e.currentTarget.dataset.type;
+    if (url == "mygroup") {
+      wx.showToast({
+        title: '暂未开放',
+        icon: 'success',
+        duration: 1000,
+        mask: true,
+      })
+      return;
+    }
     wx.navigateTo({
       url: url + "/" + url
     })
@@ -46,6 +55,7 @@ Page({
       title: '提示',
       content: '微信不支持该链接，确认复制链接到浏览器打开下载',
       showCancel: false,
+      confirmColor: "#03a8f3",
       success: function(res) {
         wx.setClipboardData({
           data: src,

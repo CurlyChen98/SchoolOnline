@@ -14,7 +14,7 @@
 
 .on {
   color: #03a9f4;
-  border-bottom: 2px inset #03a9f4;
+  border-bottom: 2px solid #03a9f4;
 }
 
 .swiper-box {
@@ -24,7 +24,7 @@
 
 .floor {
   padding: 10px;
-  border-bottom: #d6d6d6 inset 1px;
+  border-bottom: #d6d6d6 solid 1px;
   display: flex;
   flex-direction: column;
   position: relative;

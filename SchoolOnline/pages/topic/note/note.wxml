@@ -1,25 +1,36 @@
 <!-- note.wxml -->
 
-<view class='box'>
+<view class='title'>{{topic.topTitle}}</view>
 
-  <view class='titlebox'>
-    <view class='title'>{{topic.topTitle}}</view>
-    <view class='name'>{{topic.uName}}</view>
-    <view class='date'>{{topic.topData}}</view>
-    <view class='detail'>{{topic.topDetail}}</view>
-  </view>
-
-  <view class='detailbox' wx:for="{{arrdetail}}" wx:for-index="ind" wx:for-item="item" wx:key="ind">
-    <view class='detail'>{{item.detail}}</view>
-    <text class='name'>{{item.name}}</text>
-    <text class='date'>{{item.date}}</text>
-  </view>
-
+<view class='titleBox'>
+  <image src='../../../img/defaultAva.png'></image>
+  <view class='name'>{{topic.uName}}</view>
+  <view class='date'>{{topic.topData}}</view>
+  <view class='detail'>{{topic.topDetail}}</view>
 </view>
 
-<view class="send">
+<view class='detailBox' wx:for="{{arrdetail}}" wx:for-index="ind" wx:for-item="item" wx:key="ind">
+  <image src='../../../img/defaultAva.png'></image>
+  <view class='name'>{{item.name}}</view>
+  <view class='date'>{{item.date}}</view>
+  <view class='detail'>{{item.detail}}</view>
+</view>
+
+<view class='line'></view>
+
+<view class='sendFirst'>
+  <text bindtap='wantIn'>说些什么...</text>
+</view>
+
+<view class='lock' style='display: {{inHidden}};' bindtap='outIn'></view>
+
+<view class='send' style='display: {{inHidden}};'>
   <form bindsubmit="bindFormSubmit">
-    <input class='useinput' name="text" maxlength="200" placeholder="Enter something" />
-    <button form-type="submit"> 提交 </button>
+    <textarea focus='{{focusss}}' show-confirm-bar="{{showConfirmBar}}" cursor-spacing="80" fixed="true" class='useinput' name="text" maxlength="200" placeholder="说些什么..." adjust-position="true" />
+    <text class='uName'>{{uname}}</text>
+    <view class='inButton'>
+      <button form-type="submit" plain="true" size="mini">提交</button>
+    </view>
   </form>
 </view>
+

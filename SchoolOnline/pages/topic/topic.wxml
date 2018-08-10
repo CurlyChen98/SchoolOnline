@@ -21,21 +21,22 @@
   </view>
 </view>
 
-<view class='arrTopic' wx:for="{{arrTopic}}" wx:for-index="index" wx:for-item="item" wx:key="topData" data-taid='{{item.taid}}' bindtap='jumpnote'>
-  <view class='title_box'>
-    <i class='iconfont icon-accessory'></i>
-    <text class='title'>{{item.topTitle}}</text>
-  </view>
-  <text class='from' decode="true">{{item.uName}}&nbsp;{{item.topData}}</text>
-  <view class='course_box'>
-    <text class='num_msg' decode="true">{{item.couTitle}}</text>
-  </view>
-  <view class='like_box'>
-    <i class='iconfont icon-like_fill'></i>
-    <text class=''>0</text>
-  </view>
-  <view class='msg_box'>
-    <i class='iconfont icon-message'></i>
-    <text class=''>0</text>
+<view class='arrTopic'>
+  <view class='topic' wx:for="{{arrTopic}}" wx:for-index="index" wx:for-item="item" wx:key="topData" data-taid='{{item.taid}}' bindtap='jumpnote'>
+    <view class='unameBox'>
+      <image src='../../img/defaultAva.png'></image>
+      <text>{{item.uName}}</text>
+    </view>
+    <text class='date'>{{item.topData}}</text>
+    <view class='title'>{{item.topTitle}}</view>
+    <view class='likeBox samllBox'>
+      <i class='iconfont icon-like_fill'></i>
+      <text class='' decode='true'>{{template.msgCount(0)}}</text>
+    </view>
+    <view class='megBox samllBox'>
+      <i class='iconfont icon-message'></i>
+      <text class='' decode='true'>{{template.msgCount(item.countMsg)}}</text>
+    </view>
+    <text class='couTitle samllBox'>{{item.couTitle}}</text>
   </view>
 </view>

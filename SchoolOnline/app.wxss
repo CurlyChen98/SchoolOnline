@@ -3,9 +3,9 @@
 
 page{
   font-family: Microsoft Yahei;
-  font-size: 17px;
+  font-size: 15px;
   height: 100%;
   width: 100%;
   background-color: #ffffff;
-  color: #212121;
+  color: #3a3a3a;
 }

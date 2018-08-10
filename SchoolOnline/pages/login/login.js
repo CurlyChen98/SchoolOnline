@@ -24,7 +24,7 @@ Page({
       success: function(res) {
         let code = res.code;
         wx.request({
-          url: app.globalData.backAddress,
+          url: app.globalData.backAddress + app.globalData.backPage,
           data: {
             do: "InsertUse",
             code: code,
@@ -62,11 +62,7 @@ Page({
         })
       }
     });
+
   },
 
-  onGotUserInfo: function (e) {
-    console.log(e.detail.errMsg)
-    console.log(e.detail.userInfo)
-    console.log(e.detail.rawData)
-  },
 })

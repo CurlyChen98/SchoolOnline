@@ -1,35 +1,12 @@
 <!-- classroom.wxml -->
 
-<!-- 最外层 -->
-<view class='room'>
-  <!-- 课程名 -->
-  <view class='roomname'>{{title}}</view>
-  <!-- 功能选项 -->
-  <view class='titlearr'>
-    <!-- 课程资料 -->
-    <view class='titlebox'>
-      <text class='title'>课程资料</text>
-      <view class='detail'>
-        <!-- 纯文本 -->
-        <view class='textbox'>{{content}}</view>
-        <!-- 视频在线播放 -->
-        <view class='videobox'>
-          <video src="{{video_src}}" objectFit="contain"></video>
-        </view>
-      </view>
-    </view>
-    <!-- 作业下载 -->
-    <view class='titlebox'>
-      <text class='title'>作业下载</text>
-      <view class='detail'>
-        <button type="primary" size="mini" bindtap='homeworkDownload'>点击这里</button>
-      </view>
-    </view>
+<view class='box'>
+  <view class=''>{{data.title}}</view>
+  <view class=''>{{data.date}}</view>
+  <view class=''>李老师</view>
+  <view class=''>{{data.content}}</view>
+  <txv-video vid="h0751d8zbqu" playerid="txv1"></txv-video>
+  <view class='video'>
+    <txv-video vid="h0751d8zbqu" playerid="txv1"></txv-video>
   </view>
-  <!-- 功能选项结束 -->
 </view>
-
-
-<!-- <modal hidden="{{downloadhidden}}" title="链接" confirm-text="确认" bindconfirm="downloadconfirm" no-cancel="true">
-  <input value='{{key}}'></input>
-</modal> -->

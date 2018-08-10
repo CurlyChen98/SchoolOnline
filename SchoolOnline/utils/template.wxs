@@ -18,6 +18,9 @@ var DateFr = {
 var Msg = {
   msgCount: function(num) {
     num = parseInt(num);
+    if (num < 10) {
+      num = "&nbsp;&nbsp;"+num;
+    }
     if (num > 99) {
       num = "99+";
     }

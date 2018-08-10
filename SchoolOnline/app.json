@@ -1,12 +1,12 @@
 {
   "pages": [
-    "pages/topic/topic",
     
     "pages/index/index",
     "pages/index/classroom/classroom",
 
     "pages/login/login",
 
+    "pages/topic/topic",
     "pages/topic/createNote/createNote",
     "pages/topic/note/note",
 
@@ -55,5 +55,11 @@
         "text": "我的"
       }
     ]
+  },
+  "plugins": {
+    "tencentVideo": {
+      "version": "1.1.2",
+      "provider": "wxa75efa648b60994b"
+    }
   }
 }

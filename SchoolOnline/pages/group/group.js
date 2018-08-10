@@ -18,6 +18,7 @@ Page({
         title: '警告',
         content: '暂未有小组',
         showCancel: false,
+        confirmColor: "#03a8f3",
         success: function(res) {
           wx.reLaunch({
             url: "../myself/myself",

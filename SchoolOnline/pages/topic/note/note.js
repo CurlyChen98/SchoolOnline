@@ -8,10 +8,15 @@ Page({
     taid: '',
     arrdetail: '',
     topic: '',
+    inHidden: 'none',
+    uname: '',
+    showConfirmBar: false,
+    focusss: false,
   },
 
   onLoad: function(options) {
     let taid = options.taid;
+    let uname = wx.getStorageSync('uname');
     let that = this;
     wx.request({
       url: app.globalData.backAddress + app.globalData.backPage,
@@ -31,6 +36,7 @@ Page({
           arrdetail: topicdet,
           topic: topic,
           taid: taid,
+          uname: uname,
         })
       }
     })
@@ -44,7 +50,6 @@ Page({
     let detail = e.detail.value.text;
     let uid = wx.getStorageSync('uid');
     let taid = this.data.taid;
-    let back = this.data.backAddress + this.data.backurl;
     let that = this;
     if (detail == "") {
       wx.showToast({
@@ -55,7 +60,7 @@ Page({
       return;
     }
     wx.request({
-      url: back,
+      url: app.globalData.backAddress + app.globalData.backPage,
       data: {
         do: "FollowTalk",
         taid: taid,
@@ -75,7 +80,7 @@ Page({
             success: function() {
               setTimeout(function() {
                 wx.redirectTo({
-                  url: '../note/note'
+                  url: '../note/note?taid=' + taid,
                 })
               }, 1000)
             }
@@ -88,6 +93,20 @@ Page({
           })
         }
       }
+    })
+  },
+
+  wantIn: function() {
+    this.setData({
+      inHidden: 'black',
+      focusss: true,
+    })
+  },
+
+  outIn: function() {
+    this.setData({
+      inHidden: 'none',
+      focusss: false,
     })
   },
 })

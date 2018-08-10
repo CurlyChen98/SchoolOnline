@@ -164,15 +164,22 @@ function FindTopic()
         $day = "AND DATE(k.date) = '$day'";
     }
 
-    $sql = "SELECT ek.couTitle AS couTitle,ek.topData AS topData,ek.topTitle AS topTitle,ek.taid AS taid,u.name AS uName
+    $sql = "SELECT eku.couTitle AS couTitle,eku.topData AS topData,eku.topTitle AS topTitle,eku.taid AS taid,eku.uName AS uName,COUNT(t.taid) AS countMsg
             FROM
                 (
-                    SELECT e.title AS couTitle,k.date AS topData,k.title AS topTitle,k.taid AS taid,k.uid AS uid
-                    FROM course e,talk k
-                    WHERE e.couid = k.couid AND e.cid = '$cid' $day
-                ) ek
-            LEFT JOIN s_use u ON u.uid = ek.uid
-            ORDER BY `ek`.`topData` $order";
+                    SELECT ek.couTitle AS couTitle,ek.topData AS topData,ek.topTitle AS topTitle,ek.taid AS taid,u.name AS uName
+                    FROM
+                        (
+                            SELECT e.title AS couTitle,k.date AS topData,k.title AS topTitle,k.taid AS taid,k.uid AS uid
+                            FROM
+                                course e,talk k
+                            WHERE e.couid = k.couid AND e.cid = '$cid' $day LIMIT 0,30
+                        ) ek
+                    LEFT JOIN s_use u ON u.uid = ek.uid
+                    ) eku
+            LEFT JOIN talkdet t ON t.taid = eku.taid
+            GROUP BY t.taid
+            ORDER BY `eku`.`topData` $order";
     // $content["sql"] = $sql;
     $que = mysqli_query($conn, $sql);
     $num = mysqli_num_rows($que);
@@ -348,7 +355,7 @@ function FindMyFollow()
                                     FROM
                                         talkdet
                                     WHERE
-                                        uid = 1
+                                        uid = $uid
                                 ) t
                             LEFT JOIN talk k ON t.taid = k.taid
                         ) kt
