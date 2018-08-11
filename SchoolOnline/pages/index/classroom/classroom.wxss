@@ -1,67 +1,71 @@
 /* classroom.wxss */
 
-.room {
-  box-sizing: border-box;
-  padding: 10px;
+.box {
+  padding: 10px 15px 0 15px;
+  position: relative;
 }
 
-.roomname {
-  font-size: 20;
-  font-weight: bold;
-  color: #0275d8;
+.box>.color {
+  position: absolute;
+  top: 10px;
+  left: 0px;
+  height: 25px;
+  width: 5px;
+  background-color: #03a9f4;
 }
 
-.titlearr {
-  margin-top: 10px;
-  margin-right: 10px;
-  box-sizing: border-box;
+.box>.title {
+  font-size: 19px;
+  font-weight: bolder;
+  position: relative;
 }
 
-.titlearr .titlebox {
-  color: #fff;
-  font-size: 16px;
+.box>.date {
+  margin-top: 15px;
+  padding-bottom: 5px;
+  font-size: 13px;
+  color: #9e9e9e;
+  border-bottom: 1px solid #d6d6d6;
+}
+
+.box>.detail {
+  margin-top: 15px;
   margin-bottom: 10px;
+  line-height: 25px;
 }
 
-.titlearr .title {
-  background-color: #f8b066;
-  width: 200px;
-  padding: 5px;
-  display: inline-block;
-}
-
-.titlearr .detail {
-  border: #e0e1db 1px solid;
-  border-radius: 0 10px 10px 10px;
-  width: 100%;
-  color: #343434;
-  padding: 5px;
-}
-
-.textbox {
-  width: 100%;
-  word-break: break-all;
-  line-height: 30px;
-}
-
-.downloadbox {
-  display: flex;
-  align-items: center;
-  height: 50px;
-}
-
-.downloadbox>text {
-  vertical-align: middle;
-  margin-bottom: 5px;
-  margin-right: 10px;
-}
-
-.videobox {
-  margin-top: 20px;
-  margin-bottom: 20px;
+.box>.video {
+  margin-top: 10px;
+  margin-bottom: 10px;
   width: 100%;
 }
 
-.videobox>video {
-  width: 100%;
+.work {
+  padding: 10px 15px 0 15px;
+  position: relative;
+}
+
+.work>.color {
+  position: absolute;
+  top: 10px;
+  left: 0px;
+  height: 25px;
+  width: 5px;
+  background-color: #03a9f4;
+}
+
+.work>.title {
+  font-size: 19px;
+  font-weight: bolder;
+  position: relative;
+}
+
+.work>.dw {
+  margin-top: 15px;
+  margin-bottom: 25px;
+}
+
+.work>.dw>button {
+  border-radius: 3px;
+  border: #03a9f4 1px solid;
 }

@@ -12,7 +12,7 @@ Page({
   },
 
   onLoad: function() {
-    let uname = wx.getStorageSync('uanme');
+    let uname = wx.getStorageSync('uname');
     let cname = wx.getStorageSync('cname');
     let rlevel = checkLevel();
     this.setData({
