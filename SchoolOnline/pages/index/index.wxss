@@ -1,43 +1,37 @@
 /**index.wxss**/
 
-.classroom {
-  background-color: #03a8f3;
-  color: #f9f9f9;
-  font-size: 12px;
-  padding: 4px 0 4px 0;
-  position: fixed;
-  top: 0;
-  z-index: 99;
-  width: 100%;
-  display: flex;
-  justify-content: space-around;
+.arrcourse{
+  padding-left: 20px;
+  padding-top: 5px
 }
-
-.arrcourse {
-  margin-top: 30px;
-  /* background-color: darkcyan; */
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-
-.arrcourse>.course {
-  border-bottom: 2px solid #d6d6d6;
-  /* border-top: 2px solid #d6d6d6; */
-  width: 95%;
-  margin-bottom: 10px;
+.course{
+  border-radius: 5px 0 0 5px;
+  border: 2px solid #03a8f3;
+  border-right: none;
+  margin-bottom: 15px;
   position: relative;
-  border-radius: 5px;
-  /* height: 50px; */
   padding: 5px;
   box-sizing: border-box;
 }
 
-.arrcourse>.course>.course-date {
+.img{
+  width: 25px;
+  height: 25px;
   position: absolute;
-  color: #9e9e9e;
+  top: 4px;
+}
+
+.course-name{
+  font-weight: bold;
+  font-size: 16px;
+  margin-bottom: 40px;
+  padding-left: 35px;
+}
+
+.course-date{
+  color: #d6d6d6;
+  font-size: 13px;
+  position: absolute;
   right: 5px;
   bottom: 5px;
-  font-size: 14px;
 }

@@ -2,25 +2,6 @@
 
 <wxs module="template" src="../../utils/template.wxs"></wxs>
 
-<view id='arrorder'>
-  <!-- 日期选择器 -->
-  <view>
-    <picker mode="date" value="{{today}}" start="{{befday}}" end="{{lastdate}}" bindchange="dateChange">
-      <i class="iconfont icon-activity_fill" style="font-size: 13px;">{{today}}</i>
-    </picker>
-  </view>
-  <!-- 顺序选择器 -->
-  <view>
-    <picker bindchange="orderChange" value="{{order}}" range="{{arrOrder}}">
-      <i class="iconfont icon-dynamic_fill" style="font-size: 13px;">{{arrOrder[order]}}</i>
-    </picker>
-  </view>
-  <!-- 添加话题按钮 -->
-  <view bindtap="jumpcreate">
-    <i class="iconfont icon-label_fill" style="font-size: 13px;">创建话题</i>
-  </view>
-</view>
-
 <view class='arrTopic'>
   <view class='topic' wx:for="{{arrTopic}}" wx:for-index="index" wx:for-item="item" wx:key="topData" data-taid='{{item.taid}}' bindtap='jumpnote'>
     <view class='unameBox'>
@@ -38,5 +19,21 @@
       <text class='' decode='true'>{{template.msgCount(item.countMsg)}}</text>
     </view>
     <text class='couTitle samllBox'>{{item.couTitle}}</text>
+  </view>
+</view>
+
+<view class='arrorder'>
+  <view>
+    <picker mode="date" value="{{today}}" start="{{befday}}" end="{{lastdate}}" bindchange="dateChange">
+      <i class="iconfont icon-activity_fill"></i>
+    </picker>
+  </view>
+  <view>
+    <picker bindchange="orderChange" value="{{order}}" range="{{arrOrder}}">
+      <i class="iconfont icon-dynamic_fill"></i>
+    </picker>
+  </view>
+  <view bindtap="jumpcreate">
+    <i class="iconfont icon-label_fill"></i>
   </view>
 </view>

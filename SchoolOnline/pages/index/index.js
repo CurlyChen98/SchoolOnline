@@ -35,8 +35,6 @@ Page({
               })
             } else if (res.data.talk == "Ok") {
               that.setData({
-                classkey: res.data.class.name,
-                studentkey: res.data.use.name,
                 arrcourse: res.data.course,
               })
               wx.clearStorageSync();

@@ -26,7 +26,7 @@ function Dw()
     echo json_encode($content);
 }
 
-    // 上传页面寻找用户信息的方法
+// 上传页面寻找用户信息的方法
 function Find()
 {
     global $content;
@@ -55,7 +55,7 @@ function Find()
     echo json_encode($content);
 }
 
-    // 获得上传文件并处理
+// 获得上传文件并处理
 function GetFile()
 {
     global $content;
@@ -73,7 +73,7 @@ function GetFile()
 
     if ($file["error"] > 0) {
         $content["talk"] = "NotOk";
-        $content["error"] = "错误".$file["error"];
+        $content["error"] = "错误" . $file["error"];
     } else if (!is_uploaded_file($file['tmp_name'])) {
         $content["talk"] = "NotOk";
         $content["error"] = "不合理的上传";
@@ -81,8 +81,6 @@ function GetFile()
         $content["talk"] = "NotOk";
         $content["error"] = "文件过大，不能上传大于2M的文件";
     } else {
-        $extend = pathinfo($file['name']);
-        $extend = $extend['extension'];
         $dir = "../HomeworkSubmit/" . $className . "/" . $select . "/";
         if (!file_exists($dir)) {
             mkdir($dir, 0777, true);

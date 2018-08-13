@@ -8,8 +8,12 @@ header('Access-Control-Allow-Methods:POST');
 // 响应头设置
 header('Access-Control-Allow-Headers:x-requested-with,content-type');
 
-$do = $_REQUEST["do"];
-$do();
+if (@$do = $_REQUEST["do"]) {
+    $do();
+}
+if (@$do = $_FILES["do"]) {
+    $do();
+}
 $content = [];
             
 // 用户登录功能
@@ -260,6 +264,122 @@ function ShowGroupKey()
     $que = mysqli_query($conn, $sql);
     $detail = mysqli_fetch_assoc($que);
     $content["group"] = $detail;
+
+    echo json_encode($content);
+}
+
+// 创建课程
+function CreateCourse()
+{
+    global $conn;// 链接mysql
+    global $content;// 用于输出
+
+    $cid = $_REQUEST["cid"];// 班级id
+    $title = $_REQUEST["title"];// 课程标题
+    $content = $_REQUEST["content"];// 标题内容
+    $video_src = $_REQUEST["video_src"]; // 视频链接
+    $video_kind = $_REQUEST["video_kind"];// 视频链接类型
+    $task_src = $_REQUEST["task_src"];// 作业文件地址
+
+    $sql = "INSERT INTO `course`(`cid`, `title`, `date`, `content`, `video_src`, `video_kind`, `task_src`) 
+            VALUES ('$cid','$title',now(),'$content','$video_src','$video_kind','$task_src')";
+    if (mysqli_query($conn, $sql)) {
+
+        $sql = "SELECT * FROM `class` WHERE `cid` = '$cid'";
+        $que = mysqli_query($conn, $sql);
+        $detail = mysqli_fetch_assoc($que);
+        $className = $detail["name"];
+
+        $dir = "../HomeworkSubmit/" . $className . "/" . $title . "/";
+        if (!file_exists($dir)) {
+            mkdir($dir, 0777, true);
+        }
+        $dir = "../HomeworkDownload/" . $className . "/" . $title . "/";
+        if (!file_exists($dir)) {
+            mkdir($dir, 0777, true);
+        }
+
+        $content["talk"] = "Ok";
+    } else {
+        $content["talk"] = "NotOk";
+        $content["error"] = "未知的错误";
+    }
+
+    echo json_encode($content);
+}
+
+// 为课程添加作业
+function InWork()
+{
+    global $conn;// 链接mysql
+    global $content;// 用于输出
+
+    $file = $_FILES["file"];// 上传文件
+    $couid = $_REQUEST["couid"];// 课程id
+
+    if ($file["error"] > 0) {
+        $content["talk"] = "NotOk";
+        $content["error"] = "错误" . $file["error"];
+    } else if (!is_uploaded_file($file['tmp_name'])) {
+        $content["talk"] = "NotOk";
+        $content["error"] = "不合理的上传";
+    } else if ($file['size'] > 2 * 1024 * 1024) {
+        $content["talk"] = "NotOk";
+        $content["error"] = "文件过大，不能上传大于2M的文件";
+    } else {
+        $sql = "SELECT * FROM `course` WHERE `couid` = '$couid'";
+        $que = mysqli_query($conn, $sql);
+        $detail = mysqli_fetch_assoc($que);
+        $couTitle = $detail["title"];
+        $cid = $detail["cid"];
+
+        $sql = "SELECT * FROM `class` WHERE `cid` = '$cid'";
+        $que = mysqli_query($conn, $sql);
+        $detail = mysqli_fetch_assoc($que);
+        $className = $detail["name"];
+
+        $dir = "../HomeworkDownload/" . $className . "/" . $couTitle . "/";
+        $save = $dir . $file["name"];
+        if (move_uploaded_file($file['tmp_name'], $save))
+            $content["talk"] = "Ok";
+        else {
+            $content["error"] = "未知的错误";
+            $content["talk"] = "NotOk";
+        }
+
+    }
+
+    clearstatcache();
+    echo json_encode($content);
+}
+
+// 删除课程
+function DeleteCou()
+{
+    global $conn;// 链接mysql
+    global $content;// 用于输出
+
+    $couid = $_REQUEST["couid"];// 课程id
+
+    $sql = "DELETE FROM `course` WHERE `couid`= '$couid'";
+    if (mysqli_query($conn, $sql)) {
+        $content["talk"] = "Ok";
+    } else {
+        $content["talk"] = "NotOk";
+        $content["error"] = "未知的错误";
+    }
+
+    echo json_encode($content);
+}
+
+// 查找课程
+function FindCou()
+{
+    global $conn;// 链接mysql
+    global $content;// 用于输出
+
+    $cid = $_REQUEST["cid"];// 班级id
+    $level = $_REQUEST["level"];// 当前用户等级
 
     echo json_encode($content);
 }

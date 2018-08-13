@@ -21,7 +21,7 @@
   "window": {
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#ffffff",
-    "navigationBarTitleText": "WeChat",
+    "navigationBarTitleText": "SchoolOnline",
     "navigationBarTextStyle": "black"
   },
   "tabBar": {

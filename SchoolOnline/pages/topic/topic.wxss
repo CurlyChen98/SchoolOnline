@@ -1,30 +1,7 @@
 /* topic.wxss */
 
-#arrorder {
-  font-size: 13px;
-  line-height: 30px;
-  width: 100%;
-  display: flex;
-  position: fixed;
-  top: 0;
-  justify-content: space-around;
-  align-items: center;
-  z-index: 99;
-  color: #fff;
-}
-
-#arrorder>view {
-  border: 1px #fff solid;
-  box-sizing: border-box;
-  background-color: #03a9f4;
-  width: 100%;
-  height: 100%;
-  text-align: center;
-  border-radius: 5px;
-}
-
 .arrTopic {
-  margin-top: 35px;
+  margin-top: 5px;
 }
 
 .arrTopic>.topic {
@@ -48,36 +25,67 @@
   margin-right: 10px;
 }
 
-.arrTopic>.topic>.date{
+.arrTopic>.topic>.date {
   color: #d6d6d6;
   font-size: 12px;
 }
 
-.arrTopic>.topic>.title{
+.arrTopic>.topic>.title {
   margin: 10px 0 30px 0;
 }
 
-.samllBox{
+.samllBox {
   display: flex;
   align-items: center;
   justify-content: flex-start;
   font-size: 12px;
   position: absolute;
   bottom: 5px;
-  color: #d6d6d6;  
+  color: #d6d6d6;
 }
 
-.samllBox>i{
+.samllBox>i {
   margin-bottom: -1px;
 }
 
-.arrTopic>.topic>.likeBox{
+.arrTopic>.topic>.likeBox {
   right: 10px;
 }
-.arrTopic>.topic>.megBox{
+
+.arrTopic>.topic>.megBox {
   right: 50px;
 }
-.arrTopic>.topic>.couTitle{
+
+.arrTopic>.topic>.couTitle {
   left: 15px;
   color: #9e9e9e;
+}
+
+.arrorder {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
+
+.arrorder>view {
+  width: 36px;
+  height: 36px;
+  border-radius: 36px;
+  background-color: #03a8f3;
+  font-size: 40px;
+  position: relative;
+  margin-bottom: 10px;
+}
+
+.arrorder>view i {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  margin: auto;
+  height: 24px;
+  width: 22px;
+  font-size: 22px;
+  color: #ffffff;
 }
