@@ -23,17 +23,21 @@
 </view>
 
 <view class='arrorder'>
-  <view>
+  <view class='common' animation="{{an3}}">
     <picker mode="date" value="{{today}}" start="{{befday}}" end="{{lastdate}}" bindchange="dateChange">
-      <i class="iconfont icon-activity_fill"></i>
+      <i class="iconfont icon-activity"></i>
     </picker>
   </view>
-  <view>
+  <view class='common' animation="{{an2}}">
     <picker bindchange="orderChange" value="{{order}}" range="{{arrOrder}}">
-      <i class="iconfont icon-dynamic_fill"></i>
+      <i class="iconfont icon-dynamic"></i>
     </picker>
   </view>
-  <view bindtap="jumpcreate">
-    <i class="iconfont icon-label_fill"></i>
+  <view class='common' bindtap="jumpcreate" animation="{{an1}}">
+    <i class="iconfont icon-label"></i>
+  </view>
+  <!-- 菜单 -->
+  <view class='special' data-move='-1' bindtap='arrorder'>
+    <i class="iconfont icon-other"></i>
   </view>
 </view>

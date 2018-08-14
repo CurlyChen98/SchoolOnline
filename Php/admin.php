@@ -276,13 +276,13 @@ function CreateCourse()
 
     $cid = $_REQUEST["cid"];// 班级id
     $title = $_REQUEST["title"];// 课程标题
-    $content = $_REQUEST["content"];// 标题内容
+    $date = $_REQUEST["date"];// 课程标题
+    $cont = $_REQUEST["content"];// 标题内容
     $video_src = $_REQUEST["video_src"]; // 视频链接
     $video_kind = $_REQUEST["video_kind"];// 视频链接类型
-    $task_src = $_REQUEST["task_src"];// 作业文件地址
 
     $sql = "INSERT INTO `course`(`cid`, `title`, `date`, `content`, `video_src`, `video_kind`, `task_src`) 
-            VALUES ('$cid','$title',now(),'$content','$video_src','$video_kind','$task_src')";
+            VALUES ('$cid','$title','$date','$cont','$video_src','$video_kind','0')";
     if (mysqli_query($conn, $sql)) {
 
         $sql = "SELECT * FROM `class` WHERE `cid` = '$cid'";
@@ -298,7 +298,6 @@ function CreateCourse()
         if (!file_exists($dir)) {
             mkdir($dir, 0777, true);
         }
-
         $content["talk"] = "Ok";
     } else {
         $content["talk"] = "NotOk";
@@ -306,9 +305,9 @@ function CreateCourse()
     }
 
     echo json_encode($content);
-}
+};
 
-// 为课程添加作业
+// 为课程添加作业文件
 function InWork()
 {
     global $conn;// 链接mysql
@@ -353,6 +352,39 @@ function InWork()
     echo json_encode($content);
 }
 
+// 删除作文文件
+function DeleteWorl()
+{
+    global $conn;// 链接mysql
+    global $content;// 用于输出
+
+    $couid = $_REQUEST["couid"];// 课程id
+
+    $sql = "SELECT `couid`, `cid`, `title`, `date`, `task_src` 
+            FROM `course` 
+            WHERE `couid` = '$couid'";
+    $que = mysqli_query($conn, $sql);
+    $detail = mysqli_fetch_assoc($que);
+    $dirFile = "../HomeworkDownload/" . $detail["task_src"];
+    $dir = substr($dirFile, 0, strrpos($dirFile, '/'))."/";
+
+    $p = scandir($dir);
+    foreach ($p as $val) {
+        unlink($dir . $val);
+    }
+
+    // if (unlink($dir)) {
+    //     $sql = "UPDATE `course` SET `task_src`='0' WHERE `couid`='$couid'";
+    //     mysqli_query($conn, $sql);
+    //     $content["talk"] = "Ok";
+    // } else {
+    //     $content["talk"] = "NotOk";
+    //     $content["error"] = "未知的错误";
+    // }
+    
+    // echo json_encode($content);
+}
+
 // 删除课程
 function DeleteCou()
 {
@@ -361,8 +393,18 @@ function DeleteCou()
 
     $couid = $_REQUEST["couid"];// 课程id
 
-    $sql = "DELETE FROM `course` WHERE `couid`= '$couid'";
+    $sql = "SELECT `couid`, `cid`, `title`, `date`, `task_src` 
+            FROM `course` 
+            WHERE `couid` = '$couid'";
+    $que = mysqli_query($conn, $sql);
+    $detail = mysqli_fetch_assoc($que);
+    $task_src = $detail["task_src"];
+
     if (mysqli_query($conn, $sql)) {
+
+        $sql = "DELETE FROM `course` WHERE `couid`= '$couid'";
+        mysqli_query($conn, $sql);
+
         $content["talk"] = "Ok";
     } else {
         $content["talk"] = "NotOk";
@@ -372,14 +414,47 @@ function DeleteCou()
     echo json_encode($content);
 }
 
-// 查找课程
+// 展示课程
 function FindCou()
 {
     global $conn;// 链接mysql
     global $content;// 用于输出
 
     $cid = $_REQUEST["cid"];// 班级id
-    $level = $_REQUEST["level"];// 当前用户等级
+    @$couid = $_REQUEST["couid"];// 课程id（首次加载可以没有）
+
+    $sql = "SELECT `couid`,`title`, `date`, video_src, video_kind, task_src
+            FROM `course` 
+            WHERE `cid` = '$cid' 
+            ORDER BY `date` DESC";
+    if ($que = mysqli_query($conn, $sql)) {
+        $num = mysqli_num_rows($que);
+        if ($num > 0) {
+            $detail = mysqli_fetch_all($que, 1);
+            $content["course"] = $detail;
+
+            $content["oneCourse"] = $detail[0];
+            if ($couid != "") {
+                $sql = "SELECT `couid`,`title`, `date`, video_src, video_kind, task_src
+                        FROM `course` 
+                        WHERE `cid` = '$cid' AND couid = '$couid'";
+                $que = mysqli_query($conn, $sql);
+                $content["oneCourse"] = mysqli_fetch_assoc($que);
+            }
+
+            $sql = "SELECT name FROM `class` WHERE `cid` = '$cid'";
+            $que = mysqli_query($conn, $sql);
+            $content["class"] = mysqli_fetch_assoc($que);
+
+            $content["talk"] = "Ok";
+        } else {
+            $content["talk"] = "NotOk";
+            $content["error"] = "没有课程";
+        }
+    } else {
+        $content["talk"] = "NotOk";
+        $content["error"] = "未知的错误";
+    }
 
     echo json_encode($content);
 }

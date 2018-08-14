@@ -8,15 +8,11 @@
   </view>
   <view class='selfT'>
     <i class='iconfont icon-brush'></i>
-    <text>{{uanme}}</text>
+    <text decode='true'>{{uanme}}&nbsp;{{rlevel}}</text>
   </view>
   <view class='selfT'>
     <i class='iconfont icon-collection'></i>
     <text>{{cname}}</text>
-  </view>
-  <view class='selfT'>
-    <i class='iconfont icon-headlines'></i>
-    <text>{{rlevel}}</text>
   </view>
   <view class='selfT'>
     <i class='iconfont icon-manage'></i>

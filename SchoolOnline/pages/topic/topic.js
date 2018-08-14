@@ -13,6 +13,10 @@ Page({
     arrOrder: ["倒叙", "顺序"],
     arrTopic: '',
     cid: '',
+    an1: '',
+    an2: '',
+    an3: '',
+    anMove: -50,
   },
 
   onLoad: function(options) {
@@ -66,6 +70,31 @@ Page({
       url: 'createNote/createNote',
     });
   },
+
+  arrorder: function(e) {
+    let move = this.data.anMove;
+    let op = 1;
+    if (move == 50) {
+      move = 0;
+      op = 0;
+    }
+
+    let animation = wx.createAnimation({
+      duration: 500,
+      timingFunction: "ease",
+    })
+    let an1 = animation.opacity(op).translateY(move * 1).step().export();
+    let an2 = animation.opacity(op).translateY(move * 2).step().export();
+    let an3 = animation.opacity(op).translateY(move * 3).step().export();
+
+    this.setData({
+      an1: an1,
+      an2: an2,
+      an3: an3,
+      anMove: this.data.anMove * (-1)
+    })
+  },
+
 })
 
 function wxrequest(that) {
@@ -88,11 +117,11 @@ function wxrequest(that) {
     },
     success: function(res) {
       console.log(res.data)
-      if(res.data.talk=="Ok"){
+      if (res.data.talk == "Ok") {
         that.setData({
           arrTopic: res.data.topic
         })
-      }else{
+      } else {
         that.setData({
           arrTopic: ''
         })
