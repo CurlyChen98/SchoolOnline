@@ -127,8 +127,9 @@
                         coursearr = res.course;
                         let html = `<option value="None">选择课程</option>`;
                         for (const key in res.course) {
-                            html += `
-                            <option value="${res.course[key].couid}">${res.course[key].title}</option>
+                            html +=
+                                `
+                            <option value="${key}">${res.course[key].title}</option>
                         `;
                         }
                         $("#select").html(html);
@@ -157,7 +158,11 @@
                 alert("没有选择课程");
                 return;
             }
-            let select = coursearr[val - 1];
+            let select = coursearr[val];
+            console.log(coursearr)
+            console.log(select)
+            console.log(val)
+            console.log(coursearr[val])
 
             let file = document.getElementById("file").files[0];
             if (file == undefined) {
@@ -172,6 +177,7 @@
             }
 
             file_form.append("select", select.title);
+            file_form.append("selectId", select.couid);
             file_form.append("do", "GetFile");
             $.ajax({
                 type: "POST",

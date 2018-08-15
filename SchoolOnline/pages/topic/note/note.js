@@ -1,6 +1,7 @@
 // node.js
 
 const app = getApp();
+const common = require("../../../utils/template.js")
 
 Page({
 
@@ -46,7 +47,7 @@ Page({
     console.log("进入帖子")
   },
 
-  bindFormSubmit: function(e) {
+  bindFormSubmit: common.throttle(function(e) {
     let detail = e.detail.value.text;
     let uid = wx.getStorageSync('uid');
     let taid = this.data.taid;
@@ -94,7 +95,7 @@ Page({
         }
       }
     })
-  },
+  },1000),
 
   wantIn: function() {
     this.setData({

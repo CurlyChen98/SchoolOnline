@@ -1,25 +1,26 @@
 /* app.wxss */
 @import "utils/template.wxss";
 
-page{
+page {
   font-family: Microsoft Yahei;
   font-size: 15px;
   /* height: 100%; */
   width: 100%;
-  background-color: #ffffff;
+  background-color: #fff;
   color: #3a3a3a;
 }
 
-.color{
+.color {
   /* 更浅色 */
   color: #f0f3fa;
   /* 浅色字 */
   color: #d6d6d6;
   /* 略浅色字 */
   color: #9e9e9e;
-
-  /* 底线 */
-  color: #d6d6d6;
   /* 字 */
   color: #3a3a3a;
+  /* 主题蓝色 */
+  color: #03a9f4;
+  /* 警告色 */
+  color: #d9534f;
 }

@@ -83,6 +83,7 @@ function ShowStudent()
     if ($claName != "") {
         // 班级名单再次修改班级
         $claName = strtolower($claName);
+        // 需要改
         $sql = "SELECT * FROM `class` WHERE `name` = '$claName'";
         $que = mysqli_query($conn, $sql);
         $detail = mysqli_fetch_assoc($que);
@@ -112,6 +113,7 @@ function ShowStudent()
     if ($stuGroup != "") {
         // 小组名单再次修改班级
         $stuGroup = strtolower($stuGroup);
+        // 需要改
         $sql = "SELECT * FROM `s_group` WHERE `name` = '$stuGroup'";
         $que = mysqli_query($conn, $sql);
         $detail = mysqli_fetch_assoc($que);
@@ -315,6 +317,7 @@ function InWork()
 
     $file = $_FILES["file"];// 上传文件
     $couid = $_REQUEST["couid"];// 课程id
+    $cid = $_REQUEST["cid"];// 班级id
 
     if ($file["error"] > 0) {
         $content["talk"] = "NotOk";
@@ -326,12 +329,6 @@ function InWork()
         $content["talk"] = "NotOk";
         $content["error"] = "文件过大，不能上传大于2M的文件";
     } else {
-        $sql = "SELECT * FROM `course` WHERE `couid` = '$couid'";
-        $que = mysqli_query($conn, $sql);
-        $detail = mysqli_fetch_assoc($que);
-        $couTitle = $detail["title"];
-        $cid = $detail["cid"];
-
         $sql = "SELECT * FROM `class` WHERE `cid` = '$cid'";
         $que = mysqli_query($conn, $sql);
         $detail = mysqli_fetch_assoc($que);
@@ -352,8 +349,8 @@ function InWork()
     echo json_encode($content);
 }
 
-// 删除作文文件
-function DeleteWorl()
+// 删除作业文件
+function DeleteWork()
 {
     global $conn;// 链接mysql
     global $content;// 用于输出
@@ -365,24 +362,19 @@ function DeleteWorl()
             WHERE `couid` = '$couid'";
     $que = mysqli_query($conn, $sql);
     $detail = mysqli_fetch_assoc($que);
-    $dirFile = "../HomeworkDownload/" . $detail["task_src"];
-    $dir = substr($dirFile, 0, strrpos($dirFile, '/'))."/";
+    $dirFile = "./../HomeworkDownload/" . $detail["task_src"];
+    $dirFile = urldecode($dirFile);
 
-    $p = scandir($dir);
-    foreach ($p as $val) {
-        unlink($dir . $val);
+    if (unlink($dirFile)) {
+        $sql = "UPDATE `course` SET `task_src`='0' WHERE `couid`='$couid'";
+        mysqli_query($conn, $sql);
+        $content["talk"] = "Ok";
+    } else {
+        $content["talk"] = "NotOk";
+        $content["error"] = "未知的错误";
     }
 
-    // if (unlink($dir)) {
-    //     $sql = "UPDATE `course` SET `task_src`='0' WHERE `couid`='$couid'";
-    //     mysqli_query($conn, $sql);
-    //     $content["talk"] = "Ok";
-    // } else {
-    //     $content["talk"] = "NotOk";
-    //     $content["error"] = "未知的错误";
-    // }
-    
-    // echo json_encode($content);
+    echo json_encode($content);
 }
 
 // 删除课程
@@ -398,13 +390,32 @@ function DeleteCou()
             WHERE `couid` = '$couid'";
     $que = mysqli_query($conn, $sql);
     $detail = mysqli_fetch_assoc($que);
-    $task_src = $detail["task_src"];
+
+    $dirFile = "../HomeworkDownload/" . $detail["task_src"];
+    $dirFile = urldecode($dirFile);
+    $dir = substr($dirFile, 0, strrpos($dirFile, '/')) . "/";
+    $p = scandir($dir);
+    foreach ($p as $val) {
+        if ($val != "." && $val != "..") {
+            unlink($dir . $val);
+        }
+    }
+    rmdir($dirFile);
+
+    $dirFile = "../HomeworkSubmit/" . $detail["task_src"];
+    $dirFile = urldecode($dirFile);
+    $dir = substr($dirFile, 0, strrpos($dirFile, '/')) . "/";
+    $p = scandir($dir);
+    foreach ($p as $val) {
+        if ($val != "." && $val != "..") {
+            unlink($dir . $val);
+        }
+    }
+    rmdir($dirFile);
 
     if (mysqli_query($conn, $sql)) {
-
         $sql = "DELETE FROM `course` WHERE `couid`= '$couid'";
         mysqli_query($conn, $sql);
-
         $content["talk"] = "Ok";
     } else {
         $content["talk"] = "NotOk";
@@ -457,5 +468,64 @@ function FindCou()
     }
 
     echo json_encode($content);
+}
+
+// 展示班级所有学生作业
+function ShowWork()
+{
+    global $conn;// 链接mysql
+    global $content;// 用于输出
+
+    $cid = $_REQUEST["cid"];// 班级id
+    @$couid = $_REQUEST["couid"];// 课程id（首次加载可以没有）
+
+    $sql = "SELECT `couid`, `title`, `date`
+            FROM `course` WHERE `cid` = '$cid' ORDER BY `date` DESC";
+    $que = mysqli_query($conn, $sql);
+    $detail = mysqli_fetch_all($que, 1);
+    $content["course"] = $detail;
+
+    $oneCouId = $detail[0]["couid"];
+    if ($couid != "") {
+        $oneCouId = $couid;
+    }
+    $sql = "SELECT `task_id`, `task_url`, `date` 
+            FROM `task` WHERE `couid` = '$oneCouId' ORDER BY `date` DESC";
+    $que = mysqli_query($conn, $sql);
+    $detail = mysqli_fetch_all($que, 1);
+    $content["work"] = $detail;
+    $content["dirFile"] = "HomeworkSubmit/";
+
+    echo json_encode($content);
+}
+
+// 下载学生作业
+function DwWork()
+{
+    global $conn;// 链接mysql
+    global $content;// 用于输出
+
+    $task_id = $_REQUEST["task_id"];// 作业id
+    $how = $_REQUEST["how"];// 选择的数量(one、array、all)
+
+    $fileList = [];
+    if ($how == "one") {
+        $sql = "SELECT `couid`, `title`, `date`
+                FROM `course` WHERE `cid` = '$cid' ORDER BY `date` DESC";
+        $que = mysqli_query($conn, $sql);
+        $detail = mysqli_fetch_all($que, 1);
+    } else if ($how == "array") {
+
+    } else if ($how == "all") {
+
+    }
+
+    $filename = ".zip";
+    $zip = new ZipArchive();
+    $zip->open($filename, ZIPARCHIVE::OVERWRITE);   //打开压缩包
+    foreach ($fileList as $file) {
+        $zip->addFile($file, basename($file));   //向压缩包中添加文件
+    }
+    $zip->close();  //关闭压缩包
 }
 ?>

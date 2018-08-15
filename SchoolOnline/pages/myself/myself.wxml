@@ -1,31 +1,43 @@
 <!-- myself.wxml -->
 <view class='self'>
+  <!-- 头像 微信名 -->
   <view class='user'>
     <view class='userAva'>
       <open-data type="userAvatarUrl"></open-data>
     </view>
     <open-data type="userNickName"></open-data>
   </view>
+  <!-- 名字 身份 -->
   <view class='selfT'>
     <i class='iconfont icon-brush'></i>
     <text decode='true'>{{uanme}}&nbsp;{{rlevel}}</text>
   </view>
+  <!-- 本名 -->
   <view class='selfT'>
     <i class='iconfont icon-collection'></i>
     <text>{{cname}}</text>
   </view>
+  <!-- 小组 -->
   <view class='selfT'>
     <i class='iconfont icon-manage'></i>
     <text bindtap='jump' data-type='mygroup'>我的小组</text>
   </view>
+  <!-- 话题 -->
   <view class='selfT'>
     <i class='iconfont icon-flag'></i>
     <text bindtap='jump' data-type='mytopic'>我的话题</text>
   </view>
+  <!-- 话题 -->
+  <view class='selfT' wx:if="{{rlevel=='老师'}}">
+    <i class='iconfont icon-group'></i>
+    <text bindtap='jump' data-type='mytopic'>班级管理</text>
+  </view>
+  <!-- 提交 -->
   <view class='selfT'>
     <i class='iconfont icon-document'></i>
     <text bindtap='upLoadFiles'>作业提交</text>
   </view>
+  <!-- 设置 -->
   <view class='selfT'>
     <i class='iconfont icon-setup'></i>
     <text bindtap='jump' data-type='setting'>设置</text>

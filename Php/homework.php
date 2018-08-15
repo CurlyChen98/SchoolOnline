@@ -65,6 +65,7 @@ function GetFile()
     $cid = $_REQUEST["cid"];
     $uid = $_REQUEST["uid"];
     $select = $_REQUEST["select"];
+    $selectId = $_REQUEST["selectId"];
 
     $sql = "SELECT * FROM `class` WHERE `cid` = '$cid'";
     $que = mysqli_query($conn, $sql);
@@ -86,11 +87,20 @@ function GetFile()
             mkdir($dir, 0777, true);
         }
         $save = $dir . $uid . "_" . $file["name"];
+        $saveDir = urlencode($className . "/" . $select . "/" . $uid . "_" . $file["name"]);
         if (!file_exists($save)) {
-            if (move_uploaded_file($file['tmp_name'], $save))
-                $content["talk"] = "Ok";
-            else {
-                $content["error"] = "未知的错误";
+            if (move_uploaded_file($file['tmp_name'], $save)) {
+                $sql = "INSERT INTO `task`(`task_id`, `uid`, `couid`, `task_url`,`date`) 
+                        VALUES (NULL,'$uid','$selectId','$saveDir',now())";
+                $content["sql"] = $sql;
+                if (mysqli_query($conn, $sql)) {
+                    $content["talk"] = "Ok";
+                } else {
+                    $content["talk"] = "NotOk";
+                    $content["error"] = "未知的错误2";
+                }
+            } else {
+                $content["error"] = "未知的错误1";
                 $content["talk"] = "NotOk";
             }
         } else {
