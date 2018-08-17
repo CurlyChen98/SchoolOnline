@@ -2,13 +2,21 @@
 
 .box{
   margin-top: 20px;
+  padding: 0 20px 0 20px;
 }
 
 .box>.setting{
-  padding: 0 20px 0 20px;
-  line-height: 50px;
-  font-size: 17px;
-  border-bottom: 1px inset #dadada;
+  padding: 0 0 0 5px;
+  align-items: center;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
+  box-sizing: border-box;
+  height: 50px;
+  border-bottom: 1px inset #dadada;
+  position: relative;
+}
+
+.setting>.goRight{
+  position: absolute;
+  right: 5px;
 }

@@ -55,7 +55,6 @@ Page({
       title: '提示',
       content: '微信不支持该链接，确认复制链接到浏览器打开下载',
       showCancel: false,
-      confirmColor: "#03a8f3",
       success: function(res) {
         wx.setClipboardData({
           data: src,
@@ -69,6 +68,7 @@ Page({
 
 function checkLevel() {
   let ulevel = wx.getStorageSync('ulevel');
+  ulevel = String(ulevel)
   let rlevel = 'Unknown';
   switch (ulevel) {
     case "1":

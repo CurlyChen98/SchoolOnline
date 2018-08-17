@@ -62,10 +62,15 @@
 
 .work>.dw {
   margin-top: 15px;
-  margin-bottom: 25px;
 }
 
 .work>.dw>button {
   border-radius: 3px;
   border: #03a9f4 1px solid;
+}
+
+.buttomView{
+  width: 100%;
+  height: 1px;
+  margin-bottom: 20px;
 }

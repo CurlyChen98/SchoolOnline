@@ -2,12 +2,9 @@
 include("conn.php");
 header('Content-type:text/json');
 
-if (@$do = $_REQUEST["do"]) {
-    $do();
-}
-if (@$do = $_FILES["do"]) {
-    $do();
-}
+$do = $_REQUEST["do"];
+$do();
+
 $content = [];
 
 function Dw()
@@ -82,16 +79,19 @@ function GetFile()
         $content["talk"] = "NotOk";
         $content["error"] = "文件过大，不能上传大于2M的文件";
     } else {
-        $dir = "../HomeworkSubmit/" . $className . "/" . $select . "/";
+        $dir = "../HomeworkSubmit/";
+        $saveDir = $className . "/" . $select . "/";
+        $fileName = $uid . "_" . $file["name"];
         if (!file_exists($dir)) {
             mkdir($dir, 0777, true);
         }
-        $save = $dir . $uid . "_" . $file["name"];
-        $saveDir = urlencode($className . "/" . $select . "/" . $uid . "_" . $file["name"]);
+        $save = $dir . $saveDir . $fileName;
+        $saveDir = urlencode($saveDir . $fileName);
+        $fileName = urlencode($fileName);
         if (!file_exists($save)) {
             if (move_uploaded_file($file['tmp_name'], $save)) {
-                $sql = "INSERT INTO `task`(`task_id`, `uid`, `couid`, `task_url`,`date`) 
-                        VALUES (NULL,'$uid','$selectId','$saveDir',now())";
+                $sql = "INSERT INTO `task`(`task_id`, `uid`, `couid`, `task_url`, `task_name`,`date`) 
+                        VALUES (NULL,'$uid','$selectId','$saveDir','$fileName',now())";
                 $content["sql"] = $sql;
                 if (mysqli_query($conn, $sql)) {
                     $content["talk"] = "Ok";

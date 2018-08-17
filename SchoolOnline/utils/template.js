@@ -31,7 +31,7 @@ function showToast(title, icon, time, mask) {
   })
 }
 
-// 关闭当前跳转到另一个页面
+// 关闭当前页面跳转到另一个页面
 function redirectTo(url) {
   wx.redirectTo({
     url: url

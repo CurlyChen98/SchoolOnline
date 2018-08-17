@@ -2,10 +2,11 @@
 
 <view class='box'>
   <view class='setting'>
-    <text bindtap='levelCheck'>输入老师密匙</text>
+    <text bindtap='levelCheck'>输入密匙</text>
   </view>
   <view class='setting'>
-    <text>版本</text><text>v0.8</text>
+    <text>版本</text>
+    <text class='goRight'>v1.1</text>
   </view>
 </view>
 

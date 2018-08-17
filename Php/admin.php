@@ -206,54 +206,6 @@ function UpdateStudent()
     echo json_encode($content);
 }
 
-// 创建班级
-function CreateClass()
-{
-    global $conn;
-    global $content;
-    // 获取前端数据
-    $claName = $_REQUEST["claName"];
-    // 查找班级名是否一存在
-    $claName = strtolower($claName);
-    $sql = "SELECT * FROM `class` WHERE `name` = '$claName'";
-    $que = mysqli_query($conn, $sql);
-    $num = mysqli_num_rows($que);
-    if ($num > 0) {
-        $content["talk"] = "Have";
-        return;
-    } else {
-        $arrcode1 = "PLOKMIJNUHBYGVTFCRDXESZWAQ123456789";
-        $arrcode2 = "PLOKMIJNUHBYGVTFCRDXESZWAQzxcvbnmlkjhgfdsapoiuytrewq";
-        $classcode = "";
-        $teachercode = "";
-        for (;; ) {
-            $classcode = "KG" . substr(str_shuffle($arrcode1), 10, 10);
-            $sql = "SELECT * FROM `class` WHERE `classkey` = '$classcode'";
-            $que = mysqli_query($conn, $sql);
-            $num = mysqli_num_rows($que);
-            if ($num == 0) {
-                break;
-            }
-        }
-        for (;; ) {
-            $teachercode = "KG" . substr(str_shuffle($arrcode2), 10, 10);
-            $sql = "SELECT * FROM `class` WHERE `classkey` = '$teachercode'";
-            $que = mysqli_query($conn, $sql);
-            $num = mysqli_num_rows($que);
-            if ($num == 0) {
-                break;
-            }
-        }
-        $sql = "INSERT INTO `class` VALUES (NULL,'$claName','$teachercode','$classcode')";
-        if (mysqli_query($conn, $sql)) {
-            $content["talk"] = "Ok";
-        } else {
-            $content["talk"] = "NotOk";
-        }
-        echo json_encode($content);
-    }
-}
-
 // 查看小组密匙
 function ShowGroupKey()
 {
@@ -329,16 +281,31 @@ function InWork()
         $content["talk"] = "NotOk";
         $content["error"] = "文件过大，不能上传大于2M的文件";
     } else {
-        $sql = "SELECT * FROM `class` WHERE `cid` = '$cid'";
+        $sql = "SELECT name FROM `class` WHERE `cid` = '$cid'";
         $que = mysqli_query($conn, $sql);
         $detail = mysqli_fetch_assoc($que);
         $className = $detail["name"];
 
+        $sql = "SELECT title FROM `course` WHERE `couid` = '$couid'";
+        $que = mysqli_query($conn, $sql);
+        $detail = mysqli_fetch_assoc($que);
+        $couTitle = $detail["title"];
+
         $dir = "../HomeworkDownload/" . $className . "/" . $couTitle . "/";
         $save = $dir . $file["name"];
-        if (move_uploaded_file($file['tmp_name'], $save))
-            $content["talk"] = "Ok";
-        else {
+        $saveDir = $className . "/" . $couTitle . "/" . $file["name"];
+        $saveDir = urlencode($saveDir);
+        if (move_uploaded_file($file['tmp_name'], $save)) {
+            $sql = "UPDATE `course` 
+                    SET `task_src` = '$saveDir'
+                    WHERE `course`.`couid` = '$couid'";
+            if (mysqli_query($conn, $sql)) {
+                $content["talk"] = "Ok";
+            } else {
+                $content["talk"] = "NotOk";
+                $content["error"] = "未知的错误2";
+            }
+        } else {
             $content["error"] = "未知的错误";
             $content["talk"] = "NotOk";
         }
@@ -478,6 +445,17 @@ function ShowWork()
 
     $cid = $_REQUEST["cid"];// 班级id
     @$couid = $_REQUEST["couid"];// 课程id（首次加载可以没有）
+    $pageCount = $_REQUEST["pageCount"];
+    $pno = $_REQUEST["pno"];
+
+    // 处理页数
+    $samllp = $pageCount * $pno - $pageCount;
+    $bigp = $pageCount;
+    $content["pno"] = $pno;
+
+    $sql = "SELECT name FROM `class` WHERE `cid` = '$cid'";
+    $que = mysqli_query($conn, $sql);
+    $content["class"] = mysqli_fetch_assoc($que);
 
     $sql = "SELECT `couid`, `title`, `date`
             FROM `course` WHERE `cid` = '$cid' ORDER BY `date` DESC";
@@ -489,12 +467,26 @@ function ShowWork()
     if ($couid != "") {
         $oneCouId = $couid;
     }
-    $sql = "SELECT `task_id`, `task_url`, `date` 
-            FROM `task` WHERE `couid` = '$oneCouId' ORDER BY `date` DESC";
+
+    $sql = "SELECT `title` FROM `course` WHERE `couid` = '$oneCouId'";
+    $que = mysqli_query($conn, $sql);
+    $content["claName"] = mysqli_fetch_assoc($que);
+
+    $sql = "SELECT k.`task_id`,k.`task_name`,k.`date`,k.task_url,e.name
+            FROM
+                (
+                    SELECT `task_id`,`task_name`,`uid`,`date`,task_url
+                    FROM `task`
+                    WHERE `couid` = '$oneCouId'
+                ) K
+            LEFT JOIN s_use e ON e.uid = k.uid
+            ORDER BY k.`date` DESC
+            LIMIT $samllp,$bigp";
     $que = mysqli_query($conn, $sql);
     $detail = mysqli_fetch_all($que, 1);
     $content["work"] = $detail;
-    $content["dirFile"] = "HomeworkSubmit/";
+    $content["url"] = "/SchoolOnline/HomeworkSubmit/";
+
 
     echo json_encode($content);
 }
@@ -505,27 +497,155 @@ function DwWork()
     global $conn;// 链接mysql
     global $content;// 用于输出
 
-    $task_id = $_REQUEST["task_id"];// 作业id
+    $task_id = json_decode($_REQUEST["task_id"], true);// 作业id
     $how = $_REQUEST["how"];// 选择的数量(one、array、all)
 
     $fileList = [];
+    $inArr = '';
     if ($how == "one") {
-        $sql = "SELECT `couid`, `title`, `date`
-                FROM `course` WHERE `cid` = '$cid' ORDER BY `date` DESC";
-        $que = mysqli_query($conn, $sql);
-        $detail = mysqli_fetch_all($que, 1);
+        $inArr = "`task_id` = $task_id";
     } else if ($how == "array") {
-
+        $arr = [];
+        foreach ($task_id as $key => $value) {
+            array_push($arr, $value);
+        }
+        $inArr = "`task_id` IN ($arr)";
     } else if ($how == "all") {
-
+        $inArr = "1";
     }
+    $sql = "SELECT `task_url`, `task_name` 
+            FROM `task` WHERE $inArr";
+    $que = mysqli_query($conn, $sql);
+    $fileList = mysqli_fetch_all($que, 1);
 
-    $filename = ".zip";
+    $zipname = "work.zip";
     $zip = new ZipArchive();
-    $zip->open($filename, ZIPARCHIVE::OVERWRITE);   //打开压缩包
+    $res = $zip->open($zipname, ZipArchive::OVERWRITE | ZipArchive::CREATE);   //打开压缩包
     foreach ($fileList as $file) {
-        $zip->addFile($file, basename($file));   //向压缩包中添加文件
+        $file["task_url"] = rawurldecode($file["task_url"]);
+        $file["task_name"] = rawurldecode($file["task_name"]);
+        var_dump("../HomeworkSubmit/" . $file["task_url"]);
+        var_dump($file["task_name"]);
+        $a = file_exists("../HomeworkSubmit/" . $file["task_url"]);
+        var_dump($a);
+
+        $zip->addFile("../HomeworkSubmit/" . $file["task_url"], $file["task_name"]);   //向压缩包中添加文件
     }
     $zip->close();  //关闭压缩包
+
+    header("Content-Type: application/zip");
+    header("Content-Transfer-Encoding: Binary");
+    header("Content-Length: " . filesize($zipname));
+    header("Content-Disposition: attachment; filename=\"" . basename($zipname) . "\"");
+    ob_clean();
+    flush();
+
+    $content["url"] = "http://localhost/SchoolOnline/Php/work.zip";
+
+    echo json_encode($content);
+}
+
+// 创建班级
+function CreateClass()
+{
+    global $conn;
+    global $content;
+    // 获取前端数据
+    $claName = $_REQUEST["claName"];
+    // 查找班级名是否一存在
+    $claName = strtolower($claName);
+    $sql = "SELECT * FROM `class` WHERE `name` = '$claName'";
+    $que = mysqli_query($conn, $sql);
+    $num = mysqli_num_rows($que);
+    if ($num > 0) {
+        $content["talk"] = "Have";
+        return;
+    } else {
+        $arrcode1 = "PLOKMIJNUHBYGVTFCRDXESZWAQ123456789";
+        $arrcode2 = "PLOKMIJNUHBYGVTFCRDXESZWAQzxcvbnmlkjhgfdsapoiuytrewq";
+        $classcode = "";
+        $teachercode = "";
+        for (;; ) {
+            $classcode = "KG" . substr(str_shuffle($arrcode1), 10, 10);
+            $sql = "SELECT * FROM `class` WHERE `classkey` = '$classcode'";
+            $que = mysqli_query($conn, $sql);
+            $num = mysqli_num_rows($que);
+            if ($num == 0) {
+                break;
+            }
+        }
+        for (;; ) {
+            $teachercode = "KG" . substr(str_shuffle($arrcode2), 10, 10);
+            $sql = "SELECT * FROM `class` WHERE `teacherkey` = '$teachercode'";
+            $que = mysqli_query($conn, $sql);
+            $num = mysqli_num_rows($que);
+            if ($num == 0) {
+                break;
+            }
+        }
+        $sql = "INSERT INTO `class` VALUES (NULL,'$claName','$teachercode','$classcode')";
+        if (mysqli_query($conn, $sql)) {
+            $content["talk"] = "Ok";
+        } else {
+            $content["talk"] = "NotOk";
+            $content["error"] = "未知的错误";
+        }
+
+        echo json_encode($content);
+    }
+}
+
+// 删除班级
+function Delete()
+{
+    global $conn;
+    global $content;
+    // 获取前端数据
+    $cid = $_REQUEST["cid"];
+
+    try {
+        $sql = "DELETE FROM `talkdet` WHERE `taid` = (
+            SELECT k.taid
+            FROM
+            (
+                SELECT couid
+                FROM course
+                WHERE cid = $cid
+            ) e
+            LEFT JOIN talk k ON e.couid = k.couid)";
+        mysqli_query($conn, $sql);
+        $sql = "DELETE FROM `task` WHERE `couid` = (SELECT couid from course WHERE cid = $cid)";
+        mysqli_query($conn, $sql);
+        $sql = "DELETE FROM `talk` WHERE `couid` = (SELECT couid from course WHERE cid = $cid)";
+        mysqli_query($conn, $sql);
+        $sql = "DELETE FROM `class` WHERE `cid` = $cid";
+        mysqli_query($conn, $sql);
+        $sql = "DELETE FROM `course` WHERE `cid` = $cid";
+        mysqli_query($conn, $sql);
+        $sql = "DELETE FROM `message` WHERE `cid` = $cid";
+        mysqli_query($conn, $sql);
+        $sql = "DELETE FROM `s_group` WHERE `cid` = $cid";
+        mysqli_query($conn, $sql);
+        $sql = "DELETE FROM `s_use` WHERE `cid` = $cid";
+        mysqli_query($conn, $sql);
+        $content["talk"] = "Ok";
+    } catch (Exception $e) {
+        $content["talk"] = "NotOk";
+        $content["erroe"] = $e;
+    }
+
+    echo json_encode($content);
+}
+
+// 查看所有班级
+function ShowAllClass()
+{
+    global $conn;
+
+    $sql = "SELECT `cid`, `name` FROM `class`";
+    $que = mysqli_query($conn, $sql);
+    $content["class"] = mysqli_fetch_all($sql, 1);
+
+    echo json_encode($content);
 }
 ?>

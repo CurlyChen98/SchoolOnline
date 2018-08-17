@@ -153,16 +153,13 @@
         }
 
         function upFile() {
+            console.log("ssds")
             let val = $('#select').val();
             if (val == "None") {
                 alert("没有选择课程");
                 return;
             }
             let select = coursearr[val];
-            console.log(coursearr)
-            console.log(select)
-            console.log(val)
-            console.log(coursearr[val])
 
             let file = document.getElementById("file").files[0];
             if (file == undefined) {

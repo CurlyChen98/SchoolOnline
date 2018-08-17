@@ -1,5 +1,9 @@
 /* login.wxss */
 
+page{
+  height: 100%;
+}
+
 .box{
   height: 100%;
   width: 100%;
@@ -11,7 +15,7 @@
 
 .view_input{
   width: 100%;
-  margin-top: -30px;
+  margin-top: -80px;
   position: relative;
 }
 
@@ -25,7 +29,8 @@
 
 .button_sub{
   width: 100px;
-  background-color: #03a8f3;
+  background-color: #03a9f4;
+  border: none;
   color: #ffffff;
   position: absolute;
   bottom: -100%;
@@ -33,7 +38,7 @@
 }
 
 .hover_button_sub{
-  background-color: #2195f2;
+  background-color: #32a3e5;
 }
 
 .img{

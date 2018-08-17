@@ -9,7 +9,7 @@ Page({
   },
 
   onLoad: function(options) {
-    let couid = wx.getStorageSync('couid');
+    let couid = options.couid;
     let that = this;
     wx.request({
       url: app.globalData.backAddress + app.globalData.backPage,
@@ -23,7 +23,7 @@ Page({
       },
       success: function(res) {
         let data = res.data.course[0];
-        console.log(data)
+        console.log(res.data)
         that.setData({
           data: data,
         })
@@ -31,8 +31,12 @@ Page({
     })
   },
 
-  onShow: function() {
-    console.log("打开课程")
+  onShareAppMessage: function(res) {
+    return {
+      title: this.data.data.title,
+      path: '/pages/index/classroom//classroom?couid=' + this.data.data.couid,
+      // imageUrl: '',
+    }
   },
 
   homeworkDownload: function() {

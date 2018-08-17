@@ -26,15 +26,3 @@
 <modal hidden="{{modalHidden}}" title="{{modalTitle}}" confirm-text="提交" bindconfirm="modalConfirm" bindcancel="modalCancel" confirmcolor="#03a9f4">
   <input bindblur="modalInput" placeholder="请输入" value='{{modalKey}}'></input>
 </modal>
-
-<view class='modalBox'>
-  <view class='modal'>
-    <form>
-      <input></input>
-      <view class='button'>
-        <view>取消</view>
-        <view>提交</view>
-      </view>
-    </form>
-  </view>
-</view>

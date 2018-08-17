@@ -2,7 +2,7 @@
 
 <view class='box'>
   <view class='color'></view>
-  <view class='title'>{{data.title}}{{data.title}}{{data.title}}</view>
+  <view class='title'>{{data.title}}</view>
   <view class='date'>{{data.date}}</view>
   <view class='detail'>{{data.content}}</view>
   <view class='video'>
@@ -18,3 +18,13 @@
     <button bindtap='homeworkDownload' size="mini" plain="true">Click Here!</button>
   </view>
 </view>
+
+<view class='work'>
+  <view class='color'></view>
+  <view class='title'>分享课程</view>
+  <view class='dw'>
+    <button open-type="share" bindtap='' size="mini" plain="true">Click Here!</button>
+  </view>
+</view>
+
+<view class='buttomView'></view>

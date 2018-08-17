@@ -51,16 +51,11 @@ Page({
     });
   },
 
-  onShow: function() {
-    console.log("打开课程")
-  },
-
   // 点击触发课程事件
   jumpnext: function(e) {
     let couid = e.currentTarget.dataset.couid;
-    wx.setStorageSync('couid', couid);
     wx.navigateTo({
-      url: 'classroom/classroom',
+      url: 'classroom/classroom?couid=' + couid,
     });
   },
 

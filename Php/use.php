@@ -52,19 +52,39 @@ function InsertUse()
     $studentkey = $_REQUEST["studentkey"];
     // 获取真实openid
     $mdOpenId = FindOpenId($code);
-    // 判断班级密匙是否正确
+    // 判断班级密匙是否正确并获取cid
     $sql = "SELECT * FROM `class` WHERE `classkey` = '$classkey'";
     $que = mysqli_query($conn, $sql);
-    $num = mysqli_num_rows($que);
-    if ($num > 0) {
-        $detail = mysqli_fetch_assoc($que);
-        $cid = $detail['cid'];
+    $classNum = mysqli_num_rows($que);
+    $detail = mysqli_fetch_assoc($que);
+    $cid = $detail['cid'];
+    $className = $detail['name'];
+    // 判断是不是管理者组
+    if ($className == "管理者组") {
+        $level = 10;
+        // 判断姓名是否在指定名单
+        $nameNum = 1;
+    } else {
+        $level = 1;
+        // 判断姓名是否在指定名单
+        $sql = "SELECT `id` FROM `class_student_list` WHERE `student_name` = '$studentkey'";
+        $que = mysqli_query($conn, $sql);
+        $nameNum = mysqli_num_rows($que);
+    }
+    // 判断
+    if ($classNum == 0) {
+        $content["talk"] = "NotOk";
+        $content["error"] = "班级密匙错误";
+    } else if ($nameNum == 0) {
+        $content["talk"] = "NotOk";
+        $content["error"] = "查无此学生";
+    } else {
         $sql = "SELECT * FROM `s_use` WHERE `opid` = '$mdOpenId'";
         $que = mysqli_query($conn, $sql);
         $num = mysqli_num_rows($que);
         if ($num == 0) {
             $sql = "INSERT INTO `s_use`(`uid`, `gid`, `cid`, `opid`, `name`, `level`, `lastdate`,`password`) 
-                    VALUES (NULL,'0','$cid','$mdOpenId','$studentkey','1',now(),'0')";
+                    VALUES (NULL,'0','$cid','$mdOpenId','$studentkey','$level',now(),'0')";
             if (mysqli_query($conn, $sql)) {
                 $content["talk"] = "Ok";
             } else {
@@ -75,10 +95,8 @@ function InsertUse()
             $content["talk"] = "NotOk";
             $content["error"] = "该OpenId已存在";
         }
-    } else {
-        $content["talk"] = "NotOk";
-        $content["error"] = "班级密匙错误";
     }
+    // 输出
     echo json_encode($content);
 }
 
@@ -260,6 +278,7 @@ function CheckGroup()
         $sql = "UPDATE `s_use` SET `gid` = '$gid' WHERE `uid` = '$uid'";
         if (mysqli_query($conn, $sql)) {
             $content["talk"] = "Ok";
+            $content["gid"] = $gid;
         } else {
             $content["talk"] = "NotOk";
             $content["error"] = "未知的错误";
@@ -280,21 +299,30 @@ function CheckTeacher()
 
     $teacherkey = $_REQUEST["teacherkey"];
     $uid = $_REQUEST["uid"];
+    $cid = $_REQUEST["cid"];
 
-    $sql = "SELECT * FROM `class` WHERE `teacherkey` = '$teacherkey'";
+    $sql = "SELECT * FROM `class` WHERE `teacherkey` = '$teacherkey' AND cid = '$cid'";
     $que = mysqli_query($conn, $sql);
     $num = mysqli_num_rows($que);
+    $detail = mysqli_fetch_assoc($que);
+    $className = $detail["name"];
+    if ($className == "管理者组") {
+        $level = 10;
+    } else {
+        $level = 5;
+    }
     if ($num > 0) {
-        $sql = "UPDATE `s_use` SET `level` = '5' WHERE `uid` = '$uid'";
+        $sql = "UPDATE `s_use` SET `level` = '$level' WHERE `uid` = '$uid'";
         if (mysqli_query($conn, $sql)) {
             $content["talk"] = "Ok";
+            $content["level"] = $level;
         } else {
             $content["talk"] = "NotOk";
             $content["error"] = "未知的错误";
         }
     } else {
         $content["talk"] = "NotOk";
-        $content["error"] = "老师密匙错误";
+        $content["error"] = "密匙错误";
     }
 
     echo json_encode($content);
@@ -367,6 +395,57 @@ function FindMyFollow()
     $detail = mysqli_fetch_all($que, 1);
     $content["topic"] = $detail;
 
+    echo json_encode($content);
+}
+
+// 寻找班级成员
+function FindMyClass()
+{
+    global $conn;
+    global $content;
+
+    $cid = $_REQUEST["cid"];
+
+    $sql = "SELECT `uid`, `name`, `level`, `lastdate` 
+            FROM `s_use` WHERE `cid` = $cid";
+    $que = mysqli_query($conn, $sql);
+    $content["studentList"] = mysqli_fetch_all($que, 1);
+
+    echo json_encode($content);
+}
+
+// 删除学生从班级中
+function DeleteStudent()
+{
+    global $conn;
+    global $content;
+
+    $uid = $_REQUEST["uid"];
+
+    try {
+        // 删除作业和作业表相关数据
+        $sql = "SELECT `task_url` FROM `task` WHERE `uid`= $uid";
+        $que = mysqli_query($conn, $sql);
+        $work = mysqli_fetch_all($que, 1);
+        foreach ($work as $key => $value) {
+            $url = urldecode("../HomeworkSubmit/" . $value["task_url"]);
+            unlink($url);
+        }
+        $sql = "DELETE FROM `task` WHERE `uid` = '$uid'";
+        mysqli_query($conn, $sql);
+    
+        // 删除有关讨论内容
+        $sql = "DELETE FROM `talkdet` WHERE `uid` = '$uid'";
+        mysqli_query($conn, $sql);
+        $sql = "DELETE FROM `talk` WHERE `uid` = '$uid'";
+        mysqli_query($conn, $sql);
+        $sql = "DELETE FROM `s_use` WHERE `uid` = '$uid'";
+        mysqli_query($conn, $sql);
+        $content["talk"] = "Ok";
+    } catch (Exception $error) {
+        $content["talk"] = "NotOk";
+        $content["error"] = "未知的错误";
+    }
     echo json_encode($content);
 }
 ?>

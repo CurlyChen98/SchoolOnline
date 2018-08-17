@@ -17,9 +17,9 @@ Page({
 
   onLoad: function(options) {
     let gid = wx.getStorageSync('gid');
-    // let ulevel = wx.getStorageSync('ulevel');
+    let ulevel = wx.getStorageSync('ulevel');
     let uid = wx.getStorageSync('uid');
-    let ulevel = 2;
+    ulevel = 2;
     this.setData({
       gid: gid,
       ulevel: ulevel,
@@ -70,6 +70,7 @@ Page({
         if (res.data.talk == "NotOk") {
           common.showToast(res.data.error, 'none', 1000, true)
         } else if (res.data.talk == "Ok") {
+          wx.setStorageSync('gid', res.data.gid);
           common.model(that, true, "请输入小组密匙");
           common.redirectTo('../mygroup/mygroup');
         }
