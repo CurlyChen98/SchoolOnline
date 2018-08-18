@@ -9,7 +9,6 @@ Page({
   },
 
   onLoad: function(options) {
-    console.log("打开小组讨论");
     let gid = wx.getStorageSync('gid')
     let cid = wx.getStorageSync('cid')
     let uid = wx.getStorageSync('uid')

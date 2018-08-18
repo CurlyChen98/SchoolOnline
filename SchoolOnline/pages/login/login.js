@@ -8,10 +8,6 @@ Page({
 
   },
 
-  onShow: function() {
-    console.log("进入注册")
-  },
-
   formSubmit: function(e) {
     wx.showLoading({
       title: '加载中',

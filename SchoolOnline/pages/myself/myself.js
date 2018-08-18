@@ -23,7 +23,6 @@ Page({
   },
 
   onShow: function() {
-    console.log("打开我的");
     let rlevel = checkLevel();
     this.setData({
       rlevel: rlevel,

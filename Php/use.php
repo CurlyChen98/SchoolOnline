@@ -297,11 +297,11 @@ function CheckTeacher()
     global $conn;
     global $content;
 
-    $teacherkey = $_REQUEST["teacherkey"];
+    $key = $_REQUEST["key"];
     $uid = $_REQUEST["uid"];
     $cid = $_REQUEST["cid"];
 
-    $sql = "SELECT * FROM `class` WHERE `teacherkey` = '$teacherkey' AND cid = '$cid'";
+    $sql = "SELECT * FROM `class` WHERE `teacherkey` = '$key' AND cid = '$cid'";
     $que = mysqli_query($conn, $sql);
     $num = mysqli_num_rows($que);
     $detail = mysqli_fetch_assoc($que);

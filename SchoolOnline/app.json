@@ -1,5 +1,6 @@
 {
   "pages": [
+    "pages/myself/setting/setting",
     
     "pages/index/index",
     "pages/index/classroom/classroom",
@@ -11,12 +12,12 @@
     "pages/topic/note/note",
 
     "pages/myself/myclass/myclass",
-    "pages/myself/setting/setting",
     "pages/myself/mytopic/mytopic",
     "pages/myself/myself",
     
     "pages/myself/mygroup/mygroup",
     "pages/group/group"
+    
   ],
   "window": {
     "backgroundTextStyle": "light",
@@ -52,7 +53,7 @@
   },
   "plugins": {
     "tencentVideo": {
-      "version": "1.1.4",
+      "version": "1.1.6",
       "provider": "wxa75efa648b60994b"
     }
   }

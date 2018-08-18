@@ -2,7 +2,7 @@
 
 <view class='box'>
   <view class='setting'>
-    <text bindtap='levelCheck'>输入密匙</text>
+    <text id='checkView' bindtap='levelCheck'>输入密匙</text>
   </view>
   <view class='setting'>
     <text>版本</text>
@@ -11,5 +11,5 @@
 </view>
 
 <modal hidden="{{modalHidden}}" title="{{modalTitle}}" confirm-text="提交" bindconfirm="confirm" no-cancel="true">
-  <input bindblur="modalInput" placeholder="请输入" value='{{key}}'></input>
+  <input id='modalInput' placeholder="请输入" value='{{modalKey}}'></input>
 </modal>

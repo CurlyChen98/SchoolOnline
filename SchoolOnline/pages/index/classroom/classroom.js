@@ -23,7 +23,6 @@ Page({
       },
       success: function(res) {
         let data = res.data.course[0];
-        console.log(res.data)
         that.setData({
           data: data,
         })
@@ -34,7 +33,7 @@ Page({
   onShareAppMessage: function(res) {
     return {
       title: this.data.data.title,
-      path: '/pages/index/classroom//classroom?couid=' + this.data.data.couid,
+      path: 'pages/index/classroom/classroom?couid=' + this.data.data.couid,
       // imageUrl: '',
     }
   },

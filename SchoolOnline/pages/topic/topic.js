@@ -29,7 +29,6 @@ Page({
     let lastDay = year + 1
     let befDay = year - 1
     let cid = wx.getStorageSync('cid');
-    console.log(lastDay + "-" + mon + "-" + day)
     this.setData({
       cid: cid,
       lastDate: lastDay + "-" + mon + "-" + day,
@@ -37,10 +36,6 @@ Page({
       befDay: befDay + "-" + mon + "-" + day,
     })
     wxrequest(this);
-  },
-
-  onShow: function() {
-    console.log("打开话题")
   },
 
   dateChange: function(e) {
@@ -116,7 +111,6 @@ function wxrequest(that) {
       'content-type': 'application/x-www-form-urlencoded'
     },
     success: function(res) {
-      console.log(res.data)
       if (res.data.talk == "Ok") {
         that.setData({
           arrTopic: res.data.topic

@@ -8,8 +8,7 @@ Page({
   data: {
     modalHidden: true,
     modalTitle: '',
-    modalkey: '',
-    key: '',
+    modalKey: '',
     ulevel: 0,
     uid: 0,
     cid: 0,
@@ -26,10 +25,6 @@ Page({
     })
   },
 
-  onShow: function() {
-    console.log("打开设置")
-  },
-
   // 点击输入密匙方法
   levelCheck: function() {
     if (this.data.ulevel == "5" || this.data.ulevel == "10") {
@@ -39,30 +34,38 @@ Page({
     common.model(this, false, "请输入老师密匙")
   },
 
-  // 模拟弹窗输入框失去焦点方法
-  modalInput: function(e) {
-    this.setData({
-      modalkey: e.detail.value,
-      key: '',
-    })
-  },
-
   // 模拟弹窗提交触发方法
   confirm: function() {
     common.model(this, true, "")
+    let modalkeyInput = '';
+
+    var query = wx.createSelectorQuery()
+    query.select('#modalInput').fields({
+      properties: ['value'],
+    }, function(res) {
+      modalkeyInput = res.value;
+      console.log(modalkeyInput)
+    });
+    query.exec();
+    this.setData({
+      modalKey: '',
+    })
+
+    console.log(modalkeyInput)
     wx.request({
       url: app.globalData.backAddress + app.globalData.backPage,
       data: {
         do: "CheckTeacher",
         uid: this.data.uid,
         cid: this.data.cid,
-        teacherkey: this.data.modalkey,
+        key: modalkeyInput,
       },
       method: 'POST',
       header: {
         'content-type': 'application/x-www-form-urlencoded'
       },
       success: function(res) {
+        console.log(res.data)
         if (res.data.talk == "Ok") {
           wx.setStorageSync('ulevel', res.data.level);
           common.showToast('等级提升成功', 'success', 1000, true);
@@ -71,6 +74,7 @@ Page({
         }
       }
     })
+
   },
 
 })

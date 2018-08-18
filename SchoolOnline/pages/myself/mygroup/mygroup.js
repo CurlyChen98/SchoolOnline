@@ -27,10 +27,6 @@ Page({
     console.log(gid + "-" + ulevel + "-" + uid);
   },
 
-  onShow: function() {
-    console.log("打开我的小组");
-  },
-
   // 进入小组
   inGroup: function() {
     common.model(this, false, "请输入小组密匙");
