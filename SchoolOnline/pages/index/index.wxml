@@ -4,8 +4,10 @@
 
 <view class="arrcourse">
   <view wx:for="{{arrcourse}}" wx:key="item.courseDate" class="course" data-couid='{{item.couid}}' bindtap='jumpnext'>
-    <image class='img' src='../../img/cou.png'></image>
-    <view class='course-name'>{{item.title}}</view>
-    <view class='course-date'>{{template.getDate(item.date,'/')}}</view>
+    <image class='img' src='../../img/courseImg.jpg' mode='widthFix'></image>
+    <view>
+      <view class='course-name'>{{item.title}}</view>
+      <view class='course-date'>{{template.getDate(item.date,'/')}}</view>
+    </view>
   </view>
 </view>

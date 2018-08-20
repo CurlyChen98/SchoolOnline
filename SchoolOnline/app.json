@@ -1,6 +1,5 @@
 {
   "pages": [
-    "pages/myself/setting/setting",
     
     "pages/index/index",
     "pages/index/classroom/classroom",
@@ -14,6 +13,7 @@
     "pages/myself/myclass/myclass",
     "pages/myself/mytopic/mytopic",
     "pages/myself/myself",
+    "pages/myself/setting/setting",
     
     "pages/myself/mygroup/mygroup",
     "pages/group/group"
@@ -27,7 +27,7 @@
   },
   "tabBar": {
     "color": "#9e9e9e",
-    "selectedColor": "#03a8f3",
+    "selectedColor": "#03a9f4",
     "backgroundColor": "#ffffff",
     "borderStyle": "black",
     "list": [

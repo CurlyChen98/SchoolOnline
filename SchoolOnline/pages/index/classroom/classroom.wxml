@@ -15,7 +15,7 @@
   <view class='color'></view>
   <view class='title'>下载作业</view>
   <view class='dw'>
-    <button bindtap='homeworkDownload' size="mini" plain="true">Click Here!</button>
+    <button bindtap='homeworkDownload' size="mini" plain="true">Click Here</button>
   </view>
 </view>
 
@@ -23,7 +23,7 @@
   <view class='color'></view>
   <view class='title'>分享课程</view>
   <view class='dw'>
-    <button open-type="share" bindtap='' size="mini" plain="true">Click Here!</button>
+    <button open-type="share" bindtap='' size="mini" plain="true">Click Here</button>
   </view>
 </view>
 

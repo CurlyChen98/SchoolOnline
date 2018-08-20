@@ -30,7 +30,6 @@ Page({
         'content-type': 'application/x-www-form-urlencoded'
       },
       success: function(res) {
-        console.log(res.data)
         let topicdet = res.data.topicdet;
         let topic = res.data.topic;
         that.setData({
@@ -41,10 +40,6 @@ Page({
         })
       }
     })
-  },
-
-  onShow: function() {
-    console.log("进入帖子")
   },
 
   bindFormSubmit: common.throttle(function(e) {

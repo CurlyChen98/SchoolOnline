@@ -24,7 +24,6 @@ Page({
         'content-type': 'application/x-www-form-urlencoded'
       },
       success: function(res) {
-        console.log(res.data);
         that.setData({
           studentList: res.data.studentList,
         });

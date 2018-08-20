@@ -196,9 +196,8 @@ function FindTopic()
                     LEFT JOIN s_use u ON u.uid = ek.uid
                     ) eku
             LEFT JOIN talkdet t ON t.taid = eku.taid
-            GROUP BY t.taid
+            GROUP BY eku.taid
             ORDER BY `eku`.`topData` $order";
-    // $content["sql"] = $sql;
     $que = mysqli_query($conn, $sql);
     $num = mysqli_num_rows($que);
     if ($num > 0) {

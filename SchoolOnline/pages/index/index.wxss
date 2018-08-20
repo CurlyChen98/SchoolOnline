@@ -1,38 +1,31 @@
 /**index.wxss**/
 
-.arrcourse{
-  padding-left: 20px;
-  padding-top: 10px
+.arrcourse {
+  display: flex;
+  flex-direction: column;
+  margin: 10px 0 0 0;
 }
-.course{
-  border-radius: 5px 0 0 5px;
-  border: 2px solid #03a8f3;
-  border-right: none;
-  margin-bottom: 15px;
+
+.course {
+  border-bottom: 1px #f0f3fa solid;
+  display: flex;
+  padding: 8px 13px 8px 13px;
   position: relative;
-  padding: 5px;
-  box-sizing: border-box;
-  box-shadow: 0 0 10px 1px #d6d6d6;
 }
 
-.img{
-  width: 25px;
-  height: 25px;
+.course>.img{
+  width: 80px;
+  border-radius: 3px
+}
+
+.course>view{
+  margin-left: 10px;
+}
+
+.course>view>.course-date{
   position: absolute;
-  top: 4px;
-}
-
-.course-name{
-  font-weight: bold;
-  font-size: 16px;
-  margin-bottom: 40px;
-  padding-left: 35px;
-}
-
-.course-date{
-  color: #9e9e9e;
-  font-size: 13px;
-  position: absolute;
-  right: 5px;
-  bottom: 5px;
+  right: 13px;
+  bottom: 8px;
+  color: #c8c8c8;
+  font-size: 11px;
 }
