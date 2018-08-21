@@ -80,7 +80,7 @@
   position: fixed;
   z-index: 99;
   bottom: 0px;
-  background-color: #f0f3fa;
+  background-color: #f8f8f8;
   font-size: 15px;
   padding: 10px 10px 10px 10px;
   box-sizing: border-box;

@@ -28,14 +28,14 @@
     <text bindtap='jump' data-type='mytopic'>我的话题</text>
   </view>
   <!-- 班级 -->
-  <view class='selfT' wx:if="{{rlevel=='老师'}}">
+  <view class='selfT' wx:if="{{rlevel=='老师'||rlevel=='管理员'}}">
     <i class='iconfont icon-group'></i>
     <text bindtap='jump' data-type='myclass'>班级管理</text>
   </view>
   <!-- 系统 -->
   <view class='selfT' wx:if="{{rlevel=='管理员'}}">
-    <i class='iconfont icon-group'></i>
-    <text bindtap='jump' data-type='myclass'>系统管理</text>
+    <i class='iconfont icon-computer'></i>
+    <text bindtap='jump' data-type='setsystem'>系统管理</text>
   </view>
   <!-- 提交 -->
   <view class='selfT'>

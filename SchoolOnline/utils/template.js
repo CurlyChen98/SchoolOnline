@@ -56,6 +56,13 @@ function throttle(fn, gapTime) {
   }
 }
 
+// 设置导航栏标题
+function setNav(title) {
+  wx.setNavigationBarTitle({
+    title: title,
+  })
+}
+
 // 暴露借口
 module.exports = {
   model,
@@ -64,4 +71,5 @@ module.exports = {
   showToast,
   throttle,
   redirectTo,
+  setNav,
 };

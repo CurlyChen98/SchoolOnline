@@ -7,10 +7,10 @@
     </view>
   </view>
   <view class='man' wx:for="{{studentList}}" wx:key="{{item.uid}}">
-    <i class="iconfont icon-select_fill {{item.level == 5?'':'lock'}}"></i>
+    <i class="iconfont icon-select_fill {{item.level == 5?'':'lockI'}}"></i>
     <text class='name'>{{item.name}}</text>
-    <view class="man_button {{item.level == 5?'lock':''}}">
-      <view class='button-delete' bindtap='deleteStudent' data-uid='{{item.uid}}'>删除</view>
+    <view class="man_button">
+      <view class="button-delete {{item.level >= 5?'lockButton':''}}" bindtap='deleteStudent' data-uid='{{item.uid}}'>删除</view>
     </view>
   </view>
 </view>

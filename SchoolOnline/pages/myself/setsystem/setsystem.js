@@ -1,4 +1,4 @@
-// myclass.js
+// setsystem.js
 
 const app = getApp();
 const common = require("../../../utils/template.js");
@@ -6,50 +6,61 @@ const common = require("../../../utils/template.js");
 Page({
 
   data: {
-    studentList: '',
+    classList: '',
   },
 
   onLoad: function(options) {
-    let cid = wx.getStorageSync("cid");
     let that = this;
     wx.request({
       url: app.globalData.backAddress + app.globalData.backPage,
       data: {
-        do: "FindMyClass",
-        cid: cid
+        do: "ShowAllClass",
       },
       method: 'POST',
       header: {
         'content-type': 'application/x-www-form-urlencoded'
       },
       success: function(res) {
+        console.log(res.data);
         that.setData({
-          studentList: res.data.studentList,
+          classList: res.data.class,
         });
       }
     })
   },
 
-  deleteStudent: function(e) {
-    common.showLoading("删除中", true);
-    let uid = e.currentTarget.dataset.uid;
+  onShow: function() {
+    common.setNav("系统管理")
+  },
+
+  deleteClassCheck: function(e) {
+    let cid = e.currentTarget.dataset.cid;
+    let that = this;
+    wx.showModal({
+      title: '警告',
+      content: '确认是否删除！',
+      success: function(res) {
+        if (res.confirm) {
+          that.deleteClass(cid);
+        }
+      }
+    })
+  },
+
+  deleteClass: function(cid) {
+    console.log(cid)
     wx.request({
       url: app.globalData.backAddress + app.globalData.backPage,
       data: {
-        do: "DeleteStudent",
-        uid: uid,
+        do: "DeleteClass",
+        cid: cid,
       },
       method: 'POST',
       header: {
         'content-type': 'application/x-www-form-urlencoded'
       },
       success: function(res) {
-        common.hideLoading();
-        if (res.data.talk == "Ok") {
-          common.redirectTo("../myclass/myclass")
-        } else if (res.data.talk == "NotOk") {
-          common.showToast("res.data.error", "none", 1000, true);
-        }
+        console.log(res.data);
       }
     })
   },

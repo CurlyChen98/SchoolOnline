@@ -14,7 +14,8 @@
     "pages/myself/mytopic/mytopic",
     "pages/myself/myself",
     "pages/myself/setting/setting",
-    
+    "pages/myself/setsystem/setsystem",
+
     "pages/myself/mygroup/mygroup",
     "pages/group/group"
     

@@ -1,5 +1,11 @@
-.showman {
+/* setsystem.wxss */
+
+.box{
   margin-top: 10px;
+}
+
+.lockButton {
+  display: none;
 }
 
 .showman>.tip {
@@ -17,25 +23,12 @@
 .showman>.man {
   border-bottom: #f0f3fa 1px inset;
   height: 50px;
-  padding-left: 10px;
+  margin: 0 0 0 15px;
   align-items: center;
   display: flex;
   position: relative;
 }
 
-.showman>.man>i {
-  margin-right: 5px;
-  font-size: 20px;
-  color: #3a3a3a;
-}
-
-.lockI{
-  opacity: 0;
-}
-
-.lockButton {
-  display: none;
-}
 
 .showman>.man>.man_button {
   display: flex;

@@ -1,5 +1,6 @@
 <?php
 include("conn.php");
+include("module.php");
 header('Content-type:text/json');
 
 $do = $_REQUEST["do"];
@@ -416,38 +417,111 @@ function FindMyClass()
 // 删除学生从班级中
 function DeleteStudent()
 {
+    // 全局数值
+    global $conn;
+    global $content;
+    // 获取前端数据
+    $uid = $_REQUEST["uid"];
+
+    $content["talk"] = DeleteStu($uid);
+    echo json_encode($content);
+}
+
+// 删除班级
+function DeleteClass()
+{
+    global $conn;
+    global $content;
+    // 获取前端数据
+    $cid = $_REQUEST["cid"];
+
+    $sql = "SELECT `couid` FROM `course` WHERE `cid` = '$cid'";
+    $que = mysqli_query($conn, $sql);
+    $detail = mysqli_fetch_assoc($que);
+    foreach ($detail as $key => $value) {
+        $talk = DeleteCou($value);
+        if ($talk == "NotOk") {
+            $content["talk"] = "NotOk";
+            return;
+        }
+    }
+
+    // $sql = "SELECT `uid` FROM `s_use` WHERE `cid` = '$cid'";
+    // $que = mysqli_query($conn, $sql);
+    // $detail = mysqli_fetch_assoc($que);
+    // foreach ($detail as $key => $value) {
+    //     $talk = DeleteStu($value);
+    //     if ($talk == "NotOk") {
+    //         $content["talk"] = "NotOk";
+    //         return;
+    //     }
+    // }
+
+    $content["talk"] = "Ok";
+    echo json_encode($content);
+}
+
+// 查看所有班级
+function ShowAllClass()
+{
     global $conn;
     global $content;
 
-    $uid = $_REQUEST["uid"];
+    $sql = "SELECT `cid`, `name` FROM `class`";
+    $que = mysqli_query($conn, $sql);
+    $content["class"] = mysqli_fetch_all($que, 1);
 
-    try {
-        // 删除作业和作业表相关数据
-        $sql = "SELECT `task_url` FROM `task` WHERE `uid`= $uid";
-        $que = mysqli_query($conn, $sql);
-        $work = mysqli_fetch_all($que, 1);
-        foreach ($work as $key => $value) {
-            $url = urldecode("../HomeworkSubmit/" . $value["task_url"]);
-            unlink($url);
-        }
-        $sql = "DELETE FROM `task` WHERE `uid` = '$uid'";
-        mysqli_query($conn, $sql);
-    
-        // 删除有关讨论内容
-        $sql = "DELETE FROM `talkdet` WHERE `uid` = '$uid'";
-        mysqli_query($conn, $sql);
-        $sql = "DELETE FROM `talk` WHERE `uid` = '$uid'";
-        mysqli_query($conn, $sql);
-        $sql = "DELETE FROM `s_use` WHERE `uid` = '$uid'";
-        mysqli_query($conn, $sql);
-        $content["talk"] = "Ok";
-    } catch (Exception $error) {
-        $content["talk"] = "NotOk";
-        $content["error"] = "未知的错误";
-    }
     echo json_encode($content);
 }
+
+// 创建班级
+function CreateClass()
+{
+    global $conn;
+    global $content;
+    // 获取前端数据
+    $claName = $_REQUEST["claName"];
+    // 查找班级名是否一存在
+    $claName = strtolower($claName);
+    $sql = "SELECT * FROM `class` WHERE `name` = '$claName'";
+    $que = mysqli_query($conn, $sql);
+    $num = mysqli_num_rows($que);
+    if ($num > 0) {
+        $content["talk"] = "Have";
+        return;
+    } else {
+        $arrcode1 = "PLOKMIJNUHBYGVTFCRDXESZWAQ123456789";
+        $arrcode2 = "PLOKMIJNUHBYGVTFCRDXESZWAQzxcvbnmlkjhgfdsapoiuytrewq";
+        $classcode = "";
+        $teachercode = "";
+        for (;; ) {
+            $classcode = "KG" . substr(str_shuffle($arrcode1), 10, 10);
+            $sql = "SELECT * FROM `class` WHERE `classkey` = '$classcode'";
+            $que = mysqli_query($conn, $sql);
+            $num = mysqli_num_rows($que);
+            if ($num == 0) {
+                break;
+            }
+        }
+        for (;; ) {
+            $teachercode = "KG" . substr(str_shuffle($arrcode2), 10, 10);
+            $sql = "SELECT * FROM `class` WHERE `teacherkey` = '$teachercode'";
+            $que = mysqli_query($conn, $sql);
+            $num = mysqli_num_rows($que);
+            if ($num == 0) {
+                break;
+            }
+        }
+        $sql = "INSERT INTO `class` VALUES (NULL,'$claName','$teachercode','$classcode')";
+        if (mysqli_query($conn, $sql)) {
+            $content["talk"] = "Ok";
+        } else {
+            $content["talk"] = "NotOk";
+            $content["error"] = "未知的错误";
+        }
+
+        echo json_encode($content);
+    }
+}
+
 ?>
-
-
-

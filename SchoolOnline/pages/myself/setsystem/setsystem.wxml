@@ -1,0 +1,15 @@
+<!-- setsystem.wxml -->
+
+<view class='showman'>
+  <!-- <view class='tip'>
+    <view>
+      <i class='iconfont icon-select_fill'></i>代表老师
+    </view>
+  </view> -->
+  <view class='man' wx:for="{{classList}}" wx:key="{{item.cid}}">
+    <text class='name'>{{item.name}}</text>
+    <view class="man_button">
+      <view class="button-delete  {{item.name == '管理者组'?'lockButton':''}}" bindtap='deleteClassCheck' data-cid='{{item.cid}}'>删除</view>
+    </view>
+  </view>
+</view>

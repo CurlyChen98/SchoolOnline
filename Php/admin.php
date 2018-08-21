@@ -1,5 +1,6 @@
 <?php
 include("conn.php");
+include("module.php");
 header('Content-type:text/json');
 // 指定允许其他域名访问
 header('Access-Control-Allow-Origin:*');
@@ -545,107 +546,4 @@ function DwWork()
     echo json_encode($content);
 }
 
-// 创建班级
-function CreateClass()
-{
-    global $conn;
-    global $content;
-    // 获取前端数据
-    $claName = $_REQUEST["claName"];
-    // 查找班级名是否一存在
-    $claName = strtolower($claName);
-    $sql = "SELECT * FROM `class` WHERE `name` = '$claName'";
-    $que = mysqli_query($conn, $sql);
-    $num = mysqli_num_rows($que);
-    if ($num > 0) {
-        $content["talk"] = "Have";
-        return;
-    } else {
-        $arrcode1 = "PLOKMIJNUHBYGVTFCRDXESZWAQ123456789";
-        $arrcode2 = "PLOKMIJNUHBYGVTFCRDXESZWAQzxcvbnmlkjhgfdsapoiuytrewq";
-        $classcode = "";
-        $teachercode = "";
-        for (;; ) {
-            $classcode = "KG" . substr(str_shuffle($arrcode1), 10, 10);
-            $sql = "SELECT * FROM `class` WHERE `classkey` = '$classcode'";
-            $que = mysqli_query($conn, $sql);
-            $num = mysqli_num_rows($que);
-            if ($num == 0) {
-                break;
-            }
-        }
-        for (;; ) {
-            $teachercode = "KG" . substr(str_shuffle($arrcode2), 10, 10);
-            $sql = "SELECT * FROM `class` WHERE `teacherkey` = '$teachercode'";
-            $que = mysqli_query($conn, $sql);
-            $num = mysqli_num_rows($que);
-            if ($num == 0) {
-                break;
-            }
-        }
-        $sql = "INSERT INTO `class` VALUES (NULL,'$claName','$teachercode','$classcode')";
-        if (mysqli_query($conn, $sql)) {
-            $content["talk"] = "Ok";
-        } else {
-            $content["talk"] = "NotOk";
-            $content["error"] = "未知的错误";
-        }
-
-        echo json_encode($content);
-    }
-}
-
-// 删除班级
-function Delete()
-{
-    global $conn;
-    global $content;
-    // 获取前端数据
-    $cid = $_REQUEST["cid"];
-
-    try {
-        $sql = "DELETE FROM `talkdet` WHERE `taid` = (
-            SELECT k.taid
-            FROM
-            (
-                SELECT couid
-                FROM course
-                WHERE cid = $cid
-            ) e
-            LEFT JOIN talk k ON e.couid = k.couid)";
-        mysqli_query($conn, $sql);
-        $sql = "DELETE FROM `task` WHERE `couid` = (SELECT couid from course WHERE cid = $cid)";
-        mysqli_query($conn, $sql);
-        $sql = "DELETE FROM `talk` WHERE `couid` = (SELECT couid from course WHERE cid = $cid)";
-        mysqli_query($conn, $sql);
-        $sql = "DELETE FROM `class` WHERE `cid` = $cid";
-        mysqli_query($conn, $sql);
-        $sql = "DELETE FROM `course` WHERE `cid` = $cid";
-        mysqli_query($conn, $sql);
-        $sql = "DELETE FROM `message` WHERE `cid` = $cid";
-        mysqli_query($conn, $sql);
-        $sql = "DELETE FROM `s_group` WHERE `cid` = $cid";
-        mysqli_query($conn, $sql);
-        $sql = "DELETE FROM `s_use` WHERE `cid` = $cid";
-        mysqli_query($conn, $sql);
-        $content["talk"] = "Ok";
-    } catch (Exception $e) {
-        $content["talk"] = "NotOk";
-        $content["erroe"] = $e;
-    }
-
-    echo json_encode($content);
-}
-
-// 查看所有班级
-function ShowAllClass()
-{
-    global $conn;
-
-    $sql = "SELECT `cid`, `name` FROM `class`";
-    $que = mysqli_query($conn, $sql);
-    $content["class"] = mysqli_fetch_all($sql, 1);
-
-    echo json_encode($content);
-}
 ?>
