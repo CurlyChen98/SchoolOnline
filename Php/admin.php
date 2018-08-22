@@ -1,6 +1,4 @@
 <?php
-include("conn.php");
-include("module.php");
 header('Content-type:text/json');
 // 指定允许其他域名访问
 header('Access-Control-Allow-Origin:*');
@@ -8,11 +6,10 @@ header('Access-Control-Allow-Origin:*');
 header('Access-Control-Allow-Methods:POST');
 // 响应头设置
 header('Access-Control-Allow-Headers:x-requested-with,content-type');
+include("conn.php");
+include("module.php");
 
 if (@$do = $_REQUEST["do"]) {
-    $do();
-}
-if (@$do = $_FILES["do"]) {
     $do();
 }
 $content = [];
@@ -346,7 +343,7 @@ function DeleteWork()
 }
 
 // 删除课程
-function DeleteCou()
+function DeleteCoures()
 {
     global $conn;// 链接mysql
     global $content;// 用于输出
@@ -498,52 +495,58 @@ function DwWork()
     global $conn;// 链接mysql
     global $content;// 用于输出
 
-    $task_id = json_decode($_REQUEST["task_id"], true);// 作业id
-    $how = $_REQUEST["how"];// 选择的数量(one、array、all)
+    @$task_id = json_decode($_REQUEST["task_id"], true);// 作业id
+    @$couid = $_REQUEST["couid"];// 课程id
+    $how = $_REQUEST["how"];// 选择的数量(one、all)
 
     $fileList = [];
     $inArr = '';
     if ($how == "one") {
-        $inArr = "`task_id` = $task_id";
-    } else if ($how == "array") {
-        $arr = [];
-        foreach ($task_id as $key => $value) {
-            array_push($arr, $value);
-        }
-        $inArr = "`task_id` IN ($arr)";
+        $inArr = "task_id = '$task_id'";
     } else if ($how == "all") {
-        $inArr = "1";
+        $inArr = "couid = '$couid'";
     }
     $sql = "SELECT `task_url`, `task_name` 
             FROM `task` WHERE $inArr";
     $que = mysqli_query($conn, $sql);
     $fileList = mysqli_fetch_all($que, 1);
 
-    $zipname = "work.zip";
+    $task_url = rawurldecode($fileList[0]["task_url"]);
+    $task_name = rawurldecode($fileList[0]["task_name"]);
+    $baseName = strrpos($task_url, $task_name);
+    $dirZip = substr($task_url, 0, $baseName - 1);
+
+    $zipname = "../HomeworkSubmit/" . $dirZip . "/work.zip";
     $zip = new ZipArchive();
     $res = $zip->open($zipname, ZipArchive::OVERWRITE | ZipArchive::CREATE);   //打开压缩包
     foreach ($fileList as $file) {
-        $file["task_url"] = rawurldecode($file["task_url"]);
-        $file["task_name"] = rawurldecode($file["task_name"]);
-        var_dump("../HomeworkSubmit/" . $file["task_url"]);
-        var_dump($file["task_name"]);
-        $a = file_exists("../HomeworkSubmit/" . $file["task_url"]);
-        var_dump($a);
+        $task_url = rawurldecode($file["task_url"]);
+        $task_name = rawurldecode($file["task_name"]);
 
-        $zip->addFile("../HomeworkSubmit/" . $file["task_url"], $file["task_name"]);   //向压缩包中添加文件
+        $zip->addFile("../HomeworkSubmit/" . $task_url, $task_name);   //向压缩包中添加文件
     }
     $zip->close();  //关闭压缩包
 
-    header("Content-Type: application/zip");
-    header("Content-Transfer-Encoding: Binary");
-    header("Content-Length: " . filesize($zipname));
-    header("Content-Disposition: attachment; filename=\"" . basename($zipname) . "\"");
-    ob_clean();
-    flush();
-
-    $content["url"] = "http://localhost/SchoolOnline/Php/work.zip";
-
+    $content["zipname"] = $zipname;
     echo json_encode($content);
+}
+
+// 修改教师密码
+function UpdatePass()
+{
+    global $conn;// 链接mysql
+    global $content;// 用于输出
+
+    $uid = $_REQUEST["uid"];// 接受用户id
+
+    $sql = "SELECT `task_url`, `task_name` FROM `task` WHERE $inArr";
+    if(mysqli_query($conn, $sql)){
+        $content["talk"] = "Ok";
+    }else{
+        $content["talk"] = "NotOk";
+    }
+    echo json_encode($content);
+
 }
 
 ?>
