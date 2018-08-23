@@ -516,9 +516,9 @@ function DwWork()
     $baseName = strrpos($task_url, $task_name);
     $dirZip = substr($task_url, 0, $baseName - 1);
 
-    $zipname = "../HomeworkSubmit/" . $dirZip . "/work.zip";
+    $zipname = $dirZip . "/work.zip";
     $zip = new ZipArchive();
-    $res = $zip->open($zipname, ZipArchive::OVERWRITE | ZipArchive::CREATE);   //打开压缩包
+    $res = $zip->open("../HomeworkSubmit/" . $zipname, ZipArchive::OVERWRITE | ZipArchive::CREATE);   //打开压缩包
     foreach ($fileList as $file) {
         $task_url = rawurldecode($file["task_url"]);
         $task_name = rawurldecode($file["task_name"]);
@@ -532,18 +532,26 @@ function DwWork()
 }
 
 // 修改教师密码
-function UpdatePass()
+function UpdatePassword()
 {
     global $conn;// 链接mysql
     global $content;// 用于输出
 
     $uid = $_REQUEST["uid"];// 接受用户id
+    $oldPassword = $_REQUEST["oldPassword"];// 接受旧密码
+    $newPassword = $_REQUEST["newPassword"];// 接受旧密码
 
-    $sql = "SELECT `task_url`, `task_name` FROM `task` WHERE $inArr";
-    if(mysqli_query($conn, $sql)){
-        $content["talk"] = "Ok";
+    $sql = "SELECT uid FROM `s_use` WHERE `password` = '$oldPassword' AND `uid` = '$uid'";
+    $que = mysqli_query($conn, $sql);
+    if (mysqli_num_rows($que) > 0) {
+        $sql = "UPDATE `s_use` SET `password` = '$newPassword' WHERE `uid` = '$uid'";
+        if (mysqli_query($conn, $sql)) {
+            $content["talk"] = "Ok";
+        } else {
+            $content["talk"] = "NotOk2";
+        }
     }else{
-        $content["talk"] = "NotOk";
+        $content["talk"] = "NotOk1";
     }
     echo json_encode($content);
 
