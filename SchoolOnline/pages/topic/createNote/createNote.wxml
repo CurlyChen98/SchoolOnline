@@ -13,7 +13,7 @@
   <!-- 选择课程 -->
   <view class='samllInput'>
     课程选择
-    <picker name="course" bindchange="courseChange" value="{{index}}" range="{{coursearr}}" range-key="title">
+    <picker name="course" bindchange="courseChange" value="{{index}}" range="{{coursearr}}" range-key="title" disabled="{{coursearr==''?true:false}}">
       <input disabled='true' value='{{coursearr[index].title}}'></input>
     </picker>
   </view>

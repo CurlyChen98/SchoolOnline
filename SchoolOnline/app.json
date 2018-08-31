@@ -1,6 +1,5 @@
 {
   "pages": [
-    "pages/myself/setsystem/setsystem",
     
     "pages/index/index",
     "pages/index/classroom/classroom",
@@ -13,6 +12,7 @@
 
     "pages/myself/myclass/myclass",
     "pages/myself/mytopic/mytopic",
+    "pages/myself/setsystem/setsystem",
     "pages/myself/myself",
     "pages/myself/setting/setting"
 
@@ -51,7 +51,7 @@
   },
   "plugins": {
     "tencentVideo": {
-      "version": "1.1.6",
+      "version": "1.1.8",
       "provider": "wxa75efa648b60994b"
     }
   }

@@ -70,3 +70,23 @@
   color: #03a9f4;
   font-size: 18px;
 }
+
+.ShowClass {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.ShowClass>view {
+  text-align: center;
+  padding: 15px;
+  /* height: 100px;
+  width: 200px; */
+  border: 1px #03a9f4 solid;
+  background-color: #fff;
+  border-radius: 5px;
+}

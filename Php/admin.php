@@ -116,7 +116,10 @@ function UpdateStudent()
     } else if ($how == "downgrade") {
         $sql = "UPDATE `s_use` SET `level`='1' WHERE `uid` ='$uid'";
     } else if ($how == "kickOut") {
-        $sql = "UPDATE `s_use` SET `cid`='0' WHERE `uid` ='$uid'";
+        // $sql = "UPDATE `s_use` SET `cid`='0' WHERE `uid` ='$uid'";
+        $content["talk"] = DeleteStu($uid);
+        echo json_encode($content);
+        return;
     } else if ($how == "kickOutGroup") {
         $sql = "UPDATE `s_use` SET `gid`='0' WHERE `uid` ='$uid'";
     } else if ($how == "deleteGroup") {

@@ -53,6 +53,45 @@ Page({
     }
   },
 
+  // 删除帖子或跟帖
+  deleteTopic: function(e) {
+    let tid = e.currentTarget.dataset.tid;
+    let thow = e.currentTarget.dataset.thow;
+    let that = this;
+    wx.showModal({
+      title: '警告',
+      content: "确认是否删除帖子!",
+      success: function(res) {
+        if (res.confirm) {
+          wx.request({
+            url: app.globalData.backAddress + app.globalData.backPage,
+            data: {
+              do: "DeleteTopic",
+              tid: tid,
+              thow: thow,
+            },
+            method: 'POST',
+            header: {
+              'content-type': 'application/x-www-form-urlencoded'
+            },
+            success: function(res) {
+              if (res.data.talk == "Ok") {
+                let uid = that.data.uid;
+                if (thow =="talk"){
+                  getData(that, uid, "FindMyTopic")
+                } else if (thow == "talkdet"){
+                  getData(that, uid, "FindMyFollow")
+                }
+              }else{
+                common.showToast("未知的错误", "none", 1000, true);
+              }
+            }
+          })
+        }
+      }
+    })
+  },
+
   swiperChange: function(e) {
     let that = this;
     let current = e.detail.current;
@@ -76,7 +115,7 @@ Page({
   jump: function(e) {
     let taid = e.currentTarget.dataset.taid;
     wx.navigateTo({
-      url: '../../topic/note/note?taid='+taid,
+      url: '../../topic/note/note?taid=' + taid,
     });
   },
 })

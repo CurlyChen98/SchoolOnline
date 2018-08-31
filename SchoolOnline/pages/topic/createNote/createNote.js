@@ -1,12 +1,11 @@
 // createNote.js
 
 const app = getApp();
+const common = require("../../../utils/template.js");
 
 Page({
 
   data: {
-    backAddress: app.globalData.backAddress,
-    backurl: 'Php/use.php',
     date: '',
     dateYear: '',
     coursearr: '',
@@ -14,8 +13,6 @@ Page({
   },
 
   onLoad: function(options) {
-    console.log("创建话题")
-    let back = this.data.backAddress + this.data.backurl;
     let that = this;
 
     let date = new Date();
@@ -29,7 +26,7 @@ Page({
 
     let cid = wx.getStorageSync('cid')
     wx.request({
-      url: back,
+      url: app.globalData.backAddress + app.globalData.backPage,
       data: {
         do: "FindCourse",
         cid: cid
@@ -58,13 +55,12 @@ Page({
   },
 
   // 点击表单提交
-  formsub: function(e) {
-    let back = this.data.backAddress + this.data.backurl;
+  formsub: common.throttle(function(e) {
     let data = e.detail.value;
     let course = this.data.coursearr[data.course];
     let uid = wx.getStorageSync('uid');
     let dateYear = this.data.dateYear;
-    if (data.course == "" || data.detail == "" || data.title == ""){
+    if (data.course == "" || data.detail == "" || data.title == "") {
       wx.showToast({
         title: '填写不完全',
         icon: 'none',
@@ -73,7 +69,7 @@ Page({
       return;
     }
     wx.request({
-      url: back,
+      url: app.globalData.backAddress + app.globalData.backPage,
       data: {
         do: "CreateTalk",
         data: JSON.stringify(data),
@@ -115,5 +111,6 @@ Page({
         }
       }
     })
-  },
+  }, 1000),
+
 })

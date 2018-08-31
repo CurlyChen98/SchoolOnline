@@ -32,7 +32,6 @@ Page({
             'content-type': 'application/x-www-form-urlencoded'
           },
           success: function(res) {
-            console.log(res.data)
             wx.hideLoading();
             if (res.data.talk == "Ok") {
               wx.showToast({

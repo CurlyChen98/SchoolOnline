@@ -25,6 +25,7 @@
             <i class='iconfont icon-message'></i>
             <text class='num_msg' decode="true">&nbsp;{{template.msgCount(item.msg_count)}}</text>
           </view>
+          <i class='iconfont icon-empty deleteI' catchtap="deleteTopic" data-tid='{{item.taid}}' data-thow='talk'></i>
         </view>
         <!--  -->
       </view>
@@ -50,9 +51,10 @@
           <view class='course_box'>
             <text class='num_msg' decode="true">{{item.course_title}}</text>
           </view>
-          <view class='floor_box'>
+          <!-- <view class='floor_box'>
             <text class='num_msg' decode="true">0楼</text>
-          </view>
+          </view> -->
+          <i class='iconfont icon-empty deleteI' catchtap="deleteTopic" data-tid='{{item.talkdet_id}}' data-thow='talkdet'></i>
         </view>
         <!--  -->
       </view>

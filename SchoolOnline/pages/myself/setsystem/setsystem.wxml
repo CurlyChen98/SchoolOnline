@@ -1,11 +1,11 @@
 <!-- setsystem.wxml -->
 
 <view class='showman'>
-  <view class='man' wx:for="{{classList}}" wx:key="{{item.cid}}">
+  <view class='man' wx:for="{{classList}}" wx:key="{{item.cid}}" data-index='{{index}}' bindtap='showClass'>
     <text class='name'>{{item.name}}</text>
     <view class="man_button">
-      <view class="button-delete  {{item.name == '管理者组'?'lockButton':''}}" bindtap='deleteConfirmk' data-cid='{{item.cid}}' data-cname='{{item.name}}'>删除</view>
-      <view class="button-reset" bindtap='resetConfirmk' data-cid='{{item.cid}}' data-cname='{{item.name}}'>重置</view>
+      <view class="button-delete  {{item.name == '管理者组'?'lockButton':''}}" catchtap='deleteConfirm' data-cid='{{item.cid}}' data-cname='{{item.name}}'>删除</view>
+      <view class="button-reset" catchtap='resetCodeConfirm' data-cid='{{item.cid}}' data-cname='{{item.name}}'>重置</view>
     </view>
   </view>
 </view>
@@ -17,3 +17,14 @@
 <modal hidden="{{modalHidden}}" title="{{modalTitle}}" confirm-text="提交" bindconfirm="confirm" bindcancel="cancel">
   <input id='modalInput' placeholder="请输入" value='{{modalKey}}'></input>
 </modal>
+
+<view class='ShowClass' hidden='{{ShowClassHidden}}' bindtap='ShowClassHidden'>
+  <view catchtap='ShowClassStop'>
+    <view>老师密码：
+      <text selectable='true'>{{ShowClassTeacherkey}}</text>
+    </view>
+    <view>班级密码：
+      <text selectable='true'>{{ShowClassClasskey}}</text>
+    </view>
+  </view>
+</view>

@@ -68,7 +68,7 @@ function InsertUse()
     } else {
         $level = 1;
         // 判断姓名是否在指定名单
-        $sql = "SELECT `id` FROM `class_student_list` WHERE `student_name` = '$studentkey'";
+        $sql = "SELECT `id` FROM `class_student_list` WHERE `student_name` = '$studentkey' AND `class_name` = '$className'";
         $que = mysqli_query($conn, $sql);
         $nameNum = mysqli_num_rows($que);
     }
@@ -80,7 +80,7 @@ function InsertUse()
         $content["talk"] = "NotOk";
         $content["error"] = "查无此学生";
     } else {
-        $sql = "SELECT * FROM `s_use` WHERE `opid` = '$mdOpenId'";
+        $sql = "SELECT `uid` FROM `s_use` WHERE `opid` = '$mdOpenId' OR (`cid`='$cid' AND `name`='$studentkey')";
         $que = mysqli_query($conn, $sql);
         $num = mysqli_num_rows($que);
         if ($num == 0) {
@@ -90,11 +90,11 @@ function InsertUse()
                 $content["talk"] = "Ok";
             } else {
                 $content["talk"] = "NotOk";
-                $content["error"] = "未知错误";
+                $content["error"] = "未知的错误";
             }
         } else {
             $content["talk"] = "NotOk";
-            $content["error"] = "该OpenId已存在";
+            $content["error"] = "ID已存在";
         }
     }
     // 输出
@@ -249,7 +249,7 @@ function FollowTalk()
     $uid = $_REQUEST["uid"];
     $detail = $_REQUEST["detail"];
 
-    $sql = "INSERT INTO `talkdet` VALUES ('$taid','$uid','$detail',now())";
+    $sql = "INSERT INTO `talkdet` VALUES (null,'$taid','$uid','$detail',now())";
     if (mysqli_query($conn, $sql)) {
         $content["talk"] = "Ok";
     } else {
@@ -332,16 +332,16 @@ function FindMyFollow()
 
     $uid = $_REQUEST["uid"];
 
-    $sql = "SELECT kte.taid AS taid,kte.det_detail AS det_detail,kte.det_detdate AS det_detdate,kte.top_title AS top_title,kte.top_date AS top_date,kte.course_title AS course_title,u.name AS top_name
+    $sql = "SELECT kte.talkdet_id AS talkdet_id,kte.taid AS taid,kte.det_detail AS det_detail,kte.det_detdate AS det_detdate,kte.top_title AS top_title,kte.top_date AS top_date,kte.course_title AS course_title,u.name AS top_name
             FROM
                 (
-                    SELECT kt.taid AS taid,kt.det_detail AS det_detail,kt.det_detdate AS det_detdate,kt.top_title AS top_title,kt.top_date AS top_date,kt.top_uid AS top_uid,e.title AS course_title
+                    SELECT kt.talkdet_id AS talkdet_id,kt.taid AS taid,kt.det_detail AS det_detail,kt.det_detdate AS det_detdate,kt.top_title AS top_title,kt.top_date AS top_date,kt.top_uid AS top_uid,e.title AS course_title
                     FROM
                         (
-                            SELECT t.taid AS taid,t.detail AS det_detail,t.date AS det_detdate,k.title AS top_title,k.date AS top_date,k.couid AS top_couid,k.uid AS top_uid
+                            SELECT t.talkdet_id AS talkdet_id,t.taid AS taid,t.detail AS det_detail,t.date AS det_detdate,k.title AS top_title,k.date AS top_date,k.couid AS top_couid,k.uid AS top_uid
                             FROM
                                 (
-                                    SELECT taid,detail,DATE
+                                    SELECT talkdet_id,taid,detail,DATE
                                     FROM
                                         talkdet
                                     WHERE
@@ -445,7 +445,7 @@ function ShowAllClass()
 }
 
 // 重置班级密码
-function ResetCode()
+function ResetClassCode()
 {
     global $conn;
     global $content;
@@ -536,6 +536,27 @@ function CreateClass()
         }
     }
 
+    echo json_encode($content);
+}
+
+// 删除帖子
+function DeleteTopic()
+{
+    global $conn;
+    global $content;
+    // 获取前端数据
+    $tid = $_REQUEST["tid"];
+    $thow = $_REQUEST["thow"];
+    if ($thow == "talk") {
+        $sql = "DELETE FROM `talk` WHERE `taid` = '$tid'";
+        mysqli_query($conn, $sql);
+        $sql = "DELETE FROM `talkdet` WHERE `taid` = '$tid'";
+        mysqli_query($conn, $sql);
+    } else if ($thow == "talkdet") {
+        $sql = "DELETE FROM `talkdet` WHERE `talkdet_id` = '$tid'";
+        mysqli_query($conn, $sql);
+    }
+    $content["talk"] = "Ok";
     echo json_encode($content);
 }
 

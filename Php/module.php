@@ -41,7 +41,7 @@ function DeleteCourse($couid, $class)
         $className = substr($dirFile, 0, strpos($dirFile, '/'));
         $couDir1 = "../HomeworkDownload/$className/$couName/";
         $couDir2 = "../HomeworkSubmit/$className/$couName/";
-        
+
         if ($detail["task_src"] != "0") {
             $talk1 = DeleteDirAll($couDir1);
             if ($talk1 == "NotOk") {
@@ -68,18 +68,22 @@ function DeleteStu($uid)
 
     try {
         // 删除作业和作业表相关数据
-        // $sql = "SELECT `task_url` FROM `task` WHERE `uid`= $uid";
-        // $que = mysqli_query($conn, $sql);
-        // $work = mysqli_fetch_all($que, 1);
-        // foreach ($work as $key => $value) {
-        //     $url = urldecode("../HomeworkSubmit/" . $value["task_url"]);
-        //     unlink($url);
-        // }
+        $sql = "SELECT `task_url` FROM `task` WHERE `uid`= $uid";
+        $que = mysqli_query($conn, $sql);
+        $work = mysqli_fetch_all($que, 1);
+        foreach ($work as $key => $value) {
+            $url = urldecode("../HomeworkSubmit/" . $value["task_url"]);
+            unlink($url);
+        }
         $sql = "DELETE FROM `task` WHERE `uid` = '$uid'";
         mysqli_query($conn, $sql);
     
         // 删除有关讨论内容
-        $sql = "DELETE FROM `talkdet` WHERE `uid` = '$uid'";
+        $sql = "SELECT `taid` FROM `talk` WHERE uid = '$uid'";
+        $que = mysqli_query($conn, $sql);
+        $detail = mysqli_fetch_assoc($que);
+        $taid = $detail['taid'];
+        $sql = "DELETE FROM `talkdet` WHERE `taid` = '$taid'";
         mysqli_query($conn, $sql);
         $sql = "DELETE FROM `talk` WHERE `uid` = '$uid'";
         mysqli_query($conn, $sql);
