@@ -2,50 +2,62 @@
 include("conn.php");
 
 // 删除目录下所有文件
-function DeleteDirAll($dir)
+function DeleteDirAll($path)
 {
     try {
-        $p = scandir($dir);
+        $p = scandir($path);
         foreach ($p as $val) {
             if ($val != "." && $val != "..") {
-                chmod($dir . $val, 0755);
-                unlink($dir . $val);
+                if (is_dir($path . $val)) {
+                    DeleteDirAll($path . $val . '/');
+                    rmdir($path . $val . '/');
+                } else {
+                    unlink($path . $val);
+                }
             }
         }
-        rmdir($dirFile);
-        return $talk = "Ok";
+        rmdir($path);
+        return "Ok";
     } catch (Exception $error) {
-        return $talk = "NotOk";
+        return "NotOk";
     }
+
+
 }
 
 // 删除课程
-function DeleteCou($couid)
+function DeleteCourse($couid, $class)
 {
     global $conn;// 链接mysql
 
     try {
 
-        $sql = "SELECT `task_src` FROM `course` WHERE `couid` = '$couid'";
+        $sql = "SELECT `task_src`,title FROM `course` WHERE `couid` = '$couid'";
         $que = mysqli_query($conn, $sql);
         $detail = mysqli_fetch_assoc($que);
+        $couName = $detail["title"];
+        $dirFile = urldecode($detail["task_src"]);
 
-        $dirFile = "../HomeworkDownload/" . $detail["task_src"];
-        $dirFile = urldecode($dirFile);
-        $dir = substr($dirFile, 0, strrpos($dirFile, '/')) . "/";
-        echo $dir;
-        $talk = DeleteDirAll($dir);
-
-        $dirFile = "../HomeworkSubmit/" . $detail["task_src"];
-        $dirFile = urldecode($dirFile);
-        $dir = substr($dirFile, 0, strrpos($dirFile, '/')) . "/";
-        $talk = DeleteDirAll($dir);
+        $className = substr($dirFile, 0, strpos($dirFile, '/'));
+        $couDir1 = "../HomeworkDownload/$className/$couName/";
+        $couDir2 = "../HomeworkSubmit/$className/$couName/";
+        
+        if ($detail["task_src"] != "0") {
+            $talk1 = DeleteDirAll($couDir1);
+            if ($talk1 == "NotOk") {
+                return "NotOk";
+            }
+            $talk2 = DeleteDirAll($couDir2);
+            if ($talk2 == "NotOk") {
+                return "NotOk";
+            }
+        }
 
         $sql = "DELETE FROM `course` WHERE `couid`= '$couid'";
         mysqli_query($conn, $sql);
-        return $talk = "Ok";
+        return "Ok";
     } catch (Exception $error) {
-        return $talk = "NotOk";
+        return "NotOk";
     }
 }
 
@@ -56,13 +68,13 @@ function DeleteStu($uid)
 
     try {
         // 删除作业和作业表相关数据
-        $sql = "SELECT `task_url` FROM `task` WHERE `uid`= $uid";
-        $que = mysqli_query($conn, $sql);
-        $work = mysqli_fetch_all($que, 1);
-        foreach ($work as $key => $value) {
-            $url = urldecode("../HomeworkSubmit/" . $value["task_url"]);
-            unlink($url);
-        }
+        // $sql = "SELECT `task_url` FROM `task` WHERE `uid`= $uid";
+        // $que = mysqli_query($conn, $sql);
+        // $work = mysqli_fetch_all($que, 1);
+        // foreach ($work as $key => $value) {
+        //     $url = urldecode("../HomeworkSubmit/" . $value["task_url"]);
+        //     unlink($url);
+        // }
         $sql = "DELETE FROM `task` WHERE `uid` = '$uid'";
         mysqli_query($conn, $sql);
     
@@ -75,9 +87,9 @@ function DeleteStu($uid)
         // 删除学生
         $sql = "DELETE FROM `s_use` WHERE `uid` = '$uid'";
         mysqli_query($conn, $sql);
-        return $talk = "Ok";
+        return "Ok";
     } catch (Exception $error) {
-        return $talk = "NotOk";
+        return "NotOk";
     }
 }
 

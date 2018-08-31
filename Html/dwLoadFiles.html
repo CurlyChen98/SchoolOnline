@@ -40,14 +40,13 @@
 <body>
     <div id="btn" onclick="dw()">点击下载</div>
 
-    <!-- <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script> -->
     <script src="./jquery-3.3.1.min.js"></script>
     <script>
         let phpurl = "../Php/homework.php";
 
         function dw() {
             let test = window.location.search;
-            if(test==""){
+            if (test == "") {
                 alert("链接错误")
                 return;
             }
@@ -67,8 +66,8 @@
                 dataType: "JSON",
                 success: function (res) {
                     let course = res.course;
-                    let task_src = course[0].task_src;
-                    task_src = src + task_src
+                    let task_src = decodeURIComponent(course[0].task_src);
+                    task_src = "../HomeworkDownload/" + task_src
                     window.location.href = task_src;
                 }
             });

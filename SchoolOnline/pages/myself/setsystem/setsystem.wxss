@@ -1,6 +1,6 @@
 /* setsystem.wxss */
 
-.box{
+.box {
   margin-top: 10px;
 }
 
@@ -29,7 +29,6 @@
   position: relative;
 }
 
-
 .showman>.man>.man_button {
   display: flex;
   position: absolute;
@@ -45,4 +44,29 @@
   border-radius: 5px;
   font-size: 13px;
   margin-right: 5px;
+}
+
+.showman>.man>.man_button>.button-reset {
+  text-align: center;
+  background-color: #5cb85c;
+  color: #fff;
+  width: 60px;
+  line-height: 30px;
+  border-radius: 5px;
+  font-size: 13px;
+  margin-right: 5px;
+}
+
+.createClass {
+  position: absolute;
+  bottom: 15px;
+  left: 0;
+  right: 0;
+  margin: auto;
+  width: 180px;
+}
+
+.createClass>button {
+  color: #03a9f4;
+  font-size: 18px;
 }

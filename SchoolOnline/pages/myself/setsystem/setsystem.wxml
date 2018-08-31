@@ -1,15 +1,19 @@
 <!-- setsystem.wxml -->
 
 <view class='showman'>
-  <!-- <view class='tip'>
-    <view>
-      <i class='iconfont icon-select_fill'></i>代表老师
-    </view>
-  </view> -->
   <view class='man' wx:for="{{classList}}" wx:key="{{item.cid}}">
     <text class='name'>{{item.name}}</text>
     <view class="man_button">
-      <view class="button-delete  {{item.name == '管理者组'?'lockButton':''}}" bindtap='deleteClassCheck' data-cid='{{item.cid}}'>删除</view>
+      <view class="button-delete  {{item.name == '管理者组'?'lockButton':''}}" bindtap='deleteConfirmk' data-cid='{{item.cid}}' data-cname='{{item.name}}'>删除</view>
+      <view class="button-reset" bindtap='resetConfirmk' data-cid='{{item.cid}}' data-cname='{{item.name}}'>重置</view>
     </view>
   </view>
 </view>
+
+<view class='createClass'>
+  <button bindtap='createClass'>创建班级</button>
+</view>
+
+<modal hidden="{{modalHidden}}" title="{{modalTitle}}" confirm-text="提交" bindconfirm="confirm" bindcancel="cancel">
+  <input id='modalInput' placeholder="请输入" value='{{modalKey}}'></input>
+</modal>

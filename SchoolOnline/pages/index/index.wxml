@@ -2,6 +2,10 @@
 
 <wxs module="template" src="../../utils/template.wxs"></wxs>
 
+<view class='tip' hidden='{{arrcourse==""?false:true}}'>
+  好像暂时还没课程~
+</view>
+
 <view class="arrcourse">
   <view wx:for="{{arrcourse}}" wx:key="item.courseDate" class="course" data-couid='{{item.couid}}' bindtap='jumpnext'>
     <image class='img' src='../../img/courseImg.jpg' mode='widthFix'></image>

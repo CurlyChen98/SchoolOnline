@@ -1,5 +1,6 @@
 {
   "pages": [
+    "pages/myself/setsystem/setsystem",
     
     "pages/index/index",
     "pages/index/classroom/classroom",
@@ -13,12 +14,8 @@
     "pages/myself/myclass/myclass",
     "pages/myself/mytopic/mytopic",
     "pages/myself/myself",
-    "pages/myself/setting/setting",
-    "pages/myself/setsystem/setsystem",
+    "pages/myself/setting/setting"
 
-    "pages/myself/mygroup/mygroup",
-    "pages/group/group"
-    
   ],
   "window": {
     "backgroundTextStyle": "light",

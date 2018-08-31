@@ -23,7 +23,7 @@
     <text>{{cname}}</text>
   </view>
   <!-- 话题 -->
-  <view class='selfT'>
+  <view class='selfT' wx:if="{{rlevel!='老师'&&rlevel!='管理员'}}">
     <i class='iconfont icon-flag'></i>
     <text bindtap='jump' data-type='mytopic'>我的话题</text>
   </view>
@@ -38,7 +38,7 @@
     <text bindtap='jump' data-type='setsystem'>系统管理</text>
   </view>
   <!-- 提交 -->
-  <view class='selfT'>
+  <view class='selfT' wx:if="{{rlevel!='老师'&&rlevel!='管理员'}}">
     <i class='iconfont icon-document'></i>
     <text bindtap='upLoadFiles'>作业提交</text>
   </view>

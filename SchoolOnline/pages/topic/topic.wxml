@@ -2,6 +2,10 @@
 
 <wxs module="template" src="../../utils/template.wxs"></wxs>
 
+<view class="tip" hidden='{{arrTopic==""?false:true}}'>
+  好像暂时还没讨论帖~
+</view>
+
 <view class='arrTopic'>
   <view class='topic' wx:for="{{arrTopic}}" wx:for-index="index" wx:for-item="item" wx:key="topData" data-taid='{{item.taid}}' bindtap='jumpnote'>
     <view class='unameBox'>

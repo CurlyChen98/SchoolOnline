@@ -260,37 +260,6 @@ function FollowTalk()
     echo json_encode($content);
 }
 
-// 检查小组Key
-function CheckGroup()
-{
-    global $conn;
-    global $content;
-
-    $groupkey = $_REQUEST["groupkey"];
-    $uid = $_REQUEST["uid"];
-
-    $sql = "SELECT * FROM `s_group` WHERE `groupkey` = '$groupkey'";
-    $que = mysqli_query($conn, $sql);
-    $num = mysqli_num_rows($que);
-    if ($num > 0) {
-        $detail = mysqli_fetch_assoc($que);
-        $gid = $detail['gid'];
-        $sql = "UPDATE `s_use` SET `gid` = '$gid' WHERE `uid` = '$uid'";
-        if (mysqli_query($conn, $sql)) {
-            $content["talk"] = "Ok";
-            $content["gid"] = $gid;
-        } else {
-            $content["talk"] = "NotOk";
-            $content["error"] = "未知的错误";
-        }
-    } else {
-        $content["talk"] = "NotOk";
-        $content["error"] = "小组密匙错误";
-    }
-
-    echo json_encode($content);
-}
-
 // 检查老师Key
 function CheckTeacher()
 {
@@ -304,18 +273,11 @@ function CheckTeacher()
     $sql = "SELECT * FROM `class` WHERE `teacherkey` = '$key' AND cid = '$cid'";
     $que = mysqli_query($conn, $sql);
     $num = mysqli_num_rows($que);
-    $detail = mysqli_fetch_assoc($que);
-    $className = $detail["name"];
-    if ($className == "管理者组") {
-        $level = 10;
-    } else {
-        $level = 5;
-    }
     if ($num > 0) {
-        $sql = "UPDATE `s_use` SET `level` = '$level' WHERE `uid` = '$uid'";
+        $sql = "UPDATE `s_use` SET `level` = '5' WHERE `uid` = '$uid'";
         if (mysqli_query($conn, $sql)) {
             $content["talk"] = "Ok";
-            $content["level"] = $level;
+            $content["level"] = 5;
         } else {
             $content["talk"] = "NotOk";
             $content["error"] = "未知的错误";
@@ -437,26 +399,34 @@ function DeleteClass()
 
     $sql = "SELECT `couid` FROM `course` WHERE `cid` = '$cid'";
     $que = mysqli_query($conn, $sql);
-    $detail = mysqli_fetch_assoc($que);
+    $detail = mysqli_fetch_all($que, 1);
     foreach ($detail as $key => $value) {
-        $talk = DeleteCou($value);
+        $talk = DeleteCourse($value["couid"], "class");
         if ($talk == "NotOk") {
             $content["talk"] = "NotOk";
             return;
         }
     }
 
-    // $sql = "SELECT `uid` FROM `s_use` WHERE `cid` = '$cid'";
-    // $que = mysqli_query($conn, $sql);
-    // $detail = mysqli_fetch_assoc($que);
-    // foreach ($detail as $key => $value) {
-    //     $talk = DeleteStu($value);
-    //     if ($talk == "NotOk") {
-    //         $content["talk"] = "NotOk";
-    //         return;
-    //     }
-    // }
+    $sql = "SELECT `name` FROM `class` WHERE `cid` = '$cid'";
+    $que = mysqli_query($conn, $sql);
+    $detail = mysqli_fetch_assoc($que);
+    rmdir("../HomeworkDownload/" . $detail['name'] . "/");
+    rmdir("../HomeworkSubmit/" . $detail['name'] . "/");
 
+    $sql = "SELECT `uid` FROM `s_use` WHERE `cid` = '$cid'";
+    $que = mysqli_query($conn, $sql);
+    $detail = mysqli_fetch_all($que, 1);
+    foreach ($detail as $key => $value) {
+        $talk = DeleteStu($value["uid"]);
+        if ($talk == "NotOk") {
+            $content["talk"] = "NotOk";
+            return;
+        }
+    }
+
+    $sql = "DELETE FROM `class` WHERE `cid`= '$cid'";
+    mysqli_query($conn, $sql);
     $content["talk"] = "Ok";
     echo json_encode($content);
 }
@@ -467,9 +437,51 @@ function ShowAllClass()
     global $conn;
     global $content;
 
-    $sql = "SELECT `cid`, `name` FROM `class`";
+    $sql = "SELECT `cid`, `name`, `teacherkey`, `classkey` FROM `class`";
     $que = mysqli_query($conn, $sql);
     $content["class"] = mysqli_fetch_all($que, 1);
+
+    echo json_encode($content);
+}
+
+// 重置班级密码
+function ResetCode()
+{
+    global $conn;
+    global $content;
+    // 获取前端数据
+    $cid = $_REQUEST["cid"];
+
+    $arrcode1 = "PLOKMIJNUHBYGVTFCRDXESZWAQ123456789";
+    $arrcode2 = "PLOKMIJNUHBYGVTFCRDXESZWAQzxcvbnmlkjhgfdsapoiuytrewq";
+    $classcode = "";
+    $teachercode = "";
+    for (;; ) {
+        $classcode = "KG" . substr(str_shuffle($arrcode1), 10, 10);
+        $sql = "SELECT * FROM `class` WHERE `classkey` = '$classcode'";
+        $que = mysqli_query($conn, $sql);
+        $num = mysqli_num_rows($que);
+        if ($num == 0) {
+            break;
+        }
+    }
+    for (;; ) {
+        $teachercode = "KG" . substr(str_shuffle($arrcode2), 10, 10);
+        $sql = "SELECT * FROM `class` WHERE `teacherkey` = '$teachercode'";
+        $que = mysqli_query($conn, $sql);
+        $num = mysqli_num_rows($que);
+        if ($num == 0) {
+            break;
+        }
+    }
+
+    $sql = "UPDATE `class` SET `teacherkey` = '$teachercode',`classkey` = '$classcode' WHERE `cid` = '$cid'";
+    if (mysqli_query($conn, $sql)) {
+        $content["talk"] = "Ok";
+    } else {
+        $content["talk"] = "NotOk";
+        $content["error"] = "未知的错误";
+    }
 
     echo json_encode($content);
 }
@@ -488,7 +500,7 @@ function CreateClass()
     $num = mysqli_num_rows($que);
     if ($num > 0) {
         $content["talk"] = "Have";
-        return;
+        $content["error"] = "班级名字已存在";
     } else {
         $arrcode1 = "PLOKMIJNUHBYGVTFCRDXESZWAQ123456789";
         $arrcode2 = "PLOKMIJNUHBYGVTFCRDXESZWAQzxcvbnmlkjhgfdsapoiuytrewq";
@@ -514,14 +526,17 @@ function CreateClass()
         }
         $sql = "INSERT INTO `class` VALUES (NULL,'$claName','$teachercode','$classcode')";
         if (mysqli_query($conn, $sql)) {
+            $dir = $claName . "/";
+            mkdir("../HomeworkDownload/" . $dir, 0777, true);
+            mkdir("../HomeworkSubmit/" . $dir, 0777, true);
             $content["talk"] = "Ok";
         } else {
             $content["talk"] = "NotOk";
             $content["error"] = "未知的错误";
         }
-
-        echo json_encode($content);
     }
+
+    echo json_encode($content);
 }
 
 ?>

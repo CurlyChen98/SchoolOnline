@@ -23,7 +23,7 @@ function Login()
     $uname = $_REQUEST["uname"];
     $upwd = $_REQUEST["upwd"];
 
-    $sql = "SELECT * FROM `s_use` WHERE `name`='$uname' AND `password`='$upwd' AND `level`>=5";
+    $sql = "SELECT * FROM `s_use` WHERE `name`='$uname' AND `password`='$upwd' AND `level`=5";
     $que = mysqli_query($conn, $sql);
     $num = mysqli_num_rows($que);
     if ($num > 0) {
@@ -42,112 +42,61 @@ function ShowStudent()
     global $conn;
     global $content;
     // 获取前端数据
-    $uid = $_REQUEST["uid"];
-    $cid = $_REQUEST["cid"];
-    $level = $_REQUEST["level"];
-    @$showGroup = $_REQUEST["showGroup"];
-    @$updateGroup = $_REQUEST["updateGroup"];
-    @$stuGroup = $_REQUEST["stuGroup"];
-    @$stuUid = $_REQUEST["stuUid"];
-    @$claName = $_REQUEST["claName"];
-    @$stuLevel = $_REQUEST["stuLevel"];
-    @$stuName = $_REQUEST["stuName"];
-    @$pageCount = $_REQUEST["pageCount"];
-    @$pno = $_REQUEST["pno"];
+    $uid = $_REQUEST["uid"];//正在使用者的id
+    @$stuUid = $_REQUEST["stuUid"];//搜索id
+    @$cid = $_REQUEST["claName"];//搜搜班级id
+    @$stuLevel = $_REQUEST["stuLevel"];//搜索等级
+    @$stuName = $_REQUEST["stuName"];//搜索名字
+    $pageCount = $_REQUEST["pageCount"];//每页行数
+    $pno = $_REQUEST["pno"];//第几页
     // 处理页数
     $samllp = $pageCount * $pno - $pageCount;
     $bigp = $pageCount;
     $content["pno"] = $pno;
-    // 输出班级
-    if ($level <= 5) {
-        $sql = "SELECT * FROM `class` WHERE `cid` = $cid";
-    } else {
-        $sql = "SELECT * FROM `class`";
-    }
-    $que = mysqli_query($conn, $sql);
-    $detail = mysqli_fetch_all($que, 1);
-    $content["class"] = $detail;
-    // 默认第一条班级名单用户展示
-    $cid = $detail[0]["cid"];
-    $content["classOne"] = $detail[0]["name"];
-    // 判断有无附加搜索条件
-    $addsql = "";
+
+
+    $sqlAdd = "WHERE s_use.cid = class.cid AND s_use.level < 5 ";
     if ($stuUid != "") {
-        $addsql = $addsql . " AND s_use.`uid` = '$stuUid'";
+        $sqlAdd = $sqlAdd . "AND s_use.uid = '$stuUid'";
+    }
+    if ($cid != "") {
+        $sqlAdd = $sqlAdd . "AND s_use.cid = '$cid'";
     }
     if ($stuLevel != "") {
-        $addsql = $addsql . " AND s_use.`level` = '$stuLevel'";
+        $sqlAdd = $sqlAdd . "AND s_use.level = '$stuLevel'";
     }
-    if ($claName != "") {
-        // 班级名单再次修改班级
-        $claName = strtolower($claName);
-        // 需要改
-        $sql = "SELECT * FROM `class` WHERE `name` = '$claName'";
+    if ($stuName != "") {
+        $sqlAdd = $sqlAdd . "AND s_use.name = '$stuName'";
+    }
+    // 获取用户cid
+    if ($cid == "") {
+        $sql = "SELECT `cid` FROM `s_use` WHERE `uid` = '$uid'";
         $que = mysqli_query($conn, $sql);
         $detail = mysqli_fetch_assoc($que);
         $cid = $detail["cid"];
-        $content["classOne"] = $detail["name"];
+        $sqlAdd = $sqlAdd . "AND s_use.cid = '$cid'";
     }
-    if ($stuName != "") {
-        $addsql = $addsql . " AND s_use.`name` = '$stuName'";
-    }
-    // 是否小组展示
-    $addsqlgroup = "";
-    if ($showGroup == "Y") {
-        $sql = "SELECT * FROM `s_group` WHERE `cid` = $cid ORDER BY `s_group`.`gid` ASC";
-        $que = mysqli_query($conn, $sql);
-        $num = mysqli_num_rows($que);
-        if ($num == 0) {
-            $content["talk"] = "NotGroup";
-            echo json_encode($content);
-            return;
-        }
-        $detail = mysqli_fetch_all($que, 1);
-        $content["group"] = $detail;
-        $gid = $detail[0]["gid"];
-        $addsqlgroup = " AND s_use.`gid` = '$gid'";
-        $content["groupOne"] = $detail[0]["name"];
-    }
-    if ($stuGroup != "") {
-        // 小组名单再次修改班级
-        $stuGroup = strtolower($stuGroup);
-        // 需要改
-        $sql = "SELECT * FROM `s_group` WHERE `name` = '$stuGroup'";
-        $que = mysqli_query($conn, $sql);
-        $detail = mysqli_fetch_assoc($que);
-        $gid = $detail["gid"];
-        $addsqlgroup = " AND s_use.`gid` = '$gid'";
-        $content["groupOne"] = $detail["name"];
-    }
-    $addsql = $addsql . $addsqlgroup;
-    if ($updateGroup == "Y") {
-        echo json_encode($content);
-        return;
-    }
-    // 展示学生
-    $sql = "SELECT s_use.name AS 'stuName', s_use.uid AS 'stuUid', s_use.level AS 'stuLevel', s_group.name AS 'groName' 
-            FROM s_use, s_group 
-            WHERE s_use.cid = '$cid' AND s_use.gid = s_group.gid AND s_use.level < 5 $addsql
-            ORDER BY s_use.uid ASC LIMIT $samllp,$bigp";
+
+    $sql = "SELECT s_use.`uid` as uid ,class.`name` as clsName, s_use.`name` as stuName, s_use.`level` as stuLevel 
+            FROM `s_use`,class " . $sqlAdd . "LIMIT $samllp , $bigp ";
     $que = mysqli_query($conn, $sql);
-    $detail = mysqli_fetch_all($que, 1);
-    $num = mysqli_num_rows($que);
-    if ($num > 0) {
-        // 若有数据则展示
-        $content["talk"] = "Have";
-        $content["student"] = $detail;
-        // 展示总数量
-        $sql = "SELECT s_use.name AS 'stuName', s_use.uid AS 'stuUid', s_use.level AS 'stuLevel', s_group.name AS 'groName' 
-                FROM s_use, s_group 
-                WHERE s_use.cid = '$cid' AND s_use.gid = s_group.gid AND s_use.level < 5 $addsql";
+    if (mysqli_num_rows($que) > 0) {
+        $content['studetList'] = mysqli_fetch_all($que, 1);
+        // 返回老师所有名下班级
+        $sql = "SELECT class.cid as cid,class.name AS claName FROM class,s_use WHERE s_use.uid='$uid' AND s_use.cid = class.cid";
         $que = mysqli_query($conn, $sql);
-        $num = mysqli_num_rows($que) / $pageCount;
-        $content["howNum"] = $num;
+        $content['ClassList'] = mysqli_fetch_all($que, 1);
+        // 返回总页数
+        $sql = "SELECT s_use.`uid` as uid ,class.`name` as clsName, s_use.`name` as stuName, s_use.`level` as stuLevel FROM `s_use`,class " . $sqlAdd;
+        $que = mysqli_query($conn, $sql);
+        $content['howNum'] = mysqli_num_rows($que) / $pageCount;
+        $content['talk'] = "Ok";
     } else {
-        // 无数据则报错
-        $content["talk"] = "NotHave";
+        $content['talk'] = "NotOk";
+        $content['error'] = "没有关联学生";
+
     }
-    // 输出
+
     echo json_encode($content);
 }
 
@@ -343,44 +292,14 @@ function DeleteWork()
 }
 
 // 删除课程
-function DeleteCoures()
+function DeleteCou()
 {
     global $conn;// 链接mysql
     global $content;// 用于输出
 
     $couid = $_REQUEST["couid"];// 课程id
 
-    $sql = "SELECT `couid`, `cid`, `title`, `date`, `task_src` 
-            FROM `course` 
-            WHERE `couid` = '$couid'";
-    $que = mysqli_query($conn, $sql);
-    $detail = mysqli_fetch_assoc($que);
-
-    $dirFile = "../HomeworkDownload/" . $detail["task_src"];
-    $dirFile = urldecode($dirFile);
-    $dir = substr($dirFile, 0, strrpos($dirFile, '/')) . "/";
-    $p = scandir($dir);
-    foreach ($p as $val) {
-        if ($val != "." && $val != "..") {
-            unlink($dir . $val);
-        }
-    }
-    rmdir($dirFile);
-
-    $dirFile = "../HomeworkSubmit/" . $detail["task_src"];
-    $dirFile = urldecode($dirFile);
-    $dir = substr($dirFile, 0, strrpos($dirFile, '/')) . "/";
-    $p = scandir($dir);
-    foreach ($p as $val) {
-        if ($val != "." && $val != "..") {
-            unlink($dir . $val);
-        }
-    }
-    rmdir($dirFile);
-
-    if (mysqli_query($conn, $sql)) {
-        $sql = "DELETE FROM `course` WHERE `couid`= '$couid'";
-        mysqli_query($conn, $sql);
+    if (DeleteCourse($couid, "cou") == "Ok") {
         $content["talk"] = "Ok";
     } else {
         $content["talk"] = "NotOk";
@@ -458,19 +377,21 @@ function ShowWork()
     $sql = "SELECT `couid`, `title`, `date`
             FROM `course` WHERE `cid` = '$cid' ORDER BY `date` DESC";
     $que = mysqli_query($conn, $sql);
-    $detail = mysqli_fetch_all($que, 1);
-    $content["course"] = $detail;
+    if (mysqli_num_rows($que) > 0) {
+        $detail = mysqli_fetch_all($que, 1);
+        $content["course"] = $detail;
 
-    $oneCouId = $detail[0]["couid"];
-    if ($couid != "") {
-        $oneCouId = $couid;
-    }
+        $oneCouId = $detail[0]["couid"];
+        if ($couid != "") {
+            $oneCouId = $couid;
+        }
 
-    $sql = "SELECT `title` FROM `course` WHERE `couid` = '$oneCouId'";
-    $que = mysqli_query($conn, $sql);
-    $content["claName"] = mysqli_fetch_assoc($que);
+        $sql = "SELECT `title` FROM `course` WHERE `couid` = '$oneCouId'";
+        $que = mysqli_query($conn, $sql);
+        $content["claName"] = mysqli_fetch_assoc($que);
 
-    $sql = "SELECT k.`task_id`,k.`task_name`,k.`date`,k.task_url,e.name
+        if (mysqli_num_rows($que) > 0) {
+            $sql = "SELECT k.`task_id`,k.`task_name`,k.`date`,k.task_url,e.name
             FROM
                 (
                     SELECT `task_id`,`task_name`,`uid`,`date`,task_url
@@ -480,11 +401,19 @@ function ShowWork()
             LEFT JOIN s_use e ON e.uid = k.uid
             ORDER BY k.`date` DESC
             LIMIT $samllp,$bigp";
-    $que = mysqli_query($conn, $sql);
-    $detail = mysqli_fetch_all($que, 1);
-    $content["work"] = $detail;
-    $content["url"] = "/SchoolOnline/HomeworkSubmit/";
-
+            $que = mysqli_query($conn, $sql);
+            $detail = mysqli_fetch_all($que, 1);
+            $content["work"] = $detail;
+            $content["url"] = "/SchoolOnline/HomeworkSubmit/";
+            $content["talk"] = "Ok";
+        } else {
+            $content["talk"] = "NotOk";
+            $content["error"] = "无作业";
+        }
+    } else {
+        $content["talk"] = "NotOk";
+        $content["error"] = "无课程";
+    }
 
     echo json_encode($content);
 }
@@ -550,7 +479,7 @@ function UpdatePassword()
         } else {
             $content["talk"] = "NotOk2";
         }
-    }else{
+    } else {
         $content["talk"] = "NotOk1";
     }
     echo json_encode($content);
