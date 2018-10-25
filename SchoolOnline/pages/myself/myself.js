@@ -62,6 +62,30 @@ Page({
       }
     })
   },
+  // 注销
+  zhuxiao: function() {
+    let uid = wx.getStorageSync("uid");
+    console.log(uid)
+    wx.request({
+      url: app.globalData.backAddress + app.globalData.backPage,
+      data: {
+        do: "zhuxiao",
+        uid: uid,
+      },
+      method: 'POST',
+      header: {
+        'content-type': 'application/x-www-form-urlencoded'
+      },
+      success: function(res) {
+        console.log(res)
+        if (res.data.talk == "Ok") {
+          common.showToast("注销成功，下载登陆需要重新输入信息", "none", 3000, true);
+        } else {
+          common.showToast("未知的错误", "none", 1000, true);
+        }
+      }
+    })
+  },
 
 })
 

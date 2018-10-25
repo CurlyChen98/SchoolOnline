@@ -47,4 +47,14 @@
     <i class='iconfont icon-setup'></i>
     <text bindtap='jump' data-type='setting'>设置</text>
   </view>
+  <!-- 注销 -->
+  <view class='selfT'>
+    <i class='iconfont icon-brush'></i>
+    <text bindtap='zhuxiao'>注销</text>
+  </view>
+  <!-- 退出 -->
+  <view class='selfT'>
+    <i class='iconfont icon-flag'></i>
+    <navigator class='Button exit' target="miniProgram" open-type="exit">退出</navigator>
+  </view>
 </view>

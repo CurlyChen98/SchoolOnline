@@ -42,6 +42,23 @@ function SelectUse()
     echo json_encode($content);
 }
 
+// 注销用户 
+function zhuxiao()
+{
+    global $conn;
+    global $content;
+    $uid = $_REQUEST["uid"];
+    $sql = "UPDATE `s_use` SET `opid` = '' WHERE `s_use`.`uid` = '$uid'";
+    if (mysqli_query($conn, $sql)) {
+        $content["talk"] = "Ok";
+    } else {
+        $content["talk"] = "NotOk";
+        $content["error"] = "未知的错误";
+    }
+    // 输出
+    echo json_encode($content);
+}
+
 // 注册用户
 function InsertUse()
 {
@@ -80,7 +97,7 @@ function InsertUse()
         $content["talk"] = "NotOk";
         $content["error"] = "查无此学生";
     } else {
-        $sql = "SELECT `uid` FROM `s_use` WHERE `opid` = '$mdOpenId' OR (`cid`='$cid' AND `name`='$studentkey')";
+        $sql = "SELECT `uid` FROM `s_use` WHERE `cid`='$cid' AND `name`='$studentkey'";
         $que = mysqli_query($conn, $sql);
         $num = mysqli_num_rows($que);
         if ($num == 0) {
@@ -93,8 +110,14 @@ function InsertUse()
                 $content["error"] = "未知的错误";
             }
         } else {
-            $content["talk"] = "NotOk";
-            $content["error"] = "ID已存在";
+            $detail = mysqli_fetch_all($que, 1)[0]["uid"];
+            $sql = "UPDATE `s_use` SET `opid` = '$mdOpenId' WHERE `s_use`.`uid` = '$detail'";
+            if (mysqli_query($conn, $sql)) {
+                $content["talk"] = "Ok";
+            } else {
+                $content["talk"] = "NotOk";
+                $content["error"] = "未知的错误";
+            }
         }
     }
     // 输出
